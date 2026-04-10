@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>為萬國禱告 | 懷恩堂差傳組</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- 引入 Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- 點陣世界地圖背景 -->
+        <div class="world-map-bg"></div>
+        <div class="rainbow-overlay"></div>
+
+        <header class="main-header">
+            <h1 class="title-zh">為萬國禱告</h1>
+            <p class="title-en">Pray for the Nations</p>
+        </header>
+
+        <main class="card-viewer">
+            <button id="prevBtn" class="nav-btn left">
+                <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+            </button>
+
+            <div class="card-container">
+                <div id="prayerCard" class="card">
+                    <!-- 圖片會由此動態載入 -->
+                    <div class="card-image-wrapper">
+                        <img id="cardImg" src="" alt="禱告卡">
+                        <div class="card-loader"></div>
+                    </div>
+                </div>
+            </div>
+
+            <button id="nextBtn" class="nav-btn right">
+                <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+            </button>
+        </main>
+
+        <footer class="controls">
+            <div class="index-indicator">
+                <span id="currentIndex">0</span> / <span id="totalCards">0</span>
+            </div>
+            <div class="button-group">
+                <button id="langToggle" class="action-btn">切換中/EN</button>
+                <button id="randomBtn" class="action-btn">隨機抽取</button>
+                <button id="videoBtn" class="action-btn video-btn" style="display: none;">▶ 觀看影片</button>
+            </div>
+        </footer>
+
+        <!-- YouTube Lightbox -->
+        <div id="videoModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <div class="video-wrapper">
+                    <iframe id="youtubePlayer" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+:root {
+    --primary-gold: #d4a853;
+    --deep-blue: #0a1628;
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --text-color: #f5f0e8;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    height: 100%;
+    width: 100%;
+    font-family: 'Noto Sans TC', sans-serif;
+    background-color: var(--deep-blue);
+    color: var(--text-color);
+    overflow: hidden;
+}
+
+.app-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    z-index: 1;
+}
+
+/* 點陣地圖背景與彩虹效果 */
+.world-map-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'); /* 暫時代替點陣感 */
+    opacity: 0.3;
+    z-index: -2;
+}
+
+.rainbow-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+        rgba(255, 0, 0, 0.1), 
+        rgba(255, 165, 0, 0.1), 
+        rgba(255, 255, 0, 0.1), 
+        rgba(0, 128, 0, 0.1), 
+        rgba(0, 0, 255, 0.1), 
+        rgba(75, 0, 130, 0.1), 
+        rgba(238, 130, 238, 0.1)
+    );
+    filter: blur(50px);
+    z-index: -1;
+}
+
+/* Header */
+.main-header {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.title-zh {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 2.2rem;
+    letter-spacing: 4px;
+    color: var(--primary-gold);
+    text-shadow: 0 0 15px rgba(212, 168, 83, 0.5);
+}
+
+.title-en {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.8;
+}
+
+/* Card Viewer */
+.card-viewer {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    max-width: 1200px;
+}
+
+.card-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    perspective: 1000px;
+}
+
+.card {
+    width: 100%;
+    max-width: 450px;
+    aspect-ratio: 1 / 1.414; /* A4 比例 */
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.4s;
+}
+
+.card-image-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+/* Nav Buttons */
+.nav-btn {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    fill: var(--text-color);
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+/* Footer Controls */
+.controls {
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    text-align: center;
+}
+
+.index-indicator {
+    margin-bottom: 15px;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.button-group {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    padding: 10px 20px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 30px;
+    color: var(--text-color);
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.action-btn:hover {
+    background: var(--primary-gold);
+    color: var(--deep-blue);
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    width: 90%;
+    max-width: 800px;
+    position: relative;
+}
+
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+}
+
+.close-modal {
+    position: absolute;
+    top: -40px; right: 0;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+/* 手機版適應 */
+@media (max-width: 768px) {
+    .nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        background: rgba(10, 22, 40, 0.6);
+    }
+    .left { left: 10px; }
+    .right { right: 10px; }
+    
+    .card-viewer {
+        padding: 0 10px;
+    }
+    
+    .title-zh { font-size: 1.6rem; }
+}
