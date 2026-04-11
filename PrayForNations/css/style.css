@@ -1,164 +1,213 @@
-:root {
-    --primary-gold: #fb923c;
-    --text-color: #f1f5f9;
+/* --- 1. 全域與定位佈局 --- */
+* {
+    box-sizing: border-box;
+    margin: 0; padding: 0;
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* 禁止手機上下滑動 */
-html, body {
-    height: 100%;
-    width: 100%;
-    overflow: hidden; 
-    background: #030712;
-    touch-action: none; /* 防止瀏覽器預設滾動 */
+body {
+    background: #000;
+    color: #fff;
+    font-family: 'Noto Sans TC', sans-serif;
+    overflow-x: hidden;
 }
 
-/* 1280px 置中背景與壓黑效果 */
-.custom-world-bg {
+/* 背景地圖：羽化效果 */
+.world-map {
     position: fixed;
-    top: 0; left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 1280px;
-    height: 100%;
-    background-image: url('../assets/world-bg.png'); 
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-    z-index: -2;
-}
-
-/* 四周壓黑效果 */
-.custom-world-bg::after {
-    content: "";
-    position: absolute;
     top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: radial-gradient(circle, transparent 10%, #030712 90%);
-    pointer-events: none;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background-image: url('../assets/world-bg.png');
+    background-size: cover;
+    background-position: center;
+    /* 核心指令：中間亮、四周黑的羽化 */
+    -webkit-mask-image: radial-gradient(circle, black 40%, transparent 100%);
+    mask-image: radial-gradient(circle, black 40%, transparent 100%);
 }
 
-.app-container {
-    height: 100vh;
+/* 主容器：精確置中並往上偏移 50px */
+.container {
     display: flex;
     flex-direction: column;
-    background: transparent;
-}
-
-.intro-hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.intro-show {
-    opacity: 1 !important;
-    pointer-events: auto !important;
-    transition: opacity 1s ease;
-}
-
-/* Viewer Section: 靈活排版 [Prev] [Card] [Next] */
-.viewer-section {
-    height: 85vh;
-    display: flex;
     align-items: center;
     justify-content: center;
-    gap: 30px; /* 控制按鈕與圖片間距 30px */
+    min-height: 100vh;
+    transform: translateY(-50px);
     width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
 }
 
-.card-wrap {
-    perspective: 2500px;
-    width: 100%;
-    max-width: 500px; /* 這裡可視情況微調，配合 aspect-ratio 運作 */
+/* --- 2. 卡片結構與 3D 翻面 --- */
+.card-wrapper {
+    position: relative;
+    width: 650px; /* PC 版固定寬度 */
+    z-index: 5;
+    opacity: 0; /* 初始隱藏 */
 }
 
 .card {
-    position: relative;
     width: 100%;
     aspect-ratio: 1 / 1.414;
-    max-height: 80vh;
-    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    transform-style: preserve-3d;
+    perspective: 2000px;
 }
 
-.card.initial-flip, .card.flipped { transform: rotateY(180deg); }
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: rotateY(180deg); /* 初始顯示背面 */
+    opacity: 0; /* 初始隱藏 */
+}
 
-.card-side {
+.card-front, .card-back {
     position: absolute;
     width: 100%; height: 100%;
     backface-visibility: hidden;
-    border-radius: 8px;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+}
+
+/* 正面 */
+.card-front {
+    transform: rotateY(0deg);
     background: #000;
 }
+.card-front img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    display: block;
+}
 
-.card-front img { width: 100%; height: 100%; object-fit: contain; display: block; }
-
-/* 恢復背面樣式 */
+/* 背面：深水綠漸層與銘黃標題 */
 .card-back {
     transform: rotateY(180deg);
-    background: linear-gradient(135deg, #1e293b 0%, #030712 100%);
-    display: flex; align-items: center; justify-content: center; text-align: center;
-}
-.card-title-zh { font-family: 'Noto Serif TC', serif; font-size: 2rem; color: var(--primary-gold); margin-bottom: 10px; }
-.card-title-en { font-size: 0.9rem; letter-spacing: 2px; opacity: 0.6; }
-
-/* 導航按鈕 */
-.pc-nav-btn {
-    width: 60px; height: 60px;
-    background: rgba(15, 23, 42, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #fff;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1.2rem;
-    backdrop-filter: blur(10px);
-    flex-shrink: 0;
-}
-
-/* 下方區域 (15%) 與間距縮減 (60px) */
-.bottom-area {
-    height: 15vh;
+    background: linear-gradient(135deg, #0d1b1e 0%, #1a3a3a 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
-    width: 100%;
-    max-width: 500px;
-    margin: 60px auto 0; /* 手機版間距改成 60px */
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.pill-btn {
-    padding: 12px 35px;
-    background: rgba(15, 23, 42, 0.8);
+.text-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.title-zh {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 3rem;
+    color: #FFB300; /* 銘黃色 Chrome Yellow */
+    margin-bottom: 15px;
+    letter-spacing: 12px;
+}
+
+.title-en {
+    font-size: 1.2rem;
+    color: #C0C0C0; /* 銀白色 Silver White */
+    text-transform: uppercase;
+    letter-spacing: 4px;
+}
+
+/* --- 3. 按鈕與交互佈局 --- */
+
+/* 下方按鈕區間距固定 30px */
+.bottom-controls {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 650px;
+    position: relative;
+    opacity: 0; /* 初始隱藏 */
+}
+
+.extra-actions {
+    margin-top: 15px;
+    opacity: 0; /* 初始隱藏 */
+}
+
+.bottom-btn {
+    padding: 12px 30px;
+    background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 30px;
     color: #fff;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px);
 }
 
-.footer-right { position: absolute; right: 10px; }
-.small-action-btn {
-    padding: 8px 15px;
-    background: rgba(15, 23, 42, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
+.lang-btn {
+    padding: 8px 18px;
+    font-size: 0.8rem;
+}
+
+.footer-right { position: absolute; right: 0; }
+
+/* PC 導航按鈕：距離圖片 20px */
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px; height: 60px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     color: #fff;
-    font-size: 0.75rem;
+    border-radius: 50%;
+    font-size: 1.2rem;
     cursor: pointer;
+    z-index: 10;
+    opacity: 0; /* 初始隱藏 */
+    transition: opacity 0.5s ease;
 }
 
+.left-btn { left: -80px; } /* 650px card + 20px gap on each side */
+.right-btn { right: -80px; }
+
+/* 隱形觸控區 */
 .touch-zone { position: absolute; top: 0; width: 30%; height: 100%; z-index: 5; }
 .left-zone { left: 0; }
 .right-zone { right: 0; }
 
+/* --- 4. 手機版適應 --- */
 @media (max-width: 768px) {
-    .pc-nav-btn { display: none; }
-    .viewer-section { gap: 0; padding: 0; }
-    .card-wrap { max-width: 100%; }
-    .bottom-area { margin-top: 60px; }
+    body { overflow: hidden; } /* 手機模式鎖死滾動 */
+    .card-wrapper { width: calc(100vw - 40px); }
+    .nav-btn { display: none; }
+    .title-zh { font-size: 2.22rem; }
+    .bottom-controls { max-width: calc(100vw - 40px); }
 }
+
+/* --- 5. 動態進場動畫 --- */
+.animate-in-card {
+    animation: zoomIn 1s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes zoomIn {
+    from { opacity: 0; transform: scale(1.1) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Modal */
+.modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 1000; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center;
+}
+.video-container { width: 90%; max-width: 800px; position: relative; padding-bottom: 56.25%; }
+.video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.close-modal { position: absolute; top: -50px; right: 0; color: #fff; font-size: 40px; cursor: pointer; }

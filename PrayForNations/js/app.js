@@ -2,7 +2,7 @@ const CONFIG = {
     csvUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQhqx91y_5EUqOsOnjAXCQ7YjuAXrMBj6mX0_-It4VEicShgdVASf7FYg1H5IChk1aaKtKDmvT2c7OL/pub?gid=0&single=true&output=csv',
     flipDuration: 800,
     driveImagePrefix: 'https://drive.google.com/thumbnail?id=',
-    imageSuffix: '&sz=w1600' // 提升至 1600 確保超高解析度
+    imageSuffix: '&sz=w1600'
 };
 
 const state = {
@@ -15,14 +15,12 @@ const state = {
 };
 
 // DOM 元素
-const cardElement = document.getElementById('prayerCard');
+const cardInner = document.getElementById('cardInner');
+const cardWrapper = document.getElementById('cardWrapper');
 const cardImg = document.getElementById('cardImg');
-const pcPrev = document.getElementById('pcPrev');
-const pcNext = document.getElementById('pcNext');
-const touchPrev = document.getElementById('touchPrev');
-const touchNext = document.getElementById('touchNext');
-const langToggle = document.getElementById('langToggle');
 const randomBtn = document.getElementById('randomBtn');
+const langToggle = document.getElementById('langToggle');
+const videoBtn = document.getElementById('videoBtn');
 const flipSound = document.getElementById('flipSound');
 
 async function init() {
@@ -34,30 +32,34 @@ async function init() {
         
         const card = state.cards[state.currentIndex];
         cardImg.src = state.lang === 'zh' ? card.zh_img : card.en_img;
+        videoBtn.style.display = card.video ? 'inline-block' : 'none';
 
         startIntroSequence();
     } catch (err) {
-        console.error('初始化失敗:', err);
+        console.error('播放初始化失敗:', err);
     }
 }
 
+// 嚴格進場動態序列 (Animation Timeline)
 function startIntroSequence() {
-    const cardWrap = document.getElementById('mainCardWrap');
-    const bottomArea = document.getElementById('bottomArea');
-    const pcBtns = document.querySelectorAll('.pc-nav-btn');
+    // Step 1: 1.0s 後卡片鑽入顯示背面
+    setTimeout(() => {
+        cardWrapper.classList.add('animate-in-card');
+        cardInner.style.opacity = '1';
+    }, 1000);
 
-    // 1. 0.5s 顯示背景與卡片背面
-    setTimeout(() => { cardWrap.classList.add('intro-show'); }, 500);
-    // 2. 1.2s 自動翻轉
-    setTimeout(() => { 
+    // Step 2: 再過 0.5s (T=1.5s) 執行翻轉
+    setTimeout(() => {
         if (flipSound) { flipSound.volume = 0.3; flipSound.play().catch(e => {}); }
-        cardElement.classList.remove('initial-flip'); 
-    }, 1200);
-    // 3. 2.0s 介面同步鑽入
-    setTimeout(() => { 
-        bottomArea.classList.add('intro-show');
-        pcBtns.forEach(btn => btn.classList.add('intro-show'));
-    }, 2000);
+        cardInner.style.transform = 'rotateY(0deg)'; // 翻至正面
+    }, 1500);
+
+    // Step 3: 再過 0.2s (T=1.7s) 所有按鈕淡入
+    setTimeout(() => {
+        document.querySelectorAll('.nav-btn, .bottom-controls, .extra-actions').forEach(el => {
+            el.classList.add('animate-fade-in');
+        });
+    }, 1700);
 }
 
 async function loadFromGoogleSheets() {
@@ -87,20 +89,20 @@ function updateDisplay() {
     const imgUrl = state.lang === 'zh' ? card.zh_img : card.en_img;
 
     if (flipSound) { flipSound.currentTime = 0; flipSound.play().catch(e => {}); }
-    cardElement.classList.add('flipped');
+    cardInner.style.transform = 'rotateY(180deg)'; // 先轉向背面
 
     setTimeout(() => {
         cardImg.src = imgUrl;
-    }, CONFIG.flipDuration / 2);
-
-    setTimeout(() => {
-        cardElement.classList.remove('flipped');
-        state.isAnimating = false;
-        
+        videoBtn.style.display = card.video ? 'inline-block' : 'none';
         // 預載
         const nextIdx = (state.currentIndex + 1) % state.total;
         new Image().src = state.lang === 'zh' ? state.cards[nextIdx].zh_img : state.cards[nextIdx].en_img;
-    }, CONFIG.flipDuration + 100);
+    }, CONFIG.flipDuration / 2);
+
+    setTimeout(() => {
+        cardInner.style.transform = 'rotateY(0deg)';
+        state.isAnimating = false;
+    }, CONFIG.flipDuration + 200);
 }
 
 const changeCard = (dir) => {
@@ -109,10 +111,11 @@ const changeCard = (dir) => {
     updateDisplay();
 };
 
-if(pcPrev) pcPrev.onclick = () => changeCard(-1);
-if(pcNext) pcNext.onclick = () => changeCard(1);
-if(touchPrev) touchPrev.onclick = () => changeCard(-1);
-if(touchNext) touchNext.onclick = () => changeCard(1);
+// 綁定點擊與滑動
+document.getElementById('pcPrev').onclick = () => changeCard(-1);
+document.getElementById('pcNext').onclick = () => changeCard(1);
+document.getElementById('touchPrev').onclick = () => changeCard(-1);
+document.getElementById('touchNext').onclick = () => changeCard(1);
 
 randomBtn.onclick = () => {
     if (state.isAnimating) return;
@@ -127,11 +130,29 @@ langToggle.onclick = () => {
     updateDisplay();
 };
 
-cardElement.addEventListener('touchstart', (e) => { state.touchX = e.changedTouches[0].screenX; }, { passive: true });
-cardElement.addEventListener('touchend', (e) => {
+cardInner.addEventListener('touchstart', (e) => { state.touchX = e.changedTouches[0].screenX; }, { passive: true });
+cardInner.addEventListener('touchend', (e) => {
     const diff = e.changedTouches[0].screenX - state.touchX;
     if (Math.abs(diff) > 50) changeCard(diff > 0 ? -1 : 1);
 }, { passive: true });
+
+// 影片處理
+const videoModal = document.getElementById('videoModal');
+const player = document.getElementById('youtubePlayer');
+videoBtn.onclick = () => {
+    const videoUrl = state.cards[state.currentIndex].video;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = videoUrl.match(regExp);
+    const videoId = (match && match[2].length === 11) ? match[2] : null;
+    if (videoId) {
+        player.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+        videoModal.style.display = 'flex';
+    }
+};
+document.getElementById('closeVideo').onclick = () => {
+    videoModal.style.display = 'none';
+    player.src = '';
+};
 
 function parseCSV(text) {
     const lines = text.split(/\r?\n/);

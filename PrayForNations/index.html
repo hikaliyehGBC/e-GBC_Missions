@@ -8,53 +8,59 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="custom-world-bg"></div>
+    <!-- 1. 背景層 -->
+    <div class="world-map"></div>
 
-    <div id="app" class="app-container">
-        <!-- 85% 區域 -->
-        <main class="viewer-section">
-            <button id="pcPrev" class="pc-nav-btn left intro-hidden">◀</button>
-            
-            <div class="card-wrap intro-hidden" id="mainCardWrap">
-                <div id="prayerCard" class="card initial-flip">
-                    <div class="card-side card-back">
-                        <div class="placeholder-content">
-                            <h1 class="card-title-zh">為萬國禱告</h1>
-                            <p class="card-title-en">Pray for the Nations</p>
-                            <div class="loading-dot"></div>
+    <!-- 2. 主容器層 -->
+    <div id="app" class="container">
+        
+        <!-- PC 左右導航按鈕 -->
+        <button id="pcPrev" class="nav-btn left-btn">◀</button>
+        <button id="pcNext" class="nav-btn right-btn">▶</button>
+
+        <!-- 3. 卡片區域 -->
+        <div class="card-wrapper" id="cardWrapper">
+            <div class="card" id="prayerCard">
+                <div class="card-inner" id="cardInner">
+                    <!-- 卡片背面 (初始顯示) -->
+                    <div class="card-back">
+                        <div class="text-group">
+                            <h1 class="title-zh">為萬國禱告</h1>
+                            <p class="title-en">Pray for the Nations</p>
                         </div>
                     </div>
-                    
-                    <div class="card-side card-front">
+                    <!-- 卡片正面 (翻轉後顯示) -->
+                    <div class="card-front">
                         <div class="touch-zone left-zone" id="touchPrev"></div>
                         <div class="touch-zone right-zone" id="touchNext"></div>
                         <img id="cardImg" src="" alt="禱告卡">
                     </div>
                 </div>
             </div>
+        </div>
 
-            <button id="pcNext" class="pc-nav-btn right intro-hidden">▶</button>
-        </main>
-
-        <!-- 15% 區域 -->
-        <footer class="bottom-area intro-hidden" id="bottomArea">
+        <!-- 4. 底部按鈕區 -->
+        <div class="bottom-controls" id="bottomBtns">
             <div class="footer-center">
-                <button id="randomBtn" class="pill-btn">🎲 隨機抽取</button>
+                <button id="randomBtn" class="bottom-btn random-btn">🎲 隨機抽取</button>
             </div>
             <div class="footer-right">
-                <button id="langToggle" class="small-action-btn">中/EN</button>
+                <button id="langToggle" class="bottom-btn lang-btn">中/EN</button>
             </div>
-        </footer>
+        </div>
 
-        <audio id="flipSound" src="assets/book-opening-345808.mp3" preload="auto"></audio>
+        <!-- 額外行動 (觀看影片) -->
+        <div id="extraActions" class="extra-actions">
+            <button id="videoBtn" class="bottom-btn video-btn" style="display:none;">▶ 觀看影片</button>
+        </div>
+    </div>
 
-        <div id="videoModal" class="modal" style="display: none;">
-            <div class="modal-content">
-                <span class="close-modal" id="closeVideo">&times;</span>
-                <div class="video-wrapper">
-                    <iframe id="youtubePlayer" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                </div>
-            </div>
+    <!-- 音效與 Modal -->
+    <audio id="flipSound" src="assets/book-opening-345808.mp3" preload="auto"></audio>
+    <div id="videoModal" class="modal" style="display: none;">
+        <div class="video-container">
+            <span class="close-modal" id="closeVideo">&times;</span>
+            <iframe id="youtubePlayer" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
     </div>
 
