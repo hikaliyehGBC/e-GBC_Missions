@@ -9,21 +9,19 @@
 </head>
 <body>
     <div id="app" class="app-container">
-        <!-- 彩虹漸層世界地圖背景 -->
-        <div class="world-map-wrap">
-            <div class="rainbow-bg"></div>
-            <div class="world-overlay"></div>
-        </div>
+        <!-- 幾何世界地圖背景 -->
+        <div class="custom-world-bg"></div>
+        <div class="vignette-overlay"></div>
 
-        <header class="main-header">
-            <div></div> <!-- 佔位空間 -->
+        <header class="main-header intro-hidden">
+            <div></div> 
             <button id="langToggle" class="top-lang-btn">中 / EN</button>
         </header>
 
         <main class="viewer-section">
-            <div class="card-wrap">
-                <div id="prayerCard" class="card">
-                    <!-- 背面：載入中或初始狀態的底板 -->
+            <div class="card-wrap intro-hidden" id="mainCardWrap">
+                <div id="prayerCard" class="card initial-flip">
+                    <!-- 背面：標題面板 -->
                     <div class="card-side card-back">
                         <div class="placeholder-content">
                             <h1 class="card-title-zh">為萬國禱告</h1>
@@ -32,7 +30,7 @@
                         </div>
                     </div>
                     
-                    <!-- 正面：顯示禱告卡圖片 -->
+                    <!-- 正面：禱告卡圖片 -->
                     <div class="card-side card-front">
                         <div class="touch-zone left-zone" id="touchPrev"></div>
                         <div class="touch-zone right-zone" id="touchNext"></div>
@@ -41,25 +39,27 @@
                 </div>
             </div>
 
-            <div class="bottom-controls">
+            <div class="bottom-controls intro-hidden" id="bottomControls">
                 <button id="prevBtn" class="square-nav-btn">◀</button>
                 <button id="randomBtn" class="pill-btn">🎲 隨機抽取</button>
                 <button id="nextBtn" class="square-nav-btn">▶</button>
             </div>
             
-            <div class="extra-actions">
+            <div class="extra-actions intro-hidden">
                 <button id="videoBtn" class="pill-btn video-btn" style="display: none;">▶ 觀看影片</button>
             </div>
         </main>
 
-        <!-- 全螢幕原圖燈箱 -->
+        <!-- 靜音翻頁音效 -->
+        <audio id="flipSound" src="https://assets.mixkit.co/active_storage/sfx/1470/1470-preview.mp3" preload="auto"></audio>
+
+        <!-- 燈箱 -->
         <div id="imageLightbox" class="modal lightbox" style="display: none;">
             <div class="lightbox-content">
                 <img id="fullImg" src="" alt="原始禱告卡">
             </div>
         </div>
 
-        <!-- YouTube 影片燈箱 -->
         <div id="videoModal" class="modal" style="display: none;">
             <div class="modal-content">
                 <span class="close-modal" id="closeVideo">&times;</span>

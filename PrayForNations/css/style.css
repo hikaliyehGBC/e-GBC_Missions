@@ -1,9 +1,9 @@
 :root {
-    --primary-gold: #d4a853;
-    --deep-bg: #050a14;
-    --glass-bg: rgba(255, 255, 255, 0.08);
-    --glass-border: rgba(255, 255, 255, 0.2);
-    --text-color: #f5f0e8;
+    --primary-gold: #fb923c; /* 配合背景地圖的橘色調 */
+    --deep-bg: #0f172a;
+    --glass-bg: rgba(15, 23, 42, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --text-color: #f1f5f9;
 }
 
 * {
@@ -22,35 +22,24 @@ body, html {
     overflow: hidden;
 }
 
-/* 視覺背景：漸層 + 世界地圖 */
-.world-map-wrap {
+/* 自定義背景圖 */
+.custom-world-bg {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%; height: 100%;
+    background: url('../assets/world-bg.png') no-repeat center center;
+    background-size: cover;
+    z-index: -2;
+    transition: opacity 1.5s ease;
+}
+
+.vignette-overlay {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    z-index: -2;
-}
-
-.rainbow-bg {
-    position: absolute;
-    width: 100%; height: 100%;
-    background: linear-gradient(135deg, 
-        rgba(42, 63, 114, 1) 0%, 
-        rgba(35, 85, 120, 1) 30%, 
-        rgba(26, 122, 103, 1) 60%, 
-        rgba(41, 55, 99, 1) 100%);
-    opacity: 0.8;
-}
-
-.world-overlay {
-    position: absolute;
-    width: 100%; height: 100%;
-    background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'); /* 暫時代替微點感 */
-    mask-image: url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg');
-    mask-size: contain;
-    mask-repeat: no-repeat;
-    mask-position: center;
-    background-color: rgba(255, 255, 255, 0.05);
-    opacity: 0.3;
+    z-index: -1;
+    background: radial-gradient(circle, transparent 30%, var(--deep-bg) 110%);
 }
 
 .app-container {
@@ -58,7 +47,20 @@ body, html {
     display: flex;
     flex-direction: column;
     padding: 20px;
-    position: relative;
+}
+
+/* 進場動畫隱藏類別 */
+.intro-hidden {
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+}
+
+.intro-show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    transition: opacity 1s ease, transform 1s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 /* Header */
@@ -70,14 +72,15 @@ body, html {
 }
 
 .top-lang-btn {
-    padding: 8px 18px;
+    padding: 10px 20px;
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
-    border-radius: 20px;
+    border-radius: 25px;
     color: var(--text-color);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     cursor: pointer;
     backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
 /* Viewer Section */
@@ -87,26 +90,30 @@ body, html {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 40px;
+    gap: 25px;
 }
 
-/* 3D 卡片結構 */
+/* 卡片 3D 結構與手機版放大 */
 .card-wrap {
-    perspective: 1500px;
-    width: 100%;
-    max-width: 420px;
+    perspective: 2000px;
+    width: 90%; /* 手機版佔比 */
+    max-width: 480px; /* 電腦版最大寬度 */
+    transition: opacity 1s ease;
 }
 
 .card {
     position: relative;
     width: 100%;
     aspect-ratio: 1 / 1.414;
-    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
     transform-style: preserve-3d;
     cursor: pointer;
 }
 
-/* 翻牌動作 */
+.card.initial-flip {
+    transform: rotateY(180deg);
+}
+
 .card.flipped {
     transform: rotateY(180deg);
 }
@@ -117,11 +124,10 @@ body, html {
     backface-visibility: hidden;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+    box-shadow: 0 50px 100px rgba(0,0,0,0.7);
     border: 1px solid var(--glass-border);
 }
 
-/* 正面 */
 .card-front {
     z-index: 2;
     transform: rotateY(0deg);
@@ -133,103 +139,75 @@ body, html {
     object-fit: cover;
 }
 
-/* 背面 (標題中央) */
 .card-back {
     transform: rotateY(180deg);
-    background: linear-gradient(135deg, #16222a 0%, #3a6073 100%);
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 40px;
-}
-
-.placeholder-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 .card-title-zh {
     font-family: 'Noto Serif TC', serif;
-    font-size: 2.2rem;
+    font-size: 2.5rem;
     color: var(--primary-gold);
-    margin-bottom: 10px;
-    letter-spacing: 5px;
+    margin-bottom: 12px;
+    letter-spacing: 6px;
 }
 
 .card-title-en {
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    opacity: 0.6;
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    opacity: 0.5;
 }
 
-/* 隱形觸控區 */
-.touch-zone {
-    position: absolute;
-    top: 0; width: 20%; height: 100%;
-    z-index: 5;
-}
-.left-zone { left: 0; }
-.right-zone { right: 0; }
-
-/* 底部按鈕 */
+/* 控制區域 */
 .bottom-controls {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
 }
 
 .square-nav-btn {
-    width: 50px; height: 50px;
+    width: 55px; height: 55px;
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     color: var(--text-color);
-    border-radius: 15px;
+    border-radius: 16px;
     cursor: pointer;
+    backdrop-filter: blur(5px);
 }
 
 .pill-btn {
-    padding: 12px 35px;
+    padding: 14px 40px;
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
-    border-radius: 30px;
+    border-radius: 35px;
     color: var(--text-color);
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
+    backdrop-filter: blur(5px);
 }
 
-.square-nav-btn:hover, .pill-btn:hover {
+.pill-btn:hover, .square-nav-btn:hover {
     background: var(--primary-gold);
-    color: var(--deep-bg);
+    color: #000;
 }
 
-/* 燈箱與 Modal */
-.modal {
-    display: none; /* 預設完全不佔用空間 */
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 1000;
-    background: rgba(0,0,0,0.9);
-    align-items: center;
-    justify-content: center;
-}
-
-.lightbox-content img {
-    max-width: 95%; max-height: 95%;
-    object-fit: contain;
-}
-
-.close-modal {
-    position: absolute;
-    top: 20px; left: 20px;
-    color: white; font-size: 40px;
-    cursor: pointer;
-}
-
+/* 手機版細節微調 */
 @media (max-width: 480px) {
-    .card-wrap { max-width: 85%; }
-    .card-title-zh { font-size: 1.8rem; }
+    .viewer-section { gap: 15px; }
+    .card-title-zh { font-size: 2rem; }
+    .square-nav-btn { width: 50px; height: 50px; }
+    .pill-btn { padding: 12px 25px; font-size: 0.9rem; }
 }
+
+/* 燈箱 */
+.modal {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 2000; background: rgba(0,0,0,0.95);
+    display: none; align-items: center; justify-content: center;
+}
+.lightbox-content img { max-width: 95%; max-height: 95%; }

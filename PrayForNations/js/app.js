@@ -10,7 +10,9 @@ const state = {
     currentIndex: 0,
     lang: 'zh', 
     total: 0,
-    isAnimating: false
+    isAnimating: false,
+    touchStart: 0,
+    touchEnd: 0
 };
 
 // DOM 元素
@@ -18,36 +20,50 @@ const cardElement = document.getElementById('prayerCard');
 const cardImg = document.getElementById('cardImg');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
-const touchPrev = document.getElementById('touchPrev');
-const touchNext = document.getElementById('touchNext');
 const langToggle = document.getElementById('langToggle');
 const randomBtn = document.getElementById('randomBtn');
 const videoBtn = document.getElementById('videoBtn');
+const flipSound = document.getElementById('flipSound');
 
-// 燈箱與影片
-const lightbox = document.getElementById('imageLightbox');
-const fullImg = document.getElementById('fullImg');
-const videoModal = document.getElementById('videoModal');
-const player = document.getElementById('youtubePlayer');
+// 進場動畫元素
+const introElems = document.querySelectorAll('.intro-hidden');
+const cardWrap = document.getElementById('mainCardWrap');
 
 async function init() {
     try {
-        // 強制隱藏所有彈窗
-        lightbox.style.display = 'none';
-        videoModal.style.display = 'none';
-
         await loadFromGoogleSheets();
         if (state.cards.length === 0) return;
         state.total = state.cards.length;
         state.currentIndex = Math.floor(Math.random() * state.total);
         
-        // 初始狀態
+        // 設定初始圖片
         const card = state.cards[state.currentIndex];
         cardImg.src = state.lang === 'zh' ? card.zh_img : card.en_img;
         videoBtn.style.display = card.video ? 'inline-block' : 'none';
+
+        startIntroSequence();
     } catch (err) {
         console.error('初始化失敗:', err);
     }
+}
+
+// 劇院級進場動畫序幕
+function startIntroSequence() {
+    // 1. 0.5s 後顯示卡片背面
+    setTimeout(() => {
+        cardWrap.classList.add('intro-show');
+    }, 500);
+
+    // 2. 1.2s 後翻面至正面
+    setTimeout(() => {
+        playFlipSound();
+        cardElement.classList.remove('initial-flip');
+    }, 1200);
+
+    // 3. 2.0s 後顯示所有介面
+    setTimeout(() => {
+        introElems.forEach(el => el.classList.add('intro-show'));
+    }, 2000);
 }
 
 async function loadFromGoogleSheets() {
@@ -70,7 +86,6 @@ async function loadFromGoogleSheets() {
     }).sort((a, b) => a.order - b.order);
 }
 
-// 翻牌切換邏輯
 function updateDisplay() {
     if (state.total === 0 || state.isAnimating) return;
     
@@ -78,31 +93,31 @@ function updateDisplay() {
     const card = state.cards[state.currentIndex];
     const imgUrl = state.lang === 'zh' ? card.zh_img : card.en_img;
 
-    // 1. 先翻向背面
+    playFlipSound();
     cardElement.classList.add('flipped');
 
-    // 2. 在背面時更換圖片與狀態
     setTimeout(() => {
         cardImg.src = imgUrl;
         videoBtn.style.display = card.video ? 'inline-block' : 'none';
     }, CONFIG.flipDuration / 2);
 
-    // 3. 翻回正面
     setTimeout(() => {
         cardElement.classList.remove('flipped');
         state.isAnimating = false;
-        
-        // 預載鄰近圖片
-        const nextIdx = (state.currentIndex + 1) % state.total;
-        new Image().src = state.lang === 'zh' ? state.cards[nextIdx].zh_img : state.cards[nextIdx].en_img;
     }, CONFIG.flipDuration + 100);
 }
 
-// 事件綁定
-prevBtn.onclick = () => { changeCard(-1); };
-nextBtn.onclick = () => { changeCard(1); };
-touchPrev.onclick = (e) => { e.stopPropagation(); changeCard(-1); };
-touchNext.onclick = (e) => { e.stopPropagation(); changeCard(1); };
+function playFlipSound() {
+    if (flipSound) {
+        flipSound.volume = 0.3; // 控制音量不要太大
+        flipSound.currentTime = 0;
+        flipSound.play().catch(e => console.log('音效播放受限'));
+    }
+}
+
+// 事件
+prevBtn.onclick = () => changeCard(-1);
+nextBtn.onclick = () => changeCard(1);
 
 function changeCard(dir) {
     if (state.isAnimating) return;
@@ -112,7 +127,13 @@ function changeCard(dir) {
 
 randomBtn.onclick = () => {
     if (state.isAnimating) return;
-    state.currentIndex = Math.floor(Math.random() * state.total);
+    // 排除目前序號
+    let nextIdx;
+    do {
+        nextIdx = Math.floor(Math.random() * state.total);
+    } while (nextIdx === state.currentIndex && state.total > 1);
+    
+    state.currentIndex = nextIdx;
     updateDisplay();
 };
 
@@ -121,33 +142,51 @@ langToggle.onclick = () => {
     updateDisplay();
 };
 
-// 燈箱控制
-cardImg.onclick = () => {
-    fullImg.src = cardImg.src;
-    lightbox.style.display = 'flex';
-};
+// 滑動支援 (Swipe)
+cardElement.addEventListener('touchstart', (e) => {
+    state.touchStart = e.changedTouches[0].screenX;
+}, { passive: true });
 
-lightbox.onclick = () => {
-    lightbox.style.display = 'none';
-    fullImg.src = '';
-};
+cardElement.addEventListener('touchend', (e) => {
+    state.touchEnd = e.changedTouches[0].screenX;
+    handleSwipe();
+}, { passive: true });
 
-// 影片控制
+function handleSwipe() {
+    const threshold = 50;
+    if (state.touchEnd < state.touchStart - threshold) {
+        changeCard(1); // 向左滑 -> 下一張
+    } else if (state.touchEnd > state.touchStart + threshold) {
+        changeCard(-1); // 向右滑 -> 上一張
+    }
+}
+
+// 其他原有的燈箱與 YouTube 邏輯...
+const lightbox = document.getElementById('imageLightbox');
+const fullImg = document.getElementById('fullImg');
+cardImg.onclick = () => { fullImg.src = cardImg.src; lightbox.style.display = 'flex'; };
+lightbox.onclick = () => { lightbox.style.display = 'none'; fullImg.src = ''; };
+
+const videoModal = document.getElementById('videoModal');
+const player = document.getElementById('youtubePlayer');
 videoBtn.onclick = () => {
     const videoUrl = state.cards[state.currentIndex].video;
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-    const match = videoUrl.match(regExp);
-    const videoId = (match && match[2].length === 11) ? match[2] : null;
+    const videoId = extractVideoID(videoUrl);
     if (videoId) {
         player.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
         videoModal.style.display = 'flex';
     }
 };
-
 document.getElementById('closeVideo').onclick = () => {
     videoModal.style.display = 'none';
     player.src = '';
 };
+
+function extractVideoID(url) {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+}
 
 function parseCSV(text) {
     const lines = text.split(/\r?\n/);
