@@ -1,8 +1,9 @@
 :root {
     --primary-gold: #d4a853;
-    --deep-blue: #0a1628;
-    --glass-bg: rgba(255, 255, 255, 0.1);
-    --glass-border: rgba(255, 255, 255, 0.2);
+    --deep-bg: #050a14;
+    --night-light: rgba(212, 168, 83, 0.4);
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.15);
     --text-color: #f5f0e8;
 }
 
@@ -10,208 +11,223 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body, html {
     height: 100%;
     width: 100%;
     font-family: 'Noto Sans TC', sans-serif;
-    background-color: var(--deep-blue);
+    background-color: var(--deep-bg);
     color: var(--text-color);
     overflow: hidden;
 }
 
+/* 深夜點陣地圖背景 (夜光點) */
+.night-map-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -2;
+    background-color: var(--deep-bg);
+    background-image: 
+        radial-gradient(circle at 2px 2px, var(--night-light) 1px, transparent 0);
+    background-size: 24px 24px;
+    opacity: 0.4;
+}
+
+.vignette-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -1;
+    background: radial-gradient(circle, transparent 20%, var(--deep-bg) 80%);
+}
+
 .app-container {
-    position: relative;
-    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
     padding: 20px;
-    z-index: 1;
 }
 
-/* 點陣地圖背景與彩虹效果 */
-.world-map-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'); /* 暫時代替點陣感 */
-    opacity: 0.3;
-    z-index: -2;
-}
-
-.rainbow-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, 
-        rgba(255, 0, 0, 0.1), 
-        rgba(255, 165, 0, 0.1), 
-        rgba(255, 255, 0, 0.1), 
-        rgba(0, 128, 0, 0.1), 
-        rgba(0, 0, 255, 0.1), 
-        rgba(75, 0, 130, 0.1), 
-        rgba(238, 130, 238, 0.1)
-    );
-    filter: blur(50px);
-    z-index: -1;
-}
-
-/* Header */
+/* Header & Top Right Lang Button */
 .main-header {
-    text-align: center;
-    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 10;
 }
 
 .title-zh {
     font-family: 'Noto Serif TC', serif;
-    font-size: 2.2rem;
-    letter-spacing: 4px;
+    font-size: 1.8rem;
     color: var(--primary-gold);
-    text-shadow: 0 0 15px rgba(212, 168, 83, 0.5);
 }
 
 .title-en {
-    font-size: 0.9rem;
-    text-transform: uppercase;
+    font-size: 0.8rem;
     letter-spacing: 2px;
-    opacity: 0.8;
+    opacity: 0.7;
 }
 
-/* Card Viewer */
-.card-viewer {
+.top-lang-btn {
+    padding: 8px 16px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    color: var(--text-color);
+    font-size: 0.8rem;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s;
+}
+
+.top-lang-btn:hover {
+    background: var(--primary-gold);
+    color: var(--deep-bg);
+}
+
+/* Viewer Section */
+.viewer-section {
     flex: 1;
-    width: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 20px;
-    max-width: 1200px;
+    gap: 30px;
+    padding: 20px 0;
 }
 
-.card-container {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    perspective: 1000px;
+.card-wrap {
+    perspective: 1200px;
+    width: 100%;
+    max-width: 420px;
 }
 
 .card {
-    width: 100%;
-    max-width: 450px;
-    aspect-ratio: 1 / 1.414; /* A4 比例 */
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-    overflow: hidden;
     position: relative;
-    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.4s;
+    width: 100%;
+    /* 這裡確保容器與圖片比例一致 */
+    aspect-ratio: 1 / 1.414;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
 }
 
-.card-image-wrapper {
+/* 翻牌動畫類名 */
+.card.flipping {
+    transform: rotateY(180deg) scale(0.9);
+    opacity: 0.5;
+}
+
+.card-inner {
     width: 100%;
     height: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+    border: 1px solid var(--glass-border);
+    background: #000;
+}
+
+.card-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    cursor: zoom-in;
+}
+
+/* 隱形觸控區 (10%) */
+.touch-zone {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 15%; /* 稍微放寬到 15% 增加好用度 */
+    z-index: 5;
+    cursor: pointer;
+}
+
+.left-zone { left: 0; }
+.right-zone { right: 0; }
+
+/* 底部按鈕 */
+.bottom-controls {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 15px;
 }
 
-.card img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
-}
-
-/* Nav Buttons */
-.nav-btn {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 50%;
+.square-nav-btn {
     width: 50px;
     height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-color);
+    border-radius: 12px;
     cursor: pointer;
+    font-size: 1.2rem;
     transition: all 0.3s;
-    fill: var(--text-color);
 }
 
-.nav-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.1);
-}
-
-/* Footer Controls */
-.controls {
-    width: 100%;
-    max-width: 600px;
-    padding: 20px;
-    text-align: center;
-}
-
-.index-indicator {
-    margin-bottom: 15px;
-    font-size: 1rem;
-    font-weight: 500;
-}
-
-.button-group {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.action-btn {
-    padding: 10px 20px;
+.pill-btn {
+    padding: 12px 30px;
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     border-radius: 30px;
     color: var(--text-color);
-    cursor: pointer;
-    backdrop-filter: blur(5px);
-    transition: all 0.3s;
     font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
 }
 
-.action-btn:hover {
+.square-nav-btn:hover, .pill-btn:hover {
     background: var(--primary-gold);
-    color: var(--deep-blue);
+    color: var(--deep-bg);
+    transform: translateY(-2px);
 }
 
-/* Modal */
-.modal {
+.video-btn {
+    background: rgba(212, 168, 83, 0.15);
+    border-color: var(--primary-gold);
+}
+
+/* 原圖燈箱 */
+.lightbox {
     display: none;
+    z-index: 2000;
+    background: rgba(0,0,0,0.95);
+    cursor: zoom-out;
+}
+
+.lightbox-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.lightbox-content img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    box-shadow: 0 0 50px rgba(0,0,0,1);
+}
+
+/* Modal 通用 */
+.modal {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background: rgba(0,0,0,0.9);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-content {
-    width: 90%;
-    max-width: 800px;
-    position: relative;
 }
 
 .video-wrapper {
     position: relative;
-    padding-bottom: 56.25%; /* 16:9 */
-    height: 0;
+    padding-bottom: 56.25%;
+    max-width: 900px;
+    width: 90%;
 }
 
 .video-wrapper iframe {
@@ -220,29 +236,9 @@ body, html {
     width: 100%; height: 100%;
 }
 
-.close-modal {
-    position: absolute;
-    top: -40px; right: 0;
-    color: white;
-    font-size: 30px;
-    cursor: pointer;
-}
-
-/* 手機版適應 */
-@media (max-width: 768px) {
-    .nav-btn {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 10;
-        background: rgba(10, 22, 40, 0.6);
-    }
-    .left { left: 10px; }
-    .right { right: 10px; }
-    
-    .card-viewer {
-        padding: 0 10px;
-    }
-    
-    .title-zh { font-size: 1.6rem; }
+@media (max-width: 480px) {
+    .app-container { padding: 15px; }
+    .title-zh { font-size: 1.5rem; }
+    .card-wrap { max-width: 320px; }
+    .pill-btn { padding: 10px 20px; }
 }
