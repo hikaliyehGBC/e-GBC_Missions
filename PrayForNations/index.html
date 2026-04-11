@@ -9,8 +9,8 @@
 </head>
 <body>
     <div id="app" class="app-container">
-        <!-- 幾何世界地圖背景 -->
-        <div class="custom-world-bg"></div>
+        <!-- 幾何世界地圖背景 (直接指定 URL 確保讀取) -->
+        <div class="custom-world-bg" style="background-image: url('assets/world-bg.png');"></div>
         <div class="vignette-overlay"></div>
 
         <header class="main-header intro-hidden">
@@ -21,7 +21,6 @@
         <main class="viewer-section">
             <div class="card-wrap intro-hidden" id="mainCardWrap">
                 <div id="prayerCard" class="card initial-flip">
-                    <!-- 背面：標題面板 -->
                     <div class="card-side card-back">
                         <div class="placeholder-content">
                             <h1 class="card-title-zh">為萬國禱告</h1>
@@ -30,7 +29,6 @@
                         </div>
                     </div>
                     
-                    <!-- 正面：禱告卡圖片 -->
                     <div class="card-side card-front">
                         <div class="touch-zone left-zone" id="touchPrev"></div>
                         <div class="touch-zone right-zone" id="touchNext"></div>
@@ -50,10 +48,9 @@
             </div>
         </main>
 
-        <!-- 靜音翻頁音效 -->
-        <audio id="flipSound" src="https://assets.mixkit.co/active_storage/sfx/1470/1470-preview.mp3" preload="auto"></audio>
+        <!-- 指定本地音效 -->
+        <audio id="flipSound" src="assets/book-opening-345808.mp3" preload="auto"></audio>
 
-        <!-- 燈箱 -->
         <div id="imageLightbox" class="modal lightbox" style="display: none;">
             <div class="lightbox-content">
                 <img id="fullImg" src="" alt="原始禱告卡">
