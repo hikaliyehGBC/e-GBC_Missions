@@ -9,33 +9,38 @@
 </head>
 <body>
     <div id="app" class="app-container">
-        <!-- 深夜點陣地圖背景 -->
-        <div class="night-map-bg"></div>
-        <div class="vignette-overlay"></div>
+        <!-- 彩虹漸層世界地圖背景 -->
+        <div class="world-map-wrap">
+            <div class="rainbow-bg"></div>
+            <div class="world-overlay"></div>
+        </div>
 
         <header class="main-header">
-            <div class="brand">
-                <h1 class="title-zh">為萬國禱告</h1>
-                <p class="title-en">Pray for the Nations</p>
-            </div>
-            <!-- 右上角中英切換 -->
+            <div></div> <!-- 佔位空間 -->
             <button id="langToggle" class="top-lang-btn">中 / EN</button>
         </header>
 
         <main class="viewer-section">
             <div class="card-wrap">
                 <div id="prayerCard" class="card">
-                    <!-- 左右 10% 隱形觸控區 -->
-                    <div class="touch-zone left-zone" id="touchPrev"></div>
-                    <div class="touch-zone right-zone" id="touchNext"></div>
+                    <!-- 背面：載入中或初始狀態的底板 -->
+                    <div class="card-side card-back">
+                        <div class="placeholder-content">
+                            <h1 class="card-title-zh">為萬國禱告</h1>
+                            <p class="card-title-en">Pray for the Nations</p>
+                            <div class="loading-dot"></div>
+                        </div>
+                    </div>
                     
-                    <div class="card-inner">
+                    <!-- 正面：顯示禱告卡圖片 -->
+                    <div class="card-side card-front">
+                        <div class="touch-zone left-zone" id="touchPrev"></div>
+                        <div class="touch-zone right-zone" id="touchNext"></div>
                         <img id="cardImg" src="" alt="禱告卡" class="clickable-image">
                     </div>
                 </div>
             </div>
 
-            <!-- 集中在下方的控制區 -->
             <div class="bottom-controls">
                 <button id="prevBtn" class="square-nav-btn">◀</button>
                 <button id="randomBtn" class="pill-btn">🎲 隨機抽取</button>
@@ -48,16 +53,16 @@
         </main>
 
         <!-- 全螢幕原圖燈箱 -->
-        <div id="imageLightbox" class="modal lightbox">
+        <div id="imageLightbox" class="modal lightbox" style="display: none;">
             <div class="lightbox-content">
                 <img id="fullImg" src="" alt="原始禱告卡">
             </div>
         </div>
 
         <!-- YouTube 影片燈箱 -->
-        <div id="videoModal" class="modal">
+        <div id="videoModal" class="modal" style="display: none;">
             <div class="modal-content">
-                <span class="close-modal">&times;</span>
+                <span class="close-modal" id="closeVideo">&times;</span>
                 <div class="video-wrapper">
                     <iframe id="youtubePlayer" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                 </div>
