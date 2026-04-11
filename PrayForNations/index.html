@@ -8,38 +8,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- 1. 背景層 -->
     <div class="world-map"></div>
 
-    <!-- 2. 主容器層 -->
     <div id="app" class="container">
         
-        <!-- PC 左右導航按鈕 -->
-        <button id="pcPrev" class="nav-btn left-btn">◀</button>
-        <button id="pcNext" class="nav-btn right-btn">▶</button>
-
-        <!-- 3. 卡片區域 -->
-        <div class="card-wrapper" id="cardWrapper">
-            <div class="card" id="prayerCard">
-                <div class="card-inner" id="cardInner">
-                    <!-- 卡片背面 (初始顯示) -->
-                    <div class="card-back">
-                        <div class="text-group">
-                            <h1 class="title-zh">為萬國禱告</h1>
-                            <p class="title-en">Pray for the Nations</p>
+        <!-- 使用 Flex 排版的 Main Stage，確保左右按鈕穩固 -->
+        <div class="main-stage">
+            <button id="pcPrev" class="nav-btn pc-only">◀</button>
+            
+            <div class="card-wrapper" id="cardWrapper">
+                <div class="card" id="prayerCard">
+                    <div class="card-inner" id="cardInner">
+                        <div class="card-back">
+                            <div class="text-group">
+                                <h1 class="title-zh">為萬國禱告</h1>
+                                <p class="title-en">Pray for the Nations</p>
+                            </div>
                         </div>
-                    </div>
-                    <!-- 卡片正面 (翻轉後顯示) -->
-                    <div class="card-front">
-                        <div class="touch-zone left-zone" id="touchPrev"></div>
-                        <div class="touch-zone right-zone" id="touchNext"></div>
-                        <img id="cardImg" src="" alt="禱告卡">
+                        <div class="card-front">
+                            <div class="touch-zone left-zone" id="touchPrev"></div>
+                            <div class="touch-zone right-zone" id="touchNext"></div>
+                            <img id="cardImg" src="" alt="禱告卡">
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <button id="pcNext" class="nav-btn pc-only">▶</button>
         </div>
 
-        <!-- 4. 底部按鈕區 -->
         <div class="bottom-controls" id="bottomBtns">
             <div class="footer-center">
                 <button id="randomBtn" class="bottom-btn random-btn">🎲 隨機抽取</button>
@@ -49,13 +46,11 @@
             </div>
         </div>
 
-        <!-- 額外行動 (觀看影片) -->
         <div id="extraActions" class="extra-actions">
             <button id="videoBtn" class="bottom-btn video-btn" style="display:none;">▶ 觀看影片</button>
         </div>
     </div>
 
-    <!-- 音效與 Modal -->
     <audio id="flipSound" src="assets/book-opening-345808.mp3" preload="auto"></audio>
     <div id="videoModal" class="modal" style="display: none;">
         <div class="video-container">

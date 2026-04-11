@@ -10,15 +10,15 @@ body {
     color: #fff;
     font-family: 'Noto Sans TC', sans-serif;
     overflow-x: hidden;
+    overflow-y: auto; 
 }
 
 /* 背景地圖：全裝置垂直與水平置中 */
 .world-map {
     position: fixed;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 1280px;
+    width: 1280px; /* PC 版 1280px */
     height: auto;
     aspect-ratio: auto;
     min-height: 800px;
@@ -27,11 +27,11 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    /* 雙倍強化羽化強度 */
     -webkit-mask-image: radial-gradient(circle, black 20%, transparent 65%);
     mask-image: radial-gradient(circle, black 20%, transparent 65%);
 }
 
-/* 主容器：完全置中 */
 .container {
     display: flex;
     flex-direction: column;
@@ -41,10 +41,19 @@ body {
     width: 100%;
 }
 
-/* --- 2. 卡片結構 --- */
+/* --- 2. 核心舞台：由 Flexbox 掌控按鈕與圖片間距 --- */
+.main-stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px; /* 您要求的 30px 間距，最穩固的寫法 */
+    position: relative;
+    z-index: 10;
+}
+
 .card-wrapper {
     position: relative;
-    width: 520px;
+    width: 520px; /* PC 版代禱卡 520px */
     z-index: 5;
     opacity: 0;
 }
@@ -83,24 +92,22 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* --- 3. 導航按鈕：懸浮於卡片左右，推 30px --- */
+.title-zh { font-family: 'Noto Serif TC', serif; font-size: 2.5rem; color: #FFB300; margin-bottom: 12px; letter-spacing: 10px; }
+.title-en { font-size: 1rem; color: #C0C0C0; text-transform: uppercase; letter-spacing: 3px; }
+
+/* 導航按鈕：PC 版不再使用 Absolute */
 .nav-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 50px; height: 50px;
-    background: rgba(255, 255, 255, 0.08); /* 降低干擾 */
+    width: 55px; height: 55px;
+    background: rgba(45, 55, 72, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: #fff; border-radius: 50%; font-size: 1rem; cursor: pointer;
-    z-index: 100; opacity: 0; transition: all 0.3s;
+    z-index: 100;
+    opacity: 0; transition: all 0.3s;
+    display: flex; align-items: center; justify-content: center;
 }
-.nav-btn:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-50%) scale(1.1); }
+.nav-btn:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.1); }
 
-/* 精確定位：向左/右推 30px */
-.left-btn { left: -80px; }  /* 卡片寬度邊緣各推 30px，這裡是相對容器的位置 */
-.right-btn { right: -80px; }
-
-/* 底部按鈕 */
+/* 下方區域 */
 .bottom-controls {
     margin-top: 40px;
     display: flex;
@@ -123,17 +130,19 @@ body {
 }
 .footer-right { position: absolute; right: 0; }
 
+/* 隱形觸控區 */
+.touch-zone { position: absolute; top: 0; width: 30%; height: 100%; z-index: 5; }
+.left-zone { left: 0; }
+.right-zone { right: 0; }
+
 /* --- 4. 手機版適應 --- */
 @media (max-width: 768px) {
     body { overflow: hidden; }
+    .main-stage { gap: 0; }
+    .pc-only { display: none; }
     .card-wrapper { width: calc(100vw - 40px); }
-    .nav-btn { display: none; }
     .bottom-controls { max-width: calc(100vw - 40px); margin-top: 30px; }
-    .world-map { 
-        width: 100vw; 
-        top: 50%; /* 強制垂直置中 */
-        transform: translate(-50%, -50%); 
-    } 
+    .world-map { width: 100vw; } 
 }
 
 /* --- 5. 動態進場 --- */
