@@ -1,8 +1,8 @@
 :root {
     --primary-gold: #fb923c;
     --deep-bg: #030712;
-    --glass-bg: rgba(3, 7, 18, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-bg: rgba(15, 23, 42, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.15);
     --text-color: #f1f5f9;
 }
 
@@ -19,94 +19,74 @@ body, html {
     font-family: 'Noto Sans TC', sans-serif;
     color: var(--text-color);
     background-color: var(--deep-bg);
-    overflow: hidden;
 }
 
-/* 修正背景圖樣式 */
+/* 強制背景圖設定 (使用偽元素確保層級與路徑) */
 .custom-world-bg {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
+    background-image: url('../assets/world-bg.png'); /* CSS 相對路徑 */
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
     z-index: -2;
+    background-attachment: fixed;
 }
 
-.vignette-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: -1;
-    background: radial-gradient(circle, transparent 20%, var(--deep-bg) 100%);
+/* 如果 .png 路徑失敗，嘗試 .PNG (預防大小寫問題) */
+@supports not (background-image: url('../assets/world-bg.png')) {
+    .custom-world-bg { background-image: url('../assets/world-bg.PNG'); }
 }
 
 .app-container {
-    height: 100%;
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    padding: 10px;
+    position: relative;
+    overflow: hidden;
 }
 
-/* 進場動畫隱藏類別 */
 .intro-hidden {
     opacity: 0;
-    transform: translateY(25px);
     pointer-events: none;
 }
 
 .intro-show {
     opacity: 1;
-    transform: translateY(0);
     pointer-events: auto;
-    transition: opacity 1.2s ease, transform 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-/* Header */
-.main-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 10;
-}
-
-.top-lang-btn {
-    padding: 10px 22px;
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 25px;
-    color: var(--text-color);
-    font-size: 0.9rem;
-    cursor: pointer;
-    backdrop-filter: blur(15px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    transition: opacity 1s ease;
 }
 
 /* Viewer Section */
 .viewer-section {
     flex: 1;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 30px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-/* 放大禱告卡大小 (電腦版 max-width 提升至 650px) */
+/* 卡片尺寸限制 (防止超出 PC 螢幕按鈕) */
 .card-wrap {
-    perspective: 2500px;
-    width: 90%; 
-    max-width: 650px; 
-    transition: opacity 1s ease;
+    perspective: 2000px;
+    width: 100%;
+    max-width: 500px; /* 寬度稍微縮減以平衡高度 */
+    position: relative;
 }
 
 .card {
     position: relative;
     width: 100%;
+    height: auto;
     aspect-ratio: 1 / 1.414;
+    max-height: 70vh; /* 關鍵：限制最大高度為螢幕 70% */
     transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     transform-style: preserve-3d;
-    cursor: pointer;
 }
 
 .card.initial-flip, .card.flipped {
@@ -119,87 +99,89 @@ body, html {
     backface-visibility: hidden;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 60px 120px rgba(0,0,0,0.8);
+    box-shadow: 0 40px 100px rgba(0,0,0,0.8);
     border: 1px solid var(--glass-border);
 }
 
-.card-front {
-    z-index: 2;
-    transform: rotateY(0deg);
-    background: #000;
-}
-
-.card-front img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-}
-
+.card-front { z-index: 2; transform: rotateY(0deg); background: #000; }
+.card-front img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .card-back {
     transform: rotateY(180deg);
     background: linear-gradient(135deg, #1e293b 0%, #030712 100%);
+    display: flex; align-items: center; justify-content: center; text-align: center;
+}
+
+.card-title-zh { font-family: 'Noto Serif TC', serif; font-size: 2rem; color: var(--primary-gold); margin-bottom: 10px; }
+.card-title-en { font-size: 0.9rem; letter-spacing: 2px; opacity: 0.6; }
+
+/* PC 導航按鈕 (分開於左右) */
+.pc-nav-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
-}
-
-.card-title-zh {
-    font-family: 'Noto Serif TC', serif;
-    font-size: 3rem;
-    color: var(--primary-gold);
-    margin-bottom: 15px;
-    letter-spacing: 8px;
-    text-shadow: 0 0 20px rgba(251, 146, 60, 0.4);
-}
-
-.card-title-en {
-    font-size: 1.25rem;
-    letter-spacing: 4px;
-    opacity: 0.6;
-}
-
-/* 控制區域 */
-.bottom-controls {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.square-nav-btn {
     width: 60px; height: 60px;
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     color: var(--text-color);
-    border-radius: 18px;
+    border-radius: 50%;
     cursor: pointer;
+    font-size: 1.5rem;
+    transition: all 0.3s;
     backdrop-filter: blur(10px);
-    font-size: 1.2rem;
 }
 
+.pc-nav-btn:hover { background: var(--primary-gold); color: #000; }
+
+/* 卡片下方緊貼的功能按鈕 */
+.card-footer-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+    position: relative;
+    width: 100%;
+}
+
+.footer-center { flex: 1; display: flex; justify-content: center; }
 .pill-btn {
-    padding: 15px 45px;
+    padding: 12px 35px;
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
-    border-radius: 35px;
+    border-radius: 30px;
     color: var(--text-color);
     font-weight: 600;
     cursor: pointer;
-    backdrop-filter: blur(10px);
 }
 
-/* 手機版適應 (寬度保持 90%) */
-@media (max-width: 480px) {
+.footer-right { position: absolute; right: 0; }
+.small-action-btn {
+    padding: 8px 15px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    color: var(--text-color);
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+/* 隱形觸控區 */
+.touch-zone { position: absolute; top: 0; width: 30%; height: 100%; z-index: 5; }
+.left-zone { left: 0; }
+.right-zone { right: 0; }
+
+/* 手機版適應 (隱藏 PC 按鈕) */
+@media (max-width: 768px) {
+    .pc-nav-btn { display: none; }
     .card-wrap { max-width: 90%; }
-    .card-title-zh { font-size: 2.2rem; }
-    .square-nav-btn { width: 55px; height: 55px; }
-    .pill-btn { padding: 12px 30px; }
+    .card { max-height: 65vh; }
+    .viewer-section { padding: 0; gap: 0; }
 }
 
-/* 燈箱與 Modal */
+/* Modal */
 .modal {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    z-index: 2000; background: rgba(0,0,0,0.95);
-    display: none; align-items: center; justify-content: center;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 2000; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center;
 }
-.lightbox-content img { max-width: 95%; max-height: 95%; }
+.video-wrapper { position: relative; padding-bottom: 56.25%; width: 90%; max-width: 800px; }
+.video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.close-modal { position: absolute; top: 20px; right: 20px; color: white; font-size: 40px; cursor: pointer; }

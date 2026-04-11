@@ -2,23 +2,20 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>為萬國禱告 | 懷恩堂差傳組</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- 強制背景圖容器 -->
+    <div id="bgLayer" class="custom-world-bg"></div>
+
     <div id="app" class="app-container">
-        <!-- 幾何世界地圖背景 (直接指定 URL 確保讀取) -->
-        <div class="custom-world-bg" style="background-image: url('assets/world-bg.png');"></div>
-        <div class="vignette-overlay"></div>
-
-        <header class="main-header intro-hidden">
-            <div></div> 
-            <button id="langToggle" class="top-lang-btn">中 / EN</button>
-        </header>
-
         <main class="viewer-section">
+            <!-- PC 版左右按鈕 (手機版會隱藏) -->
+            <button id="pcPrev" class="pc-nav-btn left">◀</button>
+            
             <div class="card-wrap intro-hidden" id="mainCardWrap">
                 <div id="prayerCard" class="card initial-flip">
                     <div class="card-side card-back">
@@ -32,31 +29,31 @@
                     <div class="card-side card-front">
                         <div class="touch-zone left-zone" id="touchPrev"></div>
                         <div class="touch-zone right-zone" id="touchNext"></div>
-                        <img id="cardImg" src="" alt="禱告卡" class="clickable-image">
+                        <img id="cardImg" src="" alt="禱告卡">
+                    </div>
+                </div>
+
+                <!-- 緊貼卡片底部的功能區 -->
+                <div class="card-footer-controls intro-hidden">
+                    <div class="footer-center">
+                        <button id="randomBtn" class="pill-btn">🎲 隨機抽取</button>
+                    </div>
+                    <div class="footer-right">
+                        <button id="langToggle" class="small-action-btn">中/EN</button>
                     </div>
                 </div>
             </div>
 
-            <div class="bottom-controls intro-hidden" id="bottomControls">
-                <button id="prevBtn" class="square-nav-btn">◀</button>
-                <button id="randomBtn" class="pill-btn">🎲 隨機抽取</button>
-                <button id="nextBtn" class="square-nav-btn">▶</button>
-            </div>
-            
-            <div class="extra-actions intro-hidden">
-                <button id="videoBtn" class="pill-btn video-btn" style="display: none;">▶ 觀看影片</button>
-            </div>
+            <button id="pcNext" class="pc-nav-btn right">▶</button>
         </main>
 
-        <!-- 指定本地音效 -->
-        <audio id="flipSound" src="assets/book-opening-345808.mp3" preload="auto"></audio>
-
-        <div id="imageLightbox" class="modal lightbox" style="display: none;">
-            <div class="lightbox-content">
-                <img id="fullImg" src="" alt="原始禱告卡">
-            </div>
+        <div class="extra-actions intro-hidden" style="text-align: center; margin-top: 10px;">
+            <button id="videoBtn" class="pill-btn video-btn" style="display: none;">▶ 觀看影片</button>
         </div>
 
+        <audio id="flipSound" src="assets/book-opening-345808.mp3" preload="auto"></audio>
+
+        <!-- 僅保留影片 Modal -->
         <div id="videoModal" class="modal" style="display: none;">
             <div class="modal-content">
                 <span class="close-modal" id="closeVideo">&times;</span>

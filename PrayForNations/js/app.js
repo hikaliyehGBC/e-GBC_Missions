@@ -11,23 +11,20 @@ const state = {
     lang: 'zh', 
     total: 0,
     isAnimating: false,
-    touchStart: 0,
-    touchEnd: 0
+    touchX: 0
 };
 
 // DOM 元素
 const cardElement = document.getElementById('prayerCard');
 const cardImg = document.getElementById('cardImg');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
+const pcPrev = document.getElementById('pcPrev');
+const pcNext = document.getElementById('pcNext');
+const touchPrev = document.getElementById('touchPrev');
+const touchNext = document.getElementById('touchNext');
 const langToggle = document.getElementById('langToggle');
 const randomBtn = document.getElementById('randomBtn');
 const videoBtn = document.getElementById('videoBtn');
 const flipSound = document.getElementById('flipSound');
-
-// 進場動畫元素
-const introElems = document.querySelectorAll('.intro-hidden');
-const cardWrap = document.getElementById('mainCardWrap');
 
 async function init() {
     try {
@@ -36,7 +33,6 @@ async function init() {
         state.total = state.cards.length;
         state.currentIndex = Math.floor(Math.random() * state.total);
         
-        // 設定初始圖片
         const card = state.cards[state.currentIndex];
         cardImg.src = state.lang === 'zh' ? card.zh_img : card.en_img;
         videoBtn.style.display = card.video ? 'inline-block' : 'none';
@@ -47,22 +43,22 @@ async function init() {
     }
 }
 
-// 劇院級進場動畫序幕
 function startIntroSequence() {
-    // 1. 0.5s 後顯示卡片背面
-    setTimeout(() => {
-        cardWrap.classList.add('intro-show');
-    }, 500);
+    const cardWrap = document.getElementById('mainCardWrap');
+    const footerControls = document.querySelector('.card-footer-controls');
+    const extraActions = document.querySelector('.extra-actions');
 
-    // 2. 1.2s 後翻面至正面
-    setTimeout(() => {
-        playFlipSound();
-        cardElement.classList.remove('initial-flip');
+    // 1. 0.5s 顯示卡片背面
+    setTimeout(() => { cardWrap.classList.add('intro-show'); }, 500);
+    // 2. 1.2s 自動翻轉
+    setTimeout(() => { 
+        if (flipSound) { flipSound.volume = 0.3; flipSound.play(); }
+        cardElement.classList.remove('initial-flip'); 
     }, 1200);
-
-    // 3. 2.0s 後顯示所有介面
-    setTimeout(() => {
-        introElems.forEach(el => el.classList.add('intro-show'));
+    // 3. 2.0s 介面鑽入
+    setTimeout(() => { 
+        footerControls.classList.add('intro-show');
+        extraActions.classList.add('intro-show');
     }, 2000);
 }
 
@@ -88,17 +84,19 @@ async function loadFromGoogleSheets() {
 
 function updateDisplay() {
     if (state.total === 0 || state.isAnimating) return;
-    
     state.isAnimating = true;
     const card = state.cards[state.currentIndex];
     const imgUrl = state.lang === 'zh' ? card.zh_img : card.en_img;
 
-    playFlipSound();
+    if (flipSound) { flipSound.currentTime = 0; flipSound.play(); }
     cardElement.classList.add('flipped');
 
     setTimeout(() => {
         cardImg.src = imgUrl;
         videoBtn.style.display = card.video ? 'inline-block' : 'none';
+        // 預載下一張
+        const nextIdx = (state.currentIndex + 1) % state.total;
+        new Image().src = state.lang === 'zh' ? state.cards[nextIdx].zh_img : state.cards[nextIdx].en_img;
     }, CONFIG.flipDuration / 2);
 
     setTimeout(() => {
@@ -107,32 +105,21 @@ function updateDisplay() {
     }, CONFIG.flipDuration + 100);
 }
 
-function playFlipSound() {
-    if (flipSound) {
-        flipSound.volume = 0.3; // 控制音量不要太大
-        flipSound.currentTime = 0;
-        flipSound.play().catch(e => console.log('音效播放受限'));
-    }
-}
-
-// 事件
-prevBtn.onclick = () => changeCard(-1);
-nextBtn.onclick = () => changeCard(1);
-
-function changeCard(dir) {
+// 統一變更機制
+const changeCard = (dir) => {
     if (state.isAnimating) return;
     state.currentIndex = (state.currentIndex + dir + state.total) % state.total;
     updateDisplay();
-}
+};
+
+// 綁定所有導航按鈕 (PC 版與 隱形觸控區)
+[pcPrev, touchPrev].forEach(el => { el.onclick = (e) => { e.stopPropagation(); changeCard(-1); }; });
+[pcNext, touchNext].forEach(el => { el.onclick = (e) => { e.stopPropagation(); changeCard(1); }; });
 
 randomBtn.onclick = () => {
     if (state.isAnimating) return;
-    // 排除目前序號
     let nextIdx;
-    do {
-        nextIdx = Math.floor(Math.random() * state.total);
-    } while (nextIdx === state.currentIndex && state.total > 1);
-    
+    do { nextIdx = Math.floor(Math.random() * state.total); } while (nextIdx === state.currentIndex && state.total > 1);
     state.currentIndex = nextIdx;
     updateDisplay();
 };
@@ -142,36 +129,21 @@ langToggle.onclick = () => {
     updateDisplay();
 };
 
-// 滑動支援 (Swipe)
-cardElement.addEventListener('touchstart', (e) => {
-    state.touchStart = e.changedTouches[0].screenX;
-}, { passive: true });
-
+// 手機滑動支援 (Swipe)
+cardElement.addEventListener('touchstart', (e) => { state.touchX = e.changedTouches[0].screenX; }, { passive: true });
 cardElement.addEventListener('touchend', (e) => {
-    state.touchEnd = e.changedTouches[0].screenX;
-    handleSwipe();
+    const diff = e.changedTouches[0].screenX - state.touchX;
+    if (Math.abs(diff) > 50) changeCard(diff > 0 ? -1 : 1);
 }, { passive: true });
 
-function handleSwipe() {
-    const threshold = 50;
-    if (state.touchEnd < state.touchStart - threshold) {
-        changeCard(1); // 向左滑 -> 下一張
-    } else if (state.touchEnd > state.touchStart + threshold) {
-        changeCard(-1); // 向右滑 -> 上一張
-    }
-}
-
-// 其他原有的燈箱與 YouTube 邏輯...
-const lightbox = document.getElementById('imageLightbox');
-const fullImg = document.getElementById('fullImg');
-cardImg.onclick = () => { fullImg.src = cardImg.src; lightbox.style.display = 'flex'; };
-lightbox.onclick = () => { lightbox.style.display = 'none'; fullImg.src = ''; };
-
+// YouTube 影片
 const videoModal = document.getElementById('videoModal');
 const player = document.getElementById('youtubePlayer');
 videoBtn.onclick = () => {
     const videoUrl = state.cards[state.currentIndex].video;
-    const videoId = extractVideoID(videoUrl);
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = videoUrl.match(regExp);
+    const videoId = (match && match[2].length === 11) ? match[2] : null;
     if (videoId) {
         player.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
         videoModal.style.display = 'flex';
@@ -182,12 +154,6 @@ document.getElementById('closeVideo').onclick = () => {
     player.src = '';
 };
 
-function extractVideoID(url) {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
-}
-
 function parseCSV(text) {
     const lines = text.split(/\r?\n/);
     return lines.map(line => {
@@ -196,10 +162,7 @@ function parseCSV(text) {
         for (let i = 0; i < line.length; i++) {
             const char = line[i];
             if (char === '"') inQuote = !inQuote;
-            else if (char === ',' && !inQuote) {
-                result.push(cur);
-                cur = '';
-            } else cur += char;
+            else if (char === ',' && !inQuote) { result.push(cur); cur = ''; } else cur += char;
         }
         result.push(cur);
         return result;
