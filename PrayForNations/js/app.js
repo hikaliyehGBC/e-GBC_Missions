@@ -23,7 +23,6 @@ const touchPrev = document.getElementById('touchPrev');
 const touchNext = document.getElementById('touchNext');
 const langToggle = document.getElementById('langToggle');
 const randomBtn = document.getElementById('randomBtn');
-const videoBtn = document.getElementById('videoBtn');
 const flipSound = document.getElementById('flipSound');
 
 async function init() {
@@ -35,7 +34,6 @@ async function init() {
         
         const card = state.cards[state.currentIndex];
         cardImg.src = state.lang === 'zh' ? card.zh_img : card.en_img;
-        videoBtn.style.display = card.video ? 'inline-block' : 'none';
 
         startIntroSequence();
     } catch (err) {
@@ -45,25 +43,19 @@ async function init() {
 
 function startIntroSequence() {
     const cardWrap = document.getElementById('mainCardWrap');
-    const footerControls = document.querySelector('.card-footer-controls');
+    const bottomArea = document.getElementById('bottomArea');
     const pcBtns = document.querySelectorAll('.pc-nav-btn');
-    const extraActions = document.querySelector('.extra-actions');
 
     // 1. 0.5s 顯示背景與卡片背面
-    setTimeout(() => { 
-        cardWrap.classList.add('intro-show'); 
-    }, 500);
-
+    setTimeout(() => { cardWrap.classList.add('intro-show'); }, 500);
     // 2. 1.2s 自動翻轉
     setTimeout(() => { 
         if (flipSound) { flipSound.volume = 0.3; flipSound.play().catch(e => {}); }
         cardElement.classList.remove('initial-flip'); 
     }, 1200);
-
-    // 3. 2.0s 介面同步鑽入
+    // 3. 2.0s 所有控制介面同步鑽入
     setTimeout(() => { 
-        footerControls.classList.add('intro-show');
-        extraActions.classList.add('intro-show');
+        bottomArea.classList.add('intro-show');
         pcBtns.forEach(btn => btn.classList.add('intro-show'));
     }, 2000);
 }
@@ -99,7 +91,6 @@ function updateDisplay() {
 
     setTimeout(() => {
         cardImg.src = imgUrl;
-        videoBtn.style.display = card.video ? 'inline-block' : 'none';
     }, CONFIG.flipDuration / 2);
 
     setTimeout(() => {
@@ -118,8 +109,10 @@ const changeCard = (dir) => {
     updateDisplay();
 };
 
-[pcPrev, touchPrev].forEach(el => { if(el) el.onclick = (e) => { e.stopPropagation(); changeCard(-1); }; });
-[pcNext, touchNext].forEach(el => { if(el) el.onclick = (e) => { e.stopPropagation(); changeCard(1); }; });
+if(pcPrev) pcPrev.onclick = () => changeCard(-1);
+if(pcNext) pcNext.onclick = () => changeCard(1);
+if(touchPrev) touchPrev.onclick = () => changeCard(-1);
+if(touchNext) touchNext.onclick = () => changeCard(1);
 
 randomBtn.onclick = () => {
     if (state.isAnimating) return;
@@ -140,23 +133,6 @@ cardElement.addEventListener('touchend', (e) => {
     if (Math.abs(diff) > 50) changeCard(diff > 0 ? -1 : 1);
 }, { passive: true });
 
-const videoModal = document.getElementById('videoModal');
-const player = document.getElementById('youtubePlayer');
-videoBtn.onclick = () => {
-    const videoUrl = state.cards[state.currentIndex].video;
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-    const match = videoUrl.match(regExp);
-    const videoId = (match && match[2].length === 11) ? match[2] : null;
-    if (videoId) {
-        player.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-        videoModal.style.display = 'flex';
-    }
-};
-document.getElementById('closeVideo').onclick = () => {
-    videoModal.style.display = 'none';
-    player.src = '';
-};
-
 function parseCSV(text) {
     const lines = text.split(/\r?\n/);
     return lines.map(line => {
@@ -167,8 +143,7 @@ function parseCSV(text) {
             if (char === '"') inQuote = !inQuote;
             else if (char === ',' && !inQuote) { result.push(cur); cur = ''; } else cur += char;
         }
-        result.push(cur);
-        return result;
+        result.push(cur); return result;
     }).filter(row => row.length > 1);
 }
 

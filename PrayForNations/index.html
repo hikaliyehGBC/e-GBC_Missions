@@ -8,13 +8,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- 強制背景圖容器 -->
-    <div id="bgLayer" class="custom-world-bg"></div>
+    <div class="custom-world-bg"></div>
 
     <div id="app" class="app-container">
+        <!-- 85% 區域 -->
         <main class="viewer-section">
-            <!-- PC 版左右按鈕 (手機版會隱藏) -->
-            <button id="pcPrev" class="pc-nav-btn left">◀</button>
+            <button id="pcPrev" class="pc-nav-btn left intro-hidden">◀</button>
             
             <div class="card-wrap intro-hidden" id="mainCardWrap">
                 <div id="prayerCard" class="card initial-flip">
@@ -32,28 +31,23 @@
                         <img id="cardImg" src="" alt="禱告卡">
                     </div>
                 </div>
-
-                <!-- 緊貼卡片底部的功能區 -->
-                <div class="card-footer-controls intro-hidden">
-                    <div class="footer-center">
-                        <button id="randomBtn" class="pill-btn">🎲 隨機抽取</button>
-                    </div>
-                    <div class="footer-right">
-                        <button id="langToggle" class="small-action-btn">中/EN</button>
-                    </div>
-                </div>
             </div>
 
-            <button id="pcNext" class="pc-nav-btn right">▶</button>
+            <button id="pcNext" class="pc-nav-btn right intro-hidden">▶</button>
         </main>
 
-        <div class="extra-actions intro-hidden" style="text-align: center; margin-top: 10px;">
-            <button id="videoBtn" class="pill-btn video-btn" style="display: none;">▶ 觀看影片</button>
-        </div>
+        <!-- 15% 區域 -->
+        <footer class="bottom-area intro-hidden" id="bottomArea">
+            <div class="footer-center">
+                <button id="randomBtn" class="pill-btn">🎲 隨機抽取</button>
+            </div>
+            <div class="footer-right">
+                <button id="langToggle" class="small-action-btn">中/EN</button>
+            </div>
+        </footer>
 
         <audio id="flipSound" src="assets/book-opening-345808.mp3" preload="auto"></audio>
 
-        <!-- 僅保留影片 Modal -->
         <div id="videoModal" class="modal" style="display: none;">
             <div class="modal-content">
                 <span class="close-modal" id="closeVideo">&times;</span>
