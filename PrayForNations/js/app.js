@@ -46,19 +46,25 @@ async function init() {
 function startIntroSequence() {
     const cardWrap = document.getElementById('mainCardWrap');
     const footerControls = document.querySelector('.card-footer-controls');
+    const pcBtns = document.querySelectorAll('.pc-nav-btn');
     const extraActions = document.querySelector('.extra-actions');
 
-    // 1. 0.5s 顯示卡片背面
-    setTimeout(() => { cardWrap.classList.add('intro-show'); }, 500);
+    // 1. 0.5s 顯示背景與卡片背面
+    setTimeout(() => { 
+        cardWrap.classList.add('intro-show'); 
+    }, 500);
+
     // 2. 1.2s 自動翻轉
     setTimeout(() => { 
-        if (flipSound) { flipSound.volume = 0.3; flipSound.play(); }
+        if (flipSound) { flipSound.volume = 0.3; flipSound.play().catch(e => {}); }
         cardElement.classList.remove('initial-flip'); 
     }, 1200);
-    // 3. 2.0s 介面鑽入
+
+    // 3. 2.0s 介面同步鑽入
     setTimeout(() => { 
         footerControls.classList.add('intro-show');
         extraActions.classList.add('intro-show');
+        pcBtns.forEach(btn => btn.classList.add('intro-show'));
     }, 2000);
 }
 
@@ -88,33 +94,32 @@ function updateDisplay() {
     const card = state.cards[state.currentIndex];
     const imgUrl = state.lang === 'zh' ? card.zh_img : card.en_img;
 
-    if (flipSound) { flipSound.currentTime = 0; flipSound.play(); }
+    if (flipSound) { flipSound.currentTime = 0; flipSound.play().catch(e => {}); }
     cardElement.classList.add('flipped');
 
     setTimeout(() => {
         cardImg.src = imgUrl;
         videoBtn.style.display = card.video ? 'inline-block' : 'none';
-        // 預載下一張
-        const nextIdx = (state.currentIndex + 1) % state.total;
-        new Image().src = state.lang === 'zh' ? state.cards[nextIdx].zh_img : state.cards[nextIdx].en_img;
     }, CONFIG.flipDuration / 2);
 
     setTimeout(() => {
         cardElement.classList.remove('flipped');
         state.isAnimating = false;
+        
+        // 預載鄰近
+        const nextIdx = (state.currentIndex + 1) % state.total;
+        new Image().src = state.lang === 'zh' ? state.cards[nextIdx].zh_img : state.cards[nextIdx].en_img;
     }, CONFIG.flipDuration + 100);
 }
 
-// 統一變更機制
 const changeCard = (dir) => {
     if (state.isAnimating) return;
     state.currentIndex = (state.currentIndex + dir + state.total) % state.total;
     updateDisplay();
 };
 
-// 綁定所有導航按鈕 (PC 版與 隱形觸控區)
-[pcPrev, touchPrev].forEach(el => { el.onclick = (e) => { e.stopPropagation(); changeCard(-1); }; });
-[pcNext, touchNext].forEach(el => { el.onclick = (e) => { e.stopPropagation(); changeCard(1); }; });
+[pcPrev, touchPrev].forEach(el => { if(el) el.onclick = (e) => { e.stopPropagation(); changeCard(-1); }; });
+[pcNext, touchNext].forEach(el => { if(el) el.onclick = (e) => { e.stopPropagation(); changeCard(1); }; });
 
 randomBtn.onclick = () => {
     if (state.isAnimating) return;
@@ -129,14 +134,12 @@ langToggle.onclick = () => {
     updateDisplay();
 };
 
-// 手機滑動支援 (Swipe)
 cardElement.addEventListener('touchstart', (e) => { state.touchX = e.changedTouches[0].screenX; }, { passive: true });
 cardElement.addEventListener('touchend', (e) => {
     const diff = e.changedTouches[0].screenX - state.touchX;
     if (Math.abs(diff) > 50) changeCard(diff > 0 ? -1 : 1);
 }, { passive: true });
 
-// YouTube 影片
 const videoModal = document.getElementById('videoModal');
 const player = document.getElementById('youtubePlayer');
 videoBtn.onclick = () => {
