@@ -2,7 +2,7 @@ const CONFIG = {
     csvUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQhqx91y_5EUqOsOnjAXCQ7YjuAXrMBj6mX0_-It4VEicShgdVASf7FYg1H5IChk1aaKtKDmvT2c7OL/pub?gid=0&single=true&output=csv',
     flipDuration: 800,
     driveImagePrefix: 'https://drive.google.com/thumbnail?id=',
-    imageSuffix: '&sz=w1200'
+    imageSuffix: '&sz=w1600' // 提升至 1600 確保超高解析度
 };
 
 const state = {
@@ -53,7 +53,7 @@ function startIntroSequence() {
         if (flipSound) { flipSound.volume = 0.3; flipSound.play().catch(e => {}); }
         cardElement.classList.remove('initial-flip'); 
     }, 1200);
-    // 3. 2.0s 所有控制介面同步鑽入
+    // 3. 2.0s 介面同步鑽入
     setTimeout(() => { 
         bottomArea.classList.add('intro-show');
         pcBtns.forEach(btn => btn.classList.add('intro-show'));
@@ -97,7 +97,7 @@ function updateDisplay() {
         cardElement.classList.remove('flipped');
         state.isAnimating = false;
         
-        // 預載鄰近
+        // 預載
         const nextIdx = (state.currentIndex + 1) % state.total;
         new Image().src = state.lang === 'zh' ? state.cards[nextIdx].zh_img : state.cards[nextIdx].en_img;
     }, CONFIG.flipDuration + 100);
