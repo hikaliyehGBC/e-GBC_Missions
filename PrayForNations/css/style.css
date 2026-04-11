@@ -10,38 +10,44 @@ body {
     color: #fff;
     font-family: 'Noto Sans TC', sans-serif;
     overflow-x: hidden;
+    /* PC 預設允許滾動 */
+    overflow-y: auto; 
 }
 
-/* 背景地圖：寬度縮小至 800px 並置中 */
+/* 背景地圖：縮放為寬度 800 並置中 */
 .world-map {
     position: fixed;
-    top: 0; left: 50%;
-    transform: translateX(-50%);
-    width: 800px;
-    height: 100vh;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px; /* 固定寬度 800 */
+    height: auto;
+    aspect-ratio: auto; /* 維持原圖比例 */
+    min-height: 800px; /* 確保至少有足夠高度 */
     z-index: -1;
     background-image: url('../assets/world-bg.png');
-    background-size: cover;
+    background-size: contain; /* 改用 contain 確保圖不被裁切且維持 800 寬 */
+    background-repeat: no-repeat;
     background-position: center;
-    -webkit-mask-image: radial-gradient(circle, black 40%, transparent 100%);
-    mask-image: radial-gradient(circle, black 40%, transparent 100%);
+    -webkit-mask-image: radial-gradient(circle, black 60%, transparent 100%);
+    mask-image: radial-gradient(circle, black 60%, transparent 100%);
 }
 
-/* 主容器：PC 版維持偏移以平衡底部按鈕感 */
+/* 主容器：PC 版改為頂部對齊並加 80px 間距 */
 .container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* 改為頂部對齊 */
+    padding-top: 80px; /* 距離頂部 80px */
+    padding-bottom: 50px;
     min-height: 100vh;
-    transform: translateY(-40px);
     width: 100%;
 }
 
-/* --- 2. 卡片結構與尺寸更新 --- */
+/* --- 2. 卡片結構 --- */
 .card-wrapper {
     position: relative;
-    width: 520px; /* PC 版調整為 520px */
+    width: 520px;
     z-index: 5;
     opacity: 0;
 }
@@ -66,7 +72,7 @@ body {
     position: absolute;
     width: 100%; height: 100%;
     backface-visibility: hidden;
-    border-radius: 12px;
+    border-radius: 2px; /* 依照附圖更俐落的邊角 */
     overflow: hidden;
 }
 
@@ -80,7 +86,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.text-group { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.text-group { display: flex; flex-direction: column; align-items: center; }
 .title-zh { font-family: 'Noto Serif TC', serif; font-size: 2.5rem; color: #FFB300; margin-bottom: 12px; letter-spacing: 10px; }
 .title-en { font-size: 1rem; color: #C0C0C0; text-transform: uppercase; letter-spacing: 3px; }
 
@@ -96,48 +102,52 @@ body {
     opacity: 0;
 }
 
-.extra-actions { margin-top: 15px; opacity: 0; }
 .bottom-btn {
-    padding: 12px 30px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 30px;
+    padding: 10px 25px;
+    background: rgba(45, 55, 72, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
     color: #fff;
     cursor: pointer;
-    backdrop-filter: blur(10px);
+    font-size: 0.9rem;
 }
-.lang-btn { padding: 8px 18px; font-size: 0.8rem; }
+
 .footer-right { position: absolute; right: 0; }
 
+/* PC 導航按鈕：向外推 120px */
 .nav-btn {
-    position: absolute; top: 50%; transform: translateY(-50%);
-    width: 60px; height: 60px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #fff; border-radius: 50%; font-size: 1.2rem; cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px; height: 50px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff; border-radius: 50%; font-size: 1rem; cursor: pointer;
     z-index: 10; opacity: 0; transition: opacity 0.5s ease;
 }
-.left-btn { left: -80px; }
-.right-btn { right: -80px; }
+.left-btn { left: -140px; } /* 箭頭距卡片 120px (邊邊-120) */
+.right-btn { right: -140px; }
 
 /* --- 4. 手機版適應 --- */
 @media (max-width: 768px) {
-    body { overflow: hidden; }
-    .container { transform: translateY(0); } /* 手機版移除偏移實現垂直絕對置中 */
+    body { overflow: hidden; } /* 手機版鎖死滾動 */
+    .container { 
+        justify-content: center; 
+        padding-top: 0; /* 手機版維持垂直置中 */
+    } 
     .card-wrapper { width: calc(100vw - 40px); }
     .nav-btn { display: none; }
-    .title-zh { font-size: 1.8rem; letter-spacing: 6px; }
-    .bottom-controls { max-width: calc(100vw - 40px); margin-top: 20px; }
-    .world-map { width: 100vw; } /* 背景在地圖模式下維持滿版避免白邊 */
+    .bottom-controls { max-width: calc(100vw - 40px); margin-top: 30px; }
+    .world-map { width: 100vw; } 
 }
 
 /* --- 5. 動態進場 --- */
 .animate-in-card { animation: zoomIn 1s cubic-bezier(0.25, 0.8, 0.25, 1) forwards; }
 .animate-fade-in { animation: fadeIn 0.5s ease forwards; }
-@keyframes zoomIn { from { opacity: 0; transform: scale(1.1) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+@keyframes zoomIn { from { opacity: 0; transform: scale(1) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; }
+.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; }
 .video-container { width: 90%; max-width: 800px; position: relative; padding-bottom: 56.25%; }
 .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 .close-modal { position: absolute; top: -50px; right: 0; color: #fff; font-size: 40px; cursor: pointer; }
