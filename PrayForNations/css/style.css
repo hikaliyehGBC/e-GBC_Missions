@@ -10,16 +10,15 @@ body {
     color: #fff;
     font-family: 'Noto Sans TC', sans-serif;
     overflow-x: hidden;
-    overflow-y: auto; 
 }
 
-/* 背景地圖：寬度 900 並強化羽化 */
+/* 背景地圖：PC 寬度 1280 並強化羽化 */
 .world-map {
     position: fixed;
-    top: 80px; /* 與代禱卡齊頭對齊 */
+    top: 50%; /* 恢復垂直置中 */
     left: 50%;
-    transform: translateX(-50%);
-    width: 900px;
+    transform: translate(-50%, -50%); /* 恢復垂直與水平置中 */
+    width: 1280px; /* PC 版 1280 */
     height: auto;
     aspect-ratio: auto;
     min-height: 800px;
@@ -27,20 +26,18 @@ body {
     background-image: url('../assets/world-bg.png');
     background-size: contain;
     background-repeat: no-repeat;
-    background-position: top center;
-    /* 強化四周羽化，讓中央保持清晰，邊緣提早進入黑色 */
-    -webkit-mask-image: radial-gradient(circle, black 30%, transparent 85%);
-    mask-image: radial-gradient(circle, black 30%, transparent 85%);
+    background-position: center;
+    /* 雙倍強化羽化：清晰圈縮小至 20%，黑色從 65% 就全黑 */
+    -webkit-mask-image: radial-gradient(circle, black 20%, transparent 65%);
+    mask-image: radial-gradient(circle, black 20%, transparent 65%);
 }
 
-/* 主容器：距離頂部 80px */
+/* 主容器：恢復完全置中 */
 .container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    padding-top: 80px;
-    padding-bottom: 80px;
+    justify-content: center; /* 恢復置中 */
     min-height: 100vh;
     width: 100%;
 }
@@ -90,21 +87,19 @@ body {
 .title-zh { font-family: 'Noto Serif TC', serif; font-size: 2.5rem; color: #FFB300; margin-bottom: 12px; letter-spacing: 10px; }
 .title-en { font-size: 1rem; color: #C0C0C0; text-transform: uppercase; letter-spacing: 3px; }
 
-/* --- 3. 導航按鈕校正：對齊卡片各推 120px --- */
+/* 導航按鈕：維持左右外推 120px 與垂直置中 */
 .nav-btn {
     position: absolute;
-    top: 50%; /* 相對於 card-wrapper 置中 */
+    top: 50%;
     transform: translateY(-50%);
     width: 50px; height: 50px;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: #fff; border-radius: 50%; font-size: 1rem; cursor: pointer;
-    z-index: 100; /* 確保在最上層 */
+    z-index: 100;
     opacity: 0; transition: all 0.3s;
 }
 .nav-btn:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-50%) scale(1.1); }
-
-/* 卡片寬度 520px，左右各推 120px，扣除按鈕寬度 */
 .left-btn { left: -120px; } 
 .right-btn { right: -120px; }
 
@@ -135,10 +130,10 @@ body {
 /* --- 4. 手機版適應 --- */
 @media (max-width: 768px) {
     body { overflow: hidden; }
-    .container { justify-content: center; padding-top: 0; } 
     .card-wrapper { width: calc(100vw - 40px); }
     .nav-btn { display: none; }
-    .world-map { width: 100vw; top: 0; transform: translate(-50%, 0); } 
+    .bottom-controls { max-width: calc(100vw - 40px); margin-top: 30px; }
+    .world-map { width: 100vw; } /* 手機維持原本大小(滿版) */
 }
 
 /* --- 5. 動態進場 --- */
