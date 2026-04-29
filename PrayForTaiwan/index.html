@@ -107,7 +107,7 @@
         
         <div id="loadingSection">
             <div class="spinner"></div>
-            <div class="status-text">抽取今日代禱地區...</div>
+            <div id="loadingMessage" class="status-text">抽取今日代禱地區...</div>
         </div>
 
         <div id="resultSection" class="result-box">
@@ -119,8 +119,34 @@
 
     <script>
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQhqx91y_5EUqOsOnjAXCQ7YjuAXrMBj6mX0_-It4VEicShgdVASf7FYg1H5IChk1aaKtKDmvT2c7OL/pub?gid=1828342091&single=true&output=csv';
+        
+        const MESSAGES = [
+            "願這片土地被記念...",
+            "有一處土地，正等待代禱...",
+            "在這島嶼的某一角，有人需要禱告...",
+            "這片土地，有你還不認識的故事...",
+            "島嶼上，某個地方正在被記念...",
+            "讓聖靈帶領，今天為誰禱告...",
+            "聖靈帶領你去一個地方...",
+            "你的代禱，今天要去哪裡...",
+            "禱告的目光，正要落在某處...",
+            "神的心，今天牽掛著這裡...",
+            "有一處地方，等待你的代禱...",
+            "今天，神差你為這裡禱告...",
+            "你的禱告，是這地最需要的...",
+            "為那些你不認識的人，開口禱告...",
+            "今天的代禱，是一份蒙召...",
+            "在台灣的某一處，今天屬於你...",
+            "願這名字，在神的心中被記念...",
+            "每一處土地，都值得被禱告...",
+            "帶著愛，前往今天的代禱之地...",
+            "這島嶼的每一角，都有禱告的痕跡..."
+        ];
 
         async function init() {
+            // 隨機選一個載入文字
+            document.getElementById('loadingMessage').innerText = MESSAGES[Math.floor(Math.random() * MESSAGES.length)];
+
             try {
                 const response = await fetch(CSV_URL);
                 const csvText = await response.text();
@@ -139,6 +165,7 @@
                     const locationName = `${city} ${district}`;
                     
                     const videoUrl = selectedRow[3].trim();
+                    const videoId = extractYouTubeId(videoUrl);
                     
                     // 顯示結果
                     setTimeout(() => {
@@ -147,12 +174,18 @@
                         document.getElementById('locationDisplay').innerText = locationName;
                         resultSection.style.display = 'flex';
                         
-                        // 1.5 秒後跳轉
+                        // 1.5 秒後跳轉 (如果是內嵌在 iframe，必須使用 embed 網址)
                         setTimeout(() => {
-                            window.location.replace(videoUrl);
+                            if (videoId) {
+                                // 強制使用 embed 格式，避免 iframe 內嵌時被 YouTube 拒絕連線
+                                const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&playsinline=1&modestbranding=1`;
+                                window.location.replace(embedUrl);
+                            } else {
+                                window.location.replace(videoUrl);
+                            }
                         }, 1500);
                         
-                    }, 800); // 讓使用者至少看 0.8 秒的 loading
+                    }, 1200); // 稍微增加 loading 時間增加人文感
                     
                 } else {
                     showError("找不到影片資料，請確認試算表內容");
@@ -161,6 +194,12 @@
                 console.error(err);
                 showError("網路連線錯誤，請重試");
             }
+        }
+
+        function extractYouTubeId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
         }
 
         // 簡易 CSV 解析
