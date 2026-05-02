@@ -79,26 +79,24 @@
             margin-top: 20px;
         }
 
-        .start-btn {
+        .retry-btn {
             background: rgba(255, 255, 255, 0.2);
             color: white;
             border: 2px solid white;
-            padding: 12px 36px;
-            font-size: 1.1rem;
+            padding: 10px 28px;
+            font-size: 1rem;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
             font-family: 'Noto Sans TC', sans-serif;
             font-weight: 500;
-            margin-top: 10px;
+            margin-top: 16px;
             outline: none;
         }
 
-        .start-btn:hover {
+        .retry-btn:hover {
             background: white;
             color: #203a43;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
         @keyframes spin {
@@ -114,18 +112,12 @@
 </head>
 <body>
 
-    <div class="container" id="mainContainer">
+    <div class="container">
         <h1>為台灣禱告</h1>
         <div class="subtitle">Pray for Taiwan</div>
 
-        <!-- 開始區塊 -->
-        <div id="startSection">
-            <p style="margin-bottom: 25px; opacity: 0.9;">點擊下方按鈕，隨機為台灣的一個地區代禱</p>
-            <button class="start-btn" onclick="handleStart()">開始禱告</button>
-        </div>
-
         <!-- 抽取中 -->
-        <div id="loadingSection" style="display: none;">
+        <div id="loadingSection">
             <div class="spinner"></div>
             <div id="loadingMessage" class="status-text">正在尋找代禱之地...</div>
         </div>
@@ -135,6 +127,12 @@
             <div class="status-text" style="margin-bottom: 0;">今日代禱地區</div>
             <div class="location-text" id="locationDisplay">--</div>
             <div class="redirecting" id="redirectMsg">即將開啟影片...</div>
+        </div>
+
+        <!-- 錯誤 -->
+        <div id="errorSection" style="display: none;">
+            <div class="status-text" style="color:#ff8a8a;" id="errorMsg">載入失敗</div>
+            <button class="retry-btn" onclick="location.reload()">重試</button>
         </div>
     </div>
 
@@ -151,34 +149,23 @@
             "帶著愛，前往今天的代禱之地...", "這島嶼的每一角，都有禱告的痕跡..."
         ];
 
-        let cachedData = null;
+        // 頁面載入後立即開始
+        async function init() {
+            document.getElementById('loadingMessage').innerText =
+                MESSAGES[Math.floor(Math.random() * MESSAGES.length)];
 
-        // 頁面載入時預抓資料
-        async function preloadData() {
             try {
                 const res = await fetch(CSV_URL);
-                cachedData = parseCSV(await res.text());
+                const data = parseCSV(await res.text());
+                drawAndRedirect(data);
             } catch (e) {
-                console.error("Preload failed", e);
+                console.error(e);
+                showError("網路連線失敗，請重新整理頁面");
             }
         }
 
-        function handleStart() {
-            if (!cachedData) {
-                // 資料還沒好，顯示等待中並繼續抓
-                document.getElementById('startSection').style.display = 'none';
-                document.getElementById('loadingSection').style.display = 'block';
-                preloadData().then(() => {
-                    if (cachedData) drawAndRedirect();
-                    else showError("無法載入資料，請檢查網路連線");
-                });
-                return;
-            }
-            drawAndRedirect();
-        }
-
-        function drawAndRedirect() {
-            const dataRows = cachedData.slice(1).filter(r => r.length >= 4 && r[3].trim());
+        function drawAndRedirect(data) {
+            const dataRows = data.slice(1).filter(r => r.length >= 4 && r[3].trim());
             if (!dataRows.length) { showError("找不到影片資料"); return; }
 
             const row = dataRows[Math.floor(Math.random() * dataRows.length)];
@@ -186,18 +173,14 @@
             const videoUrl = row[3].trim();
             const videoId = extractYouTubeId(videoUrl);
 
-            // 顯示抽取動畫
-            document.getElementById('startSection').style.display = 'none';
-            document.getElementById('loadingSection').style.display = 'block';
-            document.getElementById('loadingMessage').innerText = MESSAGES[Math.floor(Math.random() * MESSAGES.length)];
-
+            // 顯示結果
             setTimeout(() => {
                 document.getElementById('loadingSection').style.display = 'none';
                 document.getElementById('locationDisplay').innerText = locationName;
                 document.getElementById('resultSection').style.display = 'block';
 
                 // 倒數跳轉
-                let count = 2;
+                let count = 3;
                 const tick = () => {
                     document.getElementById('redirectMsg').innerText = `${count} 秒後開啟影片...`;
                     if (count <= 0) {
@@ -208,7 +191,7 @@
                     }
                 };
                 tick();
-            }, 1800);
+            }, 2000);
         }
 
         function goToYouTube(videoId, fallbackUrl) {
@@ -217,15 +200,16 @@
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
             if (isMobile) {
-                // 手機：先嘗試喚起 YouTube App（App 內可自動播放）
-                // 若使用者沒安裝 App，1.5 秒後備援跳到 YouTube 網頁
+                // 手機：先嘗試喚起 YouTube App（App 內全螢幕自動播放）
+                // 若未安裝 App，1.5 秒後備援跳到 YouTube 網頁
                 window.top.location.href = `vnd.youtube://${videoId}`;
                 setTimeout(() => {
                     window.top.location.href = `https://www.youtube.com/watch?v=${videoId}`;
                 }, 1500);
             } else {
-                // 電腦：直接開 YouTube 網頁
-                window.top.location.href = `https://www.youtube.com/watch?v=${videoId}`;
+                // 電腦：跳轉到 YouTube embed 頁（佔滿整個分頁，視覺上全螢幕）
+                window.top.location.href =
+                    `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=0`;
             }
         }
 
@@ -250,13 +234,11 @@
         function showError(msg) {
             document.getElementById('loadingSection').style.display = 'none';
             document.getElementById('resultSection').style.display = 'none';
-            document.getElementById('startSection').style.display = 'block';
-            document.getElementById('startSection').innerHTML =
-                `<div class="status-text" style="color:#ff8a8a;">${msg}</div>
-                 <button class="start-btn" onclick="location.reload()" style="margin-top:20px;">重試</button>`;
+            document.getElementById('errorMsg').innerText = msg;
+            document.getElementById('errorSection').style.display = 'block';
         }
 
-        window.addEventListener('DOMContentLoaded', preloadData);
+        window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
