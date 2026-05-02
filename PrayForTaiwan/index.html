@@ -212,20 +212,20 @@
         }
 
         function goToYouTube(videoId, fallbackUrl) {
-            if (!videoId) { window.location.href = fallbackUrl; return; }
+            if (!videoId) { window.top.location.href = fallbackUrl; return; }
 
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
             if (isMobile) {
                 // 手機：先嘗試喚起 YouTube App（App 內可自動播放）
                 // 若使用者沒安裝 App，1.5 秒後備援跳到 YouTube 網頁
-                window.location.href = `vnd.youtube://${videoId}`;
+                window.top.location.href = `vnd.youtube://${videoId}`;
                 setTimeout(() => {
-                    window.location.href = `https://www.youtube.com/watch?v=${videoId}`;
+                    window.top.location.href = `https://www.youtube.com/watch?v=${videoId}`;
                 }, 1500);
             } else {
                 // 電腦：直接開 YouTube 網頁
-                window.location.href = `https://www.youtube.com/watch?v=${videoId}`;
+                window.top.location.href = `https://www.youtube.com/watch?v=${videoId}`;
             }
         }
 
