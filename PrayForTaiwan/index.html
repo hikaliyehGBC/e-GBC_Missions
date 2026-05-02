@@ -48,10 +48,11 @@
         }
 
         .status-text {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             min-height: 2em;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             font-weight: 500;
+            opacity: 0.9;
         }
 
         .spinner {
@@ -69,14 +70,43 @@
             font-weight: 700;
             color: #a8ff78;
             text-shadow: 0 0 10px rgba(168, 255, 120, 0.5);
-            margin: 10px 0;
+            margin: 10px 0 20px;
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        /* 前往影片按鈕 */
+        .go-btn {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 14px 40px;
+            font-size: 1.1rem;
+            font-family: 'Noto Sans TC', sans-serif;
+            font-weight: 700;
+            color: #0f2027;
+            background: #a8ff78;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(168, 255, 120, 0.4);
+            transition: all 0.3s ease;
             animation: fadeIn 0.5s ease forwards;
         }
 
-        .redirecting {
-            font-size: 0.9rem;
-            opacity: 0.7;
-            margin-top: 20px;
+        .go-btn:hover {
+            background: #c8ffa8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(168, 255, 120, 0.6);
+        }
+
+        .go-btn:active {
+            transform: translateY(0);
+        }
+
+        .hint {
+            font-size: 0.8rem;
+            opacity: 0.5;
+            margin-top: 12px;
         }
 
         .retry-btn {
@@ -92,11 +122,6 @@
             font-weight: 500;
             margin-top: 16px;
             outline: none;
-        }
-
-        .retry-btn:hover {
-            background: white;
-            color: #203a43;
         }
 
         @keyframes spin {
@@ -122,11 +147,17 @@
             <div id="loadingMessage" class="status-text">正在尋找代禱之地...</div>
         </div>
 
-        <!-- 顯示結果 -->
+        <!-- 顯示結果 + 前往按鈕 -->
         <div id="resultSection" style="display: none;">
             <div class="status-text" style="margin-bottom: 0;">今日代禱地區</div>
             <div class="location-text" id="locationDisplay">--</div>
-            <div class="redirecting" id="redirectMsg">即將開啟影片...</div>
+            <!--
+                使用 <a target="_top"> 而非 JS redirect：
+                瀏覽器永遠允許使用者點擊連結，
+                target="_top" 可突破 iframe 限制跳轉整個頁面
+            -->
+            <a id="goLink" href="#" target="_top" class="go-btn">▶ 前往禱告影片</a>
+            <div class="hint" id="hintText">點擊上方按鈕開始觀看</div>
         </div>
 
         <!-- 錯誤 -->
@@ -149,7 +180,6 @@
             "帶著愛，前往今天的代禱之地...", "這島嶼的每一角，都有禱告的痕跡..."
         ];
 
-        // 頁面載入後立即開始
         async function init() {
             document.getElementById('loadingMessage').innerText =
                 MESSAGES[Math.floor(Math.random() * MESSAGES.length)];
@@ -157,14 +187,14 @@
             try {
                 const res = await fetch(CSV_URL);
                 const data = parseCSV(await res.text());
-                drawAndRedirect(data);
+                drawResult(data);
             } catch (e) {
                 console.error(e);
                 showError("網路連線失敗，請重新整理頁面");
             }
         }
 
-        function drawAndRedirect(data) {
+        function drawResult(data) {
             const dataRows = data.slice(1).filter(r => r.length >= 4 && r[3].trim());
             if (!dataRows.length) { showError("找不到影片資料"); return; }
 
@@ -173,44 +203,31 @@
             const videoUrl = row[3].trim();
             const videoId = extractYouTubeId(videoUrl);
 
+            // 組合跳轉網址
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            let targetUrl;
+            if (videoId) {
+                if (isMobile) {
+                    // 手機優先嘗試開 App（App 內全螢幕播放）
+                    // 但 <a> 無法同時設兩個 href，改用 youtube.com 讓 App 接管
+                    targetUrl = `https://www.youtube.com/watch?v=${videoId}`;
+                } else {
+                    // 電腦：embed 頁面佔滿分頁，視覺接近全螢幕
+                    targetUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
+                }
+            } else {
+                targetUrl = videoUrl;
+            }
+
+            // 設定連結
+            document.getElementById('goLink').href = targetUrl;
+
             // 顯示結果
             setTimeout(() => {
                 document.getElementById('loadingSection').style.display = 'none';
                 document.getElementById('locationDisplay').innerText = locationName;
                 document.getElementById('resultSection').style.display = 'block';
-
-                // 倒數跳轉
-                let count = 3;
-                const tick = () => {
-                    document.getElementById('redirectMsg').innerText = `${count} 秒後開啟影片...`;
-                    if (count <= 0) {
-                        goToYouTube(videoId, videoUrl);
-                    } else {
-                        count--;
-                        setTimeout(tick, 1000);
-                    }
-                };
-                tick();
             }, 2000);
-        }
-
-        function goToYouTube(videoId, fallbackUrl) {
-            if (!videoId) { window.top.location.href = fallbackUrl; return; }
-
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-            if (isMobile) {
-                // 手機：先嘗試喚起 YouTube App（App 內全螢幕自動播放）
-                // 若未安裝 App，1.5 秒後備援跳到 YouTube 網頁
-                window.top.location.href = `vnd.youtube://${videoId}`;
-                setTimeout(() => {
-                    window.top.location.href = `https://www.youtube.com/watch?v=${videoId}`;
-                }, 1500);
-            } else {
-                // 電腦：跳轉到 YouTube embed 頁（佔滿整個分頁，視覺上全螢幕）
-                window.top.location.href =
-                    `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=0`;
-            }
         }
 
         function extractYouTubeId(url) {
