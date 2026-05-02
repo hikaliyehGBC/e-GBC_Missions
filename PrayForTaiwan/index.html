@@ -31,7 +31,6 @@
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
             max-width: 90%;
             width: 400px;
-            transition: all 0.5s ease;
         }
 
         h1 {
@@ -63,14 +62,6 @@
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 0 auto 20px auto;
-            transition: opacity 0.5s ease;
-        }
-
-        .result-box {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            animation: fadeIn 0.5s ease forwards;
         }
 
         .location-text {
@@ -79,12 +70,35 @@
             color: #a8ff78;
             text-shadow: 0 0 10px rgba(168, 255, 120, 0.5);
             margin: 10px 0;
+            animation: fadeIn 0.5s ease forwards;
         }
 
         .redirecting {
             font-size: 0.9rem;
             opacity: 0.7;
             margin-top: 20px;
+        }
+
+        .start-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 12px 36px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Noto Sans TC', sans-serif;
+            font-weight: 500;
+            margin-top: 10px;
+            outline: none;
+        }
+
+        .start-btn:hover {
+            background: white;
+            color: #203a43;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
         @keyframes spin {
@@ -96,7 +110,6 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
     </style>
 </head>
 <body>
@@ -104,127 +117,146 @@
     <div class="container" id="mainContainer">
         <h1>為台灣禱告</h1>
         <div class="subtitle">Pray for Taiwan</div>
-        
-        <div id="loadingSection">
-            <div class="spinner"></div>
-            <div id="loadingMessage" class="status-text">抽取今日代禱地區...</div>
+
+        <!-- 開始區塊 -->
+        <div id="startSection">
+            <p style="margin-bottom: 25px; opacity: 0.9;">點擊下方按鈕，隨機為台灣的一個地區代禱</p>
+            <button class="start-btn" onclick="handleStart()">開始禱告</button>
         </div>
 
-        <div id="resultSection" class="result-box">
+        <!-- 抽取中 -->
+        <div id="loadingSection" style="display: none;">
+            <div class="spinner"></div>
+            <div id="loadingMessage" class="status-text">正在尋找代禱之地...</div>
+        </div>
+
+        <!-- 顯示結果 -->
+        <div id="resultSection" style="display: none;">
             <div class="status-text" style="margin-bottom: 0;">今日代禱地區</div>
             <div class="location-text" id="locationDisplay">--</div>
-            <div class="redirecting">即將前往影片...</div>
+            <div class="redirecting" id="redirectMsg">即將開啟影片...</div>
         </div>
     </div>
 
     <script>
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQhqx91y_5EUqOsOnjAXCQ7YjuAXrMBj6mX0_-It4VEicShgdVASf7FYg1H5IChk1aaKtKDmvT2c7OL/pub?gid=1828342091&single=true&output=csv';
-        
+
         const MESSAGES = [
-            "願這片土地被記念...",
-            "有一處土地，正等待代禱...",
-            "在這島嶼的某一角，有人需要禱告...",
-            "這片土地，有你還不認識的故事...",
-            "島嶼上，某個地方正在被記念...",
-            "讓聖靈帶領，今天為誰禱告...",
-            "聖靈帶領你去一個地方...",
-            "你的代禱，今天要去哪裡...",
-            "禱告的目光，正要落在某處...",
-            "神的心，今天牽掛著這裡...",
-            "有一處地方，等待你的代禱...",
-            "今天，神差你為這裡禱告...",
-            "你的禱告，是這地最需要的...",
-            "為那些你不認識的人，開口禱告...",
-            "今天的代禱，是一份蒙召...",
-            "在台灣的某一處，今天屬於你...",
-            "願這名字，在神的心中被記念...",
-            "每一處土地，都值得被禱告...",
-            "帶著愛，前往今天的代禱之地...",
-            "這島嶼的每一角，都有禱告的痕跡..."
+            "願這片土地被記念...", "有一處土地，正等待代禱...", "在這島嶼的某一角，有人需要禱告...",
+            "這片土地，有你還不認識的故事...", "島嶼上，某個地方正在被記念...", "讓聖靈帶領，今天為誰禱告...",
+            "聖靈帶領你去一個地方...", "你的代禱，今天要去哪裡...", "禱告的目光，正要落在某處...",
+            "神的心，今天牽掛著這裡...", "有一處地方，等待你的代禱...", "今天，神差你為這裡禱告...",
+            "你的禱告，是這地最需要的...", "為那些你不認識的人，開口禱告...", "今天的代禱，是一份蒙召...",
+            "在台灣的某一處，今天屬於你...", "願這名字，在神的心中被記念...", "每一處土地，都值得被禱告...",
+            "帶著愛，前往今天的代禱之地...", "這島嶼的每一角，都有禱告的痕跡..."
         ];
 
-        async function init() {
-            // 隨機選一個載入文字
+        let cachedData = null;
+
+        // 頁面載入時預抓資料
+        async function preloadData() {
+            try {
+                const res = await fetch(CSV_URL);
+                cachedData = parseCSV(await res.text());
+            } catch (e) {
+                console.error("Preload failed", e);
+            }
+        }
+
+        function handleStart() {
+            if (!cachedData) {
+                // 資料還沒好，顯示等待中並繼續抓
+                document.getElementById('startSection').style.display = 'none';
+                document.getElementById('loadingSection').style.display = 'block';
+                preloadData().then(() => {
+                    if (cachedData) drawAndRedirect();
+                    else showError("無法載入資料，請檢查網路連線");
+                });
+                return;
+            }
+            drawAndRedirect();
+        }
+
+        function drawAndRedirect() {
+            const dataRows = cachedData.slice(1).filter(r => r.length >= 4 && r[3].trim());
+            if (!dataRows.length) { showError("找不到影片資料"); return; }
+
+            const row = dataRows[Math.floor(Math.random() * dataRows.length)];
+            const locationName = `${(row[1] || '').trim()} ${(row[2] || '').trim()}`;
+            const videoUrl = row[3].trim();
+            const videoId = extractYouTubeId(videoUrl);
+
+            // 顯示抽取動畫
+            document.getElementById('startSection').style.display = 'none';
+            document.getElementById('loadingSection').style.display = 'block';
             document.getElementById('loadingMessage').innerText = MESSAGES[Math.floor(Math.random() * MESSAGES.length)];
 
-            try {
-                const response = await fetch(CSV_URL);
-                const csvText = await response.text();
-                const rows = parseCSV(csvText);
-                
-                // 去除標題列，過濾有 YouTube 網址的列
-                const dataRows = rows.slice(1).filter(row => row.length >= 4 && row[3].trim() !== '');
-                
-                if (dataRows.length > 0) {
-                    // 隨機選一個
-                    const randomIndex = Math.floor(Math.random() * dataRows.length);
-                    const selectedRow = dataRows[randomIndex];
-                    
-                    const city = selectedRow[1] ? selectedRow[1].trim() : '';
-                    const district = selectedRow[2] ? selectedRow[2].trim() : '';
-                    const locationName = `${city} ${district}`;
-                    
-                    const videoUrl = selectedRow[3].trim();
-                    const videoId = extractYouTubeId(videoUrl);
-                    
-                    // 顯示結果
-                    setTimeout(() => {
-                        document.getElementById('loadingSection').style.display = 'none';
-                        const resultSection = document.getElementById('resultSection');
-                        document.getElementById('locationDisplay').innerText = locationName;
-                        resultSection.style.display = 'flex';
-                        
-                        // 1.5 秒後跳轉 (如果是內嵌在 iframe，必須使用 embed 網址)
-                        setTimeout(() => {
-                            if (videoId) {
-                                // 強制使用 embed 格式，避免 iframe 內嵌時被 YouTube 拒絕連線
-                                const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&playsinline=1&modestbranding=1`;
-                                window.location.replace(embedUrl);
-                            } else {
-                                window.location.replace(videoUrl);
-                            }
-                        }, 1500);
-                        
-                    }, 1200); // 稍微增加 loading 時間增加人文感
-                    
-                } else {
-                    showError("找不到影片資料，請確認試算表內容");
-                }
-            } catch (err) {
-                console.error(err);
-                showError("網路連線錯誤，請重試");
+            setTimeout(() => {
+                document.getElementById('loadingSection').style.display = 'none';
+                document.getElementById('locationDisplay').innerText = locationName;
+                document.getElementById('resultSection').style.display = 'block';
+
+                // 倒數跳轉
+                let count = 2;
+                const tick = () => {
+                    document.getElementById('redirectMsg').innerText = `${count} 秒後開啟影片...`;
+                    if (count <= 0) {
+                        goToYouTube(videoId, videoUrl);
+                    } else {
+                        count--;
+                        setTimeout(tick, 1000);
+                    }
+                };
+                tick();
+            }, 1800);
+        }
+
+        function goToYouTube(videoId, fallbackUrl) {
+            if (!videoId) { window.location.href = fallbackUrl; return; }
+
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+            if (isMobile) {
+                // 手機：先嘗試喚起 YouTube App（App 內可自動播放）
+                // 若使用者沒安裝 App，1.5 秒後備援跳到 YouTube 網頁
+                window.location.href = `vnd.youtube://${videoId}`;
+                setTimeout(() => {
+                    window.location.href = `https://www.youtube.com/watch?v=${videoId}`;
+                }, 1500);
+            } else {
+                // 電腦：直接開 YouTube 網頁
+                window.location.href = `https://www.youtube.com/watch?v=${videoId}`;
             }
         }
 
         function extractYouTubeId(url) {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
+            const m = url.match(/^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/);
+            return (m && m[2].length === 11) ? m[2] : null;
         }
 
-        // 簡易 CSV 解析
         function parseCSV(text) {
-            const lines = text.split(/\r?\n/);
-            return lines.map(line => {
-                const result = [];
-                let cur = '', inQuote = false;
-                for (let i = 0; i < line.length; i++) {
-                    const char = line[i];
-                    if (char === '"') inQuote = !inQuote;
-                    else if (char === ',' && !inQuote) { result.push(cur); cur = ''; } 
-                    else cur += char;
+            return text.split(/\r?\n/).map(line => {
+                const result = []; let cur = '', inQ = false;
+                for (const c of line) {
+                    if (c === '"') inQ = !inQ;
+                    else if (c === ',' && !inQ) { result.push(cur); cur = ''; }
+                    else cur += c;
                 }
-                result.push(cur); 
+                result.push(cur);
                 return result;
             });
         }
 
         function showError(msg) {
-            document.getElementById('loadingSection').innerHTML = `<div class="status-text">${msg}</div>`;
+            document.getElementById('loadingSection').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'none';
+            document.getElementById('startSection').style.display = 'block';
+            document.getElementById('startSection').innerHTML =
+                `<div class="status-text" style="color:#ff8a8a;">${msg}</div>
+                 <button class="start-btn" onclick="location.reload()" style="margin-top:20px;">重試</button>`;
         }
 
-        // 開始執行
-        window.addEventListener('DOMContentLoaded', init);
+        window.addEventListener('DOMContentLoaded', preloadData);
     </script>
 </body>
 </html>
