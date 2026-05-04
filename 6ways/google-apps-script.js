@@ -4,13 +4,13 @@
 // ============================================================
 
 const SPREADSHEET_ID = '1BzGZlEjSI_M7b3GuAZnwkCkDdNyNOs3A6c-gCyDZRhY';
-const SHEET_NAME = 'Sheet1'; // 若工作表名稱不同請修改
 
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-    const sheet = ss.getSheetByName(SHEET_NAME);
+    // 取第一個工作表，不管名稱是 Sheet1 或 工作表1
+    const sheet = ss.getSheets()[0];
 
     // 若第一列是空的，先寫標題列
     if (sheet.getLastRow() === 0) {

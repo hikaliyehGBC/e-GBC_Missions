@@ -746,10 +746,11 @@
         details: detailValues
       };
 
+      // no-cors 模式下 Content-Type 必須是 text/plain，否則瀏覽器會靜默阻擋
       fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify(payload)
       }).then(() => showToast()).catch(() => { });
     }
