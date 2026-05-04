@@ -19,17 +19,25 @@ function doPost(e) {
         '詳細Q1-學習', '詳細Q2-禱告', '詳細Q3-差派',
         '詳細Q4-歡迎', '詳細Q5-動員', '詳細Q6-學習',
         '詳細Q7-禱告', '詳細Q8-差派', '詳細Q9-歡迎',
-        '詳細Q10-動員','詳細Q11-出去','詳細Q12-出去'
+        '詳細Q10-動員','詳細Q11-出去','詳細Q12-出去',
+        '學習總分', '禱告總分', '差派總分', '歡迎總分', '動員總分', '出去總分'
       ];
       sheet.appendRow(headers);
     }
 
     // 組合資料列
+    const cat = data.catScores || {};
     const row = [
       data.timecode,
       data.q1 || '未作答',
       data.q2 || '未作答',
-      ...( data.details || Array(12).fill('未作答') )
+      ...( data.details || Array(12).fill('未作答') ),
+      cat.learn    !== undefined ? cat.learn    : '',
+      cat.pray     !== undefined ? cat.pray     : '',
+      cat.send     !== undefined ? cat.send     : '',
+      cat.welcome  !== undefined ? cat.welcome  : '',
+      cat.mobilize !== undefined ? cat.mobilize : '',
+      cat.go       !== undefined ? cat.go       : ''
     ];
 
     sheet.appendRow(row);

@@ -392,6 +392,7 @@
 
     .card-actions {
       display: flex;
+      flex-direction: column;
       gap: 8px;
       margin-top: auto;
     }
@@ -620,7 +621,7 @@
       mobilize: {
         name: '動員 (Mobilize)', icon: '📢', color: '#C55A11',
         img: 'images/mobilize.png',
-        desc: '您是宣教的火種，善於號召、聯絡，能影響更多人投入大使命',
+        desc: '您是宣教的火種，善於號召、聯絡，影響更多人投入大使命',
         action: '在小組分享宣教見證、協助籌辦宣教活動',
         video: 'https://youtu.be/pdtZ85QfFOs?si=VJnhbsxuGqx4KkCU',
         learnMore: 'https://omf.org/tw/什麼是宣教動員/'
@@ -629,7 +630,7 @@
         name: '出去 (Go)', icon: '✈️', color: '#2E5C8A',
         img: 'images/go.png',
         desc: '您有拓荒者的熱情，具備跨文化行動力，願意親自前往禾場',
-        action: '參加教會或差會舉辦的短、中、長期宣教',
+        action: '參加教會或差會舉辦的短/中/長期宣教',
         video: 'https://youtu.be/mGw4Dw0C_9k?si=JIYTwcv-KNZJ6z78',
         learnMore: 'https://omf.org/tw/0601/'
       }
@@ -743,7 +744,16 @@
         timecode: now,
         q1: q1val,
         q2: q2val,
-        details: detailValues
+        details: detailValues,
+        // 六類型總分
+        catScores: {
+          learn:    detailScores.learn,
+          pray:     detailScores.pray,
+          send:     detailScores.send,
+          welcome:  detailScores.welcome,
+          mobilize: detailScores.mobilize,
+          go:       detailScores.go
+        }
       };
 
       // no-cors 模式下 Content-Type 必須是 text/plain，否則瀏覽器會靜默阻擋
