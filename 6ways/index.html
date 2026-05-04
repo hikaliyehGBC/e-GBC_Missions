@@ -687,13 +687,14 @@
     // ===== 顯示結果 =====
     // primaryTypes 為陣列，支援並列最高分
     function displayResults(scoreMap, primaryTypes, q1val, q2val) {
-      const maxScore = 10;
       const order = ['learn', 'pray', 'send', 'welcome', 'mobilize', 'go'];
 
+      // 六項目總分，用於計算比例
+      const totalScore = Object.values(scoreMap).reduce((a, b) => a + b, 0);
       let cardsHtml = order.map(cat => {
         const info = categories[cat];
         const score = scoreMap[cat];
-        const pct = (score / maxScore) * 100;
+        const pct = totalScore > 0 ? Math.round(score / totalScore * 100) : 0;
         const isHighlight = primaryTypes.includes(cat);
         const suggestions = info.action.split('、').map(s => `<li>${s.trim()}</li>`).join('');
 
@@ -702,7 +703,7 @@
         <img class="card-img" src="${info.img}" alt="${info.name}" loading="lazy">
         <div class="card-body">
           <div class="card-title">${info.icon} ${info.name}${isHighlight ? ' ⭐' : ''}</div>
-          <div class="card-score" style="color:${info.color}">${score} / 10</div>
+          <div class="card-score" style="color:${info.color}">${pct}%</div>
           <div class="card-bar"><div class="card-bar-fill" style="width:${pct}%;background:${info.color}"></div></div>
           <div class="card-desc">${info.desc}</div>
           <ul class="card-suggestions">${suggestions}</ul>
