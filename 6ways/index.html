@@ -194,13 +194,13 @@
 
     .score-buttons {
       display: flex;
-      gap: 10px;
+      gap: 6px;
       margin-top: 15px;
-      flex-wrap: wrap;
     }
 
     .score-btn {
-      width: 45px;
+      flex: 1;
+      min-width: 0;
       height: 45px;
       border: 2px solid var(--border);
       background: white;
@@ -293,7 +293,7 @@
 
     @media(max-width:680px) {
       .results-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
         gap: 14px;
       }
     }
@@ -666,27 +666,27 @@
       const q2 = document.querySelector('input[name="q2"]:checked');
       if (!q1 || !q2) { alert('請先完成第一部分的兩道快速評估題目'); return; }
 
-      const quickCount = { A: 0, B: 0, C: 0, D: 0, E: 0, F: 0 };
-      quickCount[q1.value]++;
-      quickCount[q2.value]++;
-
+      // 六類別詳細分數（未填寫視為 0）
       const detailScores = { learn: 0, pray: 0, send: 0, welcome: 0, mobilize: 0, go: 0 };
       detailedQuestions.forEach(q => {
         const val = parseInt(document.getElementById(`detail${q.id}`).value);
         detailScores[q.category] += (val >= 0 ? val : 0);
       });
 
-      const letterToCategory = { A: 'learn', B: 'pray', C: 'send', D: 'welcome', E: 'mobilize', F: 'go' };
-      let primaryLetter = 'A', maxCount = 0;
-      for (let l in quickCount) { if (quickCount[l] > maxCount) { maxCount = quickCount[l]; primaryLetter = l; } }
-      const primaryCategory = letterToCategory[primaryLetter];
+      // 找最高分，支援並列
+      let maxScore = 0;
+      for (let cat in detailScores) {
+        if (detailScores[cat] > maxScore) maxScore = detailScores[cat];
+      }
+      const primaryCategories = Object.keys(detailScores).filter(cat => detailScores[cat] === maxScore);
 
-      displayResults(detailScores, primaryCategory, q1.value, q2.value);
+      displayResults(detailScores, primaryCategories, q1.value, q2.value);
       submitToSheets(q1.value, q2.value, detailScores);
     }
 
     // ===== 顯示結果 =====
-    function displayResults(scoreMap, primaryType, q1val, q2val) {
+    // primaryTypes 為陣列，支援並列最高分
+    function displayResults(scoreMap, primaryTypes, q1val, q2val) {
       const maxScore = 10;
       const order = ['learn', 'pray', 'send', 'welcome', 'mobilize', 'go'];
 
@@ -694,7 +694,7 @@
         const info = categories[cat];
         const score = scoreMap[cat];
         const pct = (score / maxScore) * 100;
-        const isHighlight = cat === primaryType;
+        const isHighlight = primaryTypes.includes(cat);
         const suggestions = info.action.split('、').map(s => `<li>${s.trim()}</li>`).join('');
 
         return `
@@ -714,15 +714,19 @@
       </div>`;
       }).join('');
 
-      const primaryInfo = categories[primaryType];
+      // 並列最高分時，標題欄顯示全部，以「、」串聯
+      const primaryNames = primaryTypes.map(cat => `${categories[cat].icon} ${categories[cat].name}`).join('、');
+      const primaryDescs = primaryTypes.map(cat => categories[cat].desc).join('；');
+      const primaryColor = categories[primaryTypes[0]].color;
+
       const resultsDiv = document.getElementById('results');
       resultsDiv.innerHTML = `
     <div class="results-title">📊 您的評估結果</div>
     <div class="results-subtitle">⭐ 標示為您的主要宣教恩賜</div>
     <div class="primary-highlight">
       <div class="ph-label">🎯 您的主要宣教恩賜</div>
-      <div class="ph-name" style="color:${primaryInfo.color}">${primaryInfo.icon} ${primaryInfo.name}</div>
-      <div class="ph-desc">${primaryInfo.desc}</div>
+      <div class="ph-name" style="color:${primaryColor}">${primaryNames}</div>
+      <div class="ph-desc">${primaryDescs}</div>
     </div>
     <div class="results-grid">${cardsHtml}</div>
   `;
