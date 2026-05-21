@@ -194,14 +194,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 專業宣教文字內容 (折行繪製)
         ctx.fillStyle = '#b8c7bc';
-        ctx.font = '16px "Noto Sans TC", sans-serif';
+        ctx.font = '18px "Noto Sans TC", sans-serif';
         ctx.letterSpacing = '1px';
         
         const lines = getLines(ctx, profInfo.desc, width - 450);
         let yOffset = 420;
         lines.forEach(line => {
             ctx.fillText(line, 65, yOffset);
-            yOffset += 28;
+            yOffset += 32;
         });
 
         // --- 繪製右半邊設計感裝飾「地球 / 福音圖誌」 ---
@@ -314,34 +314,29 @@ document.addEventListener('DOMContentLoaded', () => {
         link.click();
     });
 
-    // 5. 「思考」與「結語」沉浸式動畫觸發
-    const reflectionCards = document.querySelectorAll('.question-card');
-    const epilogue = document.querySelector('.epilogue-content');
+    // 5. 沉浸式滾動顯現動畫 (Scroll Reveal)
+    const revealElements = document.querySelectorAll('.scroll-reveal');
 
     const animObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // 進入畫面時加入 show 類別，觸發漸入動畫
                 entry.target.classList.add('show');
                 
-                // Stagger 動畫延遲效果 (如果是 reflection-card)
-                if (entry.target.classList.contains('question-card')) {
-                    const index = entry.target.dataset.index;
-                    entry.target.style.transitionDelay = `${index * 0.6}s`;
+                // Stagger 延遲效果
+                const delay = entry.target.dataset.delay;
+                if (delay) {
+                    entry.target.style.transitionDelay = delay;
                 }
                 
-                // 解除觀察，只動態觸發一次
+                // 解除觀察，只觸發一次
                 animObserver.unobserve(entry.target);
             }
         });
     }, {
-        threshold: 0.15 // 稍微進入視窗 15% 即觸發
+        threshold: 0.15 // 進入視窗 15% 即觸發
     });
 
-    reflectionCards.forEach(c => animObserver.observe(c));
-    if (epilogue) {
-        animObserver.observe(epilogue);
-    }
+    revealElements.forEach(el => animObserver.observe(el));
 
     // 初始繪圖
     drawPass();
