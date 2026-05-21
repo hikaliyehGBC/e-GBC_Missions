@@ -1120,6 +1120,35 @@ section {
     text-align: center;
 }
 
+/* 紙本單張下載區 */
+.download-leaflet-box {
+    text-align: center;
+    margin-top: -30px;
+    margin-bottom: 60px;
+}
+
+.leaflet-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-gold);
+    text-decoration: none;
+    font-size: 1.05rem;
+    padding: 12px 28px;
+    border: 1px solid rgba(207, 161, 110, 0.25);
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.02);
+    transition: var(--transition-smooth);
+    font-weight: 500;
+}
+
+.leaflet-link:hover {
+    background: rgba(207, 161, 110, 0.08);
+    border-color: var(--earth-gold);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(207, 161, 110, 0.15);
+}
+
 /* Footer */
 footer {
     text-align: center;
