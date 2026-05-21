@@ -761,11 +761,13 @@ section {
     color: var(--text-light);
     font-weight: 700;
     margin-bottom: 6px;
+    text-align: center;
 }
 
 .node-desc {
     font-size: 1.05rem;
     color: var(--text-muted);
+    text-align: center;
 }
 
 .node-arrow {
@@ -810,6 +812,7 @@ section {
     color: var(--text-gold);
     margin-bottom: 30px;
     letter-spacing: 2px;
+    text-align: center;
 }
 
 .targets-grid-new {
@@ -1114,6 +1117,7 @@ section {
     letter-spacing: 3px;
     line-height: 1.6;
     text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    text-align: center;
 }
 
 /* Footer */
@@ -1169,6 +1173,12 @@ footer a:hover {
         font-size: 1.65rem !important; /* 微調標題尺寸，防破版 */
         margin-bottom: 25px !important;
     }
+    
+    .section-subtitle {
+        margin-top: 10px !important; /* 消除負邊距，防止與底線重疊 */
+        margin-bottom: 30px !important;
+        font-size: 1.15rem !important; /* 手機版副標題字級微調，視覺比例更佳 */
+    }
 
     /* 斷詞與優雅折行 (keep-all 防止單字單獨換行) */
     .tagline, 
@@ -1179,8 +1189,6 @@ footer a:hover {
     .insight-sub, 
     .q-text, 
     .epilogue-q, 
-    .epilogue-statement,
-    .targets-intro-text,
     p {
         word-break: keep-all !important;
         word-wrap: break-word !important;
