@@ -18,6 +18,14 @@
     --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* 響應式雙軌文字系統 */
+.mobile-text {
+    display: none !important;
+}
+.desktop-text {
+    display: inline !important;
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -1130,4 +1138,58 @@ footer a:hover {
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* ----------------------------------
+   手機 UI 設計師專屬優化與雙軌文字系統
+   ---------------------------------- */
+@media (max-width: 768px) {
+    /* 雙軌文字切換 */
+    .desktop-text {
+        display: none !important;
+    }
+    .mobile-text {
+        display: inline !important; /* inline 可與內文其他 span 完美契合 */
+    }
+
+    /* 手機端排版行高與緊湊性調整 */
+    body {
+        line-height: 1.6 !important;
+    }
+    
+    .container {
+        padding: 35px 20px 50px 20px !important; /* 縮小上下 Padding */
+    }
+    
+    section {
+        margin-bottom: 60px !important; /* 緊湊 Section 間距 */
+    }
+    
+    .section-title {
+        font-size: 1.65rem !important; /* 微調標題尺寸，防破版 */
+        margin-bottom: 25px !important;
+    }
+
+    /* 斷詞與優雅折行 (keep-all 防止單字單獨換行) */
+    .tagline, 
+    .era-focus, 
+    .era-list li, 
+    .detail-body, 
+    .insight-main, 
+    .insight-sub, 
+    .q-text, 
+    .epilogue-q, 
+    .epilogue-statement,
+    .targets-intro-text,
+    p {
+        word-break: keep-all !important;
+        word-wrap: break-word !important;
+        text-align: justify !important;
+    }
+
+    /* 針對手機版引導文字的特別邊距 */
+    .targets-intro-text {
+        padding: 0 10px !important;
+        font-size: 0.88rem !important;
+    }
 }
