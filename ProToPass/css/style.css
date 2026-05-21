@@ -111,6 +111,7 @@ header {
     padding: 20px;
     border-top: 1px solid rgba(230, 197, 148, 0.2);
     border-bottom: 1px solid rgba(230, 197, 148, 0.2);
+    text-align: center;
 }
 
 .tagline span {
@@ -1210,7 +1211,6 @@ footer a:hover {
     }
 
     /* 斷詞與優雅折行 (keep-all 防止單字單獨換行) */
-    .tagline, 
     .era-focus, 
     .era-list li, 
     .detail-body, 
@@ -1221,12 +1221,22 @@ footer a:hover {
     p {
         word-break: keep-all !important;
         word-wrap: break-word !important;
-        text-align: justify !important;
     }
 
     /* 針對手機版引導文字的特別邊距 */
     .targets-intro-text {
         padding: 0 10px !important;
         font-size: 0.88rem !important;
+    }
+
+    /* 強制置中特定標籤，確保標題與重要提示詞置中對齊 */
+    .node-title,
+    .node-desc,
+    .tagline,
+    .targets-intro-text,
+    .epilogue-statement,
+    .q-text,
+    .epilogue-q {
+        text-align: center !important;
     }
 }
