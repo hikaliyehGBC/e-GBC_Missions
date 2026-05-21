@@ -194,38 +194,42 @@ section {
 }
 
 .era-focus {
-    font-size: 1.1rem;
+    font-size: 1.1rem; /* 稍微調大以與項目字體拉開層次 */
     color: var(--text-light);
     font-weight: 500;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
+    display: inline-block;
+    border-bottom: 2px solid var(--earth-gold); /* 增強底線為精緻沙金色 */
+    padding-bottom: 6px;
 }
 
 .era-list {
     list-style: none;
     padding: 0;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 .era-list li {
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
-    font-size: 1.25rem;
+    gap: 10px;
+    margin-bottom: 8px; /* 縮短行距與 margin */
+    font-size: 0.92rem; /* 縮小文字，營造出優良的視覺重量感 */
     color: var(--text-muted);
+    line-height: 1.4;
     transition: var(--transition-smooth);
 }
 
 .era-list .era-icon {
-    font-size: 1.65rem; /* 放大 Unicode 小圖片符號 */
+    font-size: 1.15rem; /* 縮小圖示以配合文字比例，保持重量感平衡 */
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
+    width: 32px; /* 縮小圖示外框 */
+    height: 32px;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 10px;
+    border-radius: 8px;
     transition: var(--transition-smooth);
     flex-shrink: 0;
 }
@@ -347,10 +351,10 @@ section {
     background: rgba(207, 161, 110, 0.05);
 }
 
-/* 專業職能選擇器（細長藥丸狀排版） */
+/* 專業職能選擇器（網格排版：圖片在上、文字在下） */
 .profession-grid {
     display: grid;
-    grid-template-columns: repeat(6, 1fr); /* 設置為六個細長欄位 */
+    grid-template-columns: repeat(6, 1fr);
     gap: 12px;
     margin-bottom: 40px;
 }
@@ -363,23 +367,27 @@ section {
 
 @media (max-width: 600px) {
     .profession-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr); /* 手機版強制 3x2 排序 */
+        gap: 8px;
     }
 }
 
 .profession-card {
     background: var(--bg-card);
     border: 1px solid var(--border-card);
-    border-radius: 30px; /* 細長藥丸形狀 */
-    padding: 14px 24px;
+    border-radius: 16px; /* 更精巧的名片式圓角 */
+    padding: 18px 8px;
     display: flex;
+    flex-direction: column; /* 圖片在上方，文字在下方 */
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
     cursor: pointer;
     transition: var(--transition-smooth);
     position: relative;
     overflow: hidden;
+    white-space: nowrap; /* 確保文字絕對不換行 */
+    text-align: center;
 }
 
 .profession-card::before {
@@ -408,14 +416,42 @@ section {
 }
 
 .prof-icon-inline {
-    font-size: 1.4rem;
+    font-size: 1.6rem; /* 稍微放大圖示，以利置中擺放 */
 }
 
 .prof-name-inline {
     font-family: var(--font-serif);
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--text-light);
+    letter-spacing: 0.5px;
+}
+
+@media (max-width: 600px) {
+    .prof-name-inline {
+        font-size: 0.92rem; /* 在極小手機螢幕上縮小文字，防止超出溢出 */
+        letter-spacing: 0px;
+    }
+    .prof-icon-inline {
+        font-size: 1.35rem;
+    }
+    .profession-card {
+        padding: 14px 4px;
+    }
+}
+
+@media (max-width: 380px) {
+    .prof-name-inline {
+        font-size: 0.8rem !important; /* 超小螢幕下進一步縮小字體以維持 nowrap */
+        letter-spacing: -0.5px !important;
+    }
+    .prof-icon-inline {
+        font-size: 1.15rem !important;
+    }
+    .profession-card {
+        padding: 10px 2px !important;
+        gap: 4px !important;
+    }
 }
 
 /* 職能詳細展示 */
@@ -577,62 +613,103 @@ section {
     transform: translateY(0);
 }
 
+/* 差時左右滑入動畫 - 提高優先權以解決 .scroll-reveal 覆蓋 Bug */
+.era-comparison .era-card.past.scroll-reveal {
+    transform: translateX(-60px) translateY(0);
+    opacity: 0;
+    filter: blur(12px);
+    transition: opacity 2s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 2s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.era-comparison .era-card.present.scroll-reveal {
+    transform: translateX(60px) translateY(0);
+    opacity: 0;
+    filter: blur(12px);
+    transition: opacity 2s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 2s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: 0.2s; /* 現在卡片有 0.2s 的差時延遲 */
+}
+.era-comparison .era-card.past.scroll-reveal.show,
+.era-comparison .era-card.present.scroll-reveal.show {
+    transform: translateX(0) translateY(0);
+    opacity: 1;
+    filter: blur(0);
+}
+
 /* 階段三：神正在把未得之民帶到我們身邊 */
 .local-mission-section {
     margin-bottom: 100px;
 }
 
-.local-mission-container {
-    display: grid;
-    grid-template-columns: 1.25fr 1fr;
-    gap: 30px;
-    margin-bottom: 40px;
+.section-subtitle {
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    color: var(--text-gold);
+    text-align: center;
+    margin-top: -30px;
+    margin-bottom: 50px;
+    letter-spacing: 2px;
+    font-weight: 500;
 }
 
-@media (max-width: 768px) {
-    .local-mission-container {
-        grid-template-columns: 1fr;
-    }
-}
-
-.path-diagram-card, .targets-card {
+.reverse-flow-container {
     background: var(--bg-card);
     border: 1px solid var(--border-card);
-    border-radius: 16px;
-    padding: 35px;
+    border-radius: 24px;
+    padding: 60px 40px;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 時代逆轉流向圖示 (3x3斜線佈局) */
+.path-visual-box {
+    display: grid;
+    grid-template-columns: 1fr 120px 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 10px;
+    align-items: center;
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto 50px auto;
+}
+
+.visual-node {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
     transition: var(--transition-smooth);
 }
 
-.path-diagram-card:hover, .targets-card:hover {
+.visual-node:hover {
+    border-color: rgba(207, 161, 110, 0.3);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.past-node {
+    grid-column: 1;
+    grid-row: 1;
+    text-align: right;
+}
+
+.present-node {
+    grid-column: 3;
+    grid-row: 3;
+    text-align: left;
     border-color: rgba(207, 161, 110, 0.2);
+    background: rgba(31, 61, 42, 0.15);
 }
 
-.diagram-title, .targets-title {
-    font-family: var(--font-serif);
-    font-size: 1.35rem;
-    color: var(--text-gold);
-    margin-bottom: 25px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    padding-bottom: 12px;
-    letter-spacing: 1px;
-}
-
-.diagram-flow {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-@media (max-width: 480px) {
-    .diagram-flow {
-        flex-direction: column;
-        text-align: center;
-    }
-}
-
-.diagram-globe-wrapper {
+.visual-globe-wrapper {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: center;
     width: 90px;
     height: 90px;
     background: rgba(31, 61, 42, 0.2);
@@ -643,12 +720,184 @@ section {
     justify-content: center;
     position: relative;
     animation: rotateGlobe 25s linear infinite;
-    flex-shrink: 0;
     box-shadow: 0 0 20px rgba(31, 61, 42, 0.5);
+    flex-shrink: 0;
 }
 
-.globe-emoji {
+.visual-globe {
     font-size: 3rem;
+}
+
+.node-badge {
+    display: inline-block;
+    font-size: 0.8rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.past-badge {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-muted);
+}
+
+.present-badge {
+    background: rgba(207, 161, 110, 0.2);
+    color: var(--text-gold);
+}
+
+.node-title {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    color: var(--text-light);
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.node-desc {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+}
+
+.node-arrow {
+    position: absolute;
+    font-size: 1.3rem;
+    color: var(--text-gold);
+    opacity: 0.5;
+}
+
+.past-node .node-arrow {
+    bottom: -35px;
+    right: -45px;
+    transform: rotate(30deg);
+}
+
+.present-node .node-arrow {
+    top: -35px;
+    left: -45px;
+    transform: rotate(30deg);
+}
+
+/* 4個宣教對象 */
+.targets-section-new {
+    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+    padding-top: 40px;
+    text-align: center;
+    position: relative;
+}
+
+.targets-guide-line {
+    position: absolute;
+    top: -20px;
+    left: 75%; /* 電腦版改為對齊右下角「現在」卡片，以實踐現在與四個福音現場的空間連結 */
+    transform: translateX(-50%);
+    width: 2px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--earth-gold), transparent);
+}
+
+.targets-intro-text {
+    font-size: 0.95rem;
+    color: var(--text-gold);
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+}
+
+.targets-grid-new {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.target-card-new {
+    background: rgba(31, 61, 42, 0.1);
+    border: 1px solid rgba(207, 161, 110, 0.15);
+    padding: 20px 15px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    transition: var(--transition-smooth);
+}
+
+.target-card-new:hover {
+    background: rgba(207, 161, 110, 0.08);
+    border-color: var(--earth-gold);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.t-icon {
+    font-size: 2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+}
+
+.t-name {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-light);
+}
+
+@media (max-width: 768px) {
+    .path-visual-box {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        gap: 30px;
+        text-align: center;
+    }
+    
+    .past-node {
+        grid-column: 1;
+        grid-row: 1;
+        text-align: center;
+    }
+    
+    .visual-globe-wrapper {
+        grid-column: 1;
+        grid-row: 2;
+    }
+    
+    .present-node {
+        grid-column: 1;
+        grid-row: 3;
+        text-align: center;
+    }
+    
+    .past-node .node-arrow {
+        bottom: -25px;
+        right: 50%;
+        transform: translateX(50%) rotate(90deg);
+    }
+    
+    .present-node .node-arrow {
+        top: -25px;
+        left: 50%;
+        transform: translateX(-50%) rotate(90deg);
+    }
+    
+    .targets-guide-line {
+        left: 50%; /* 手機版垂直排列時，將引導線還原為居中對齊 */
+    }
+    
+    .targets-grid-new {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .targets-grid-new {
+        grid-template-columns: 1fr;
+    }
 }
 
 @keyframes rotateGlobe {
@@ -656,86 +905,17 @@ section {
     to { transform: rotate(360deg); }
 }
 
-.arrows-wrapper {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    width: 100%;
-}
-
-.arrow-line {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 18px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 30px;
-    font-size: 0.95rem;
-    color: var(--text-muted);
-}
-
-.arrow-line.active {
-    background: rgba(31, 61, 42, 0.25);
-    border-color: rgba(207, 161, 110, 0.3);
-    color: var(--text-light);
-    font-weight: 500;
-    box-shadow: 0 0 15px rgba(207, 161, 110, 0.1);
-}
-
-.arrow-symbol {
-    font-size: 1.15rem;
-}
-
-.targets-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
-
-@media (max-width: 480px) {
-    .targets-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-.target-item {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 16px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    transition: var(--transition-smooth);
-}
-
-.target-item:hover {
-    background: rgba(207, 161, 110, 0.05);
-    border-color: var(--earth-gold);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-.target-icon {
-    font-size: 1.7rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 46px;
-    height: 46px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 10px;
-    flex-shrink: 0;
-}
-
-.target-name {
-    font-family: var(--font-serif);
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--text-light);
+/* 下拉式選單特別覆蓋 (灰底與箭頭間距優化) */
+.input-group select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; /* 移除原生粗糙箭頭 */
+    background-color: #191f1a !important; /* 強制改為深綠黑 */
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23e6c594' d='M2 4l4 4 4-4z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 16px center !important; /* 箭頭距右邊緣，保持高雅呼吸感 */
+    background-size: 12px 12px !important;
+    padding-right: 36px !important; /* 增加右側 padding 確保文字與箭頭有完美的間距 */
 }
 
 .street-corner-focus {

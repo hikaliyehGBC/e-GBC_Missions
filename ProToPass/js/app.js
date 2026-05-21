@@ -161,7 +161,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const hash = Array.from(userName).reduce((acc, char) => acc + char.charCodeAt(0), 0) % 9000 + 1000;
         const passID = `GBC-${2026}-${hash}`;
         ctx.fillStyle = 'rgba(207, 161, 110, 0.7)';
-        ctx.fillText(`PASS ID: ${passID}`, width - 240, 80);
+        ctx.textAlign = 'right'; // 改為右對齊，確保不論字串長度，右邊距皆完美對稱一致
+        ctx.fillText(`PASS ID: ${passID}`, width - 65, 80);
+        ctx.textAlign = 'left'; // 繪製完後隨即復原為左對齊，不影響後續標題與文字的繪製
 
         // --- 繪製核心主標題 ---
         ctx.fillStyle = '#e6c594'; // 沙金
