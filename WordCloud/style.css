@@ -1,0 +1,190 @@
+/* 全域設定，極簡白色風格與無障礙設計 */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans TC', sans-serif;
+}
+
+body {
+    background-color: #ffffff;
+    color: #333333;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh; /* 適應手機瀏覽器底列 */
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 頂部標題 */
+header {
+    text-align: center;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+}
+
+header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+header p {
+    font-size: 14px;
+    color: #777777;
+    margin-top: 5px;
+}
+
+/* 字雲顯示區 */
+.cloud-container {
+    flex-grow: 1;
+    position: relative;
+    width: 100%;
+    min-height: 250px;
+    border-radius: 12px;
+    background-color: #fcfcfc;
+    border: 1px solid #f0f0f0;
+    overflow: hidden;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.loading {
+    position: absolute;
+    color: #aaaaaa;
+    font-size: 14px;
+    display: none;
+}
+
+/* 輸入區塊 */
+.input-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+}
+
+#keyword-input {
+    flex-grow: 1;
+    padding: 16px;
+    font-size: 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+#keyword-input:focus {
+    border-color: #555555;
+}
+
+#submit-btn {
+    padding: 16px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #333333;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+#submit-btn:active {
+    transform: scale(0.98);
+}
+
+#submit-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* 歷史紀錄與刪除區塊 */
+.history-section {
+    flex-shrink: 0;
+    max-height: 25vh;
+    overflow-y: auto;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 15px;
+}
+
+.history-section h3 {
+    font-size: 14px;
+    color: #999999;
+    margin-bottom: 10px;
+}
+
+#history-list {
+    list-style: none;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 15px;
+}
+
+.delete-btn {
+    color: #e74c3c;
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+/* 手機橫直向適應 (Landscape mode) */
+@media screen and (orientation: landscape) and (max-height: 500px) {
+    .container {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    header {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .cloud-container {
+        width: 55%;
+        height: calc(100vh - 80px);
+        margin-bottom: 0;
+    }
+    .right-panel {
+        width: 45%;
+        padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+    /* 在橫向模式下，我們需要透過 JS 或 CSS 將輸入區與歷史區包裝，為了維持 HTML 結構簡潔，使用 flex order */
+    .input-section {
+        width: calc(45% - 20px);
+        position: absolute;
+        right: 20px;
+        top: 80px;
+    }
+    .history-section {
+        width: calc(45% - 20px);
+        position: absolute;
+        right: 20px;
+        top: 150px;
+        max-height: calc(100vh - 170px);
+    }
+}
