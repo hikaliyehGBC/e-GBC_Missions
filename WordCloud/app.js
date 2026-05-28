@@ -72,26 +72,23 @@ async function addKeyword() {
             return;
         }
 
-        const response = await fetch(GAS_API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'text/plain;charset=utf-8'
-            },
-            body: JSON.stringify({
-                action: 'add',
-                uuid: deviceUUID,
-                keyword: keyword
-            })
+        const url = new URL(GAS_API_URL);
+        url.searchParams.append('action', 'add');
+        url.searchParams.append('uuid', deviceUUID);
+        url.searchParams.append('keyword', keyword);
+
+        const response = await fetch(url.toString(), {
+            method: 'GET'
         });
         
-        // 確保伺服器回傳的是 JSON，如果權限設錯或報錯可能會回傳 HTML 導致 parse 失敗
+        // 確保伺服器回傳的是 JSON
         const responseText = await response.text();
         let result;
         try {
             result = JSON.parse(responseText);
         } catch(e) {
             console.error('GAS 回傳非 JSON:', responseText);
-            throw new Error('伺服器回傳格式錯誤 (可能是 GAS 部署權限設定非「所有人」或名稱不符)');
+            throw new Error('伺服器回傳格式錯誤 (如果您剛更新程式碼，請記得在 GAS 點擊「新增部署作業」)');
         }
 
         if (result.status === 'success') {
@@ -118,16 +115,13 @@ async function deleteKeyword(keyword, index) {
     if (!confirm(`確定要刪除「${keyword}」嗎？`)) return;
 
     try {
-        const response = await fetch(GAS_API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'text/plain;charset=utf-8'
-            },
-            body: JSON.stringify({
-                action: 'delete',
-                uuid: deviceUUID,
-                keyword: keyword
-            })
+        const url = new URL(GAS_API_URL);
+        url.searchParams.append('action', 'delete');
+        url.searchParams.append('uuid', deviceUUID);
+        url.searchParams.append('keyword', keyword);
+
+        const response = await fetch(url.toString(), {
+            method: 'GET'
         });
         
         const responseText = await response.text();
@@ -136,7 +130,7 @@ async function deleteKeyword(keyword, index) {
             result = JSON.parse(responseText);
         } catch(e) {
             console.error('GAS 回傳非 JSON:', responseText);
-            throw new Error('伺服器回傳格式錯誤');
+            throw new Error('伺服器回傳格式錯誤 (如果您剛更新程式碼，請記得在 GAS 點擊「新增部署作業」)');
         }
 
         if (result.status === 'success') {
