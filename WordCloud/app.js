@@ -74,14 +74,26 @@ async function addKeyword() {
 
         const response = await fetch(GAS_API_URL, {
             method: 'POST',
+            headers: {
+                'Content-Type': 'text/plain;charset=utf-8'
+            },
             body: JSON.stringify({
                 action: 'add',
                 uuid: deviceUUID,
                 keyword: keyword
             })
         });
+        
+        // 確保伺服器回傳的是 JSON，如果權限設錯或報錯可能會回傳 HTML 導致 parse 失敗
+        const responseText = await response.text();
+        let result;
+        try {
+            result = JSON.parse(responseText);
+        } catch(e) {
+            console.error('GAS 回傳非 JSON:', responseText);
+            throw new Error('伺服器回傳格式錯誤 (可能是 GAS 部署權限設定非「所有人」或名稱不符)');
+        }
 
-        const result = await response.json();
         if (result.status === 'success') {
             // 寫入本地歷史紀錄
             historyList.unshift(keyword); // 插在最前面
@@ -95,7 +107,7 @@ async function addKeyword() {
         }
     } catch (error) {
         console.error('Error adding keyword:', error);
-        alert('網路連線異常，請稍後再試。');
+        alert('連線異常或設定錯誤：' + error.message + '\n請確認您部署時「誰可以存取」有選擇「所有人(Anyone)」');
     } finally {
         resetSubmitBtn();
     }
@@ -108,14 +120,25 @@ async function deleteKeyword(keyword, index) {
     try {
         const response = await fetch(GAS_API_URL, {
             method: 'POST',
+            headers: {
+                'Content-Type': 'text/plain;charset=utf-8'
+            },
             body: JSON.stringify({
                 action: 'delete',
                 uuid: deviceUUID,
                 keyword: keyword
             })
         });
+        
+        const responseText = await response.text();
+        let result;
+        try {
+            result = JSON.parse(responseText);
+        } catch(e) {
+            console.error('GAS 回傳非 JSON:', responseText);
+            throw new Error('伺服器回傳格式錯誤');
+        }
 
-        const result = await response.json();
         if (result.status === 'success') {
             // 從本地移除
             historyList.splice(index, 1);
@@ -128,7 +151,7 @@ async function deleteKeyword(keyword, index) {
         }
     } catch (error) {
         console.error('Error deleting keyword:', error);
-        alert('網路連線異常，請稍後再試。');
+        alert('連線異常或設定錯誤：' + error.message);
     }
 }
 
