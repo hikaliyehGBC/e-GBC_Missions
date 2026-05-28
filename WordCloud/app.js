@@ -207,18 +207,20 @@ function renderWordCloud() {
         list: wordCloudData,
         fontFamily: 'Noto Sans TC, sans-serif',
         weightFactor: function (size) {
-            // 調整大小倍率，避免太大超出畫面或太小看不見
-            return size * 3;
+            // size 是出現的次數。基礎大小給 30px，每多一次加 15px
+            return (size * 15) + 30;
         },
         color: function () {
-            // 隨機產生質感的深灰色系
-            const grays = ['#333333', '#555555', '#777777', '#222222', '#444444'];
-            return grays[Math.floor(Math.random() * grays.length)];
+            // 加入溫暖與沉穩的色系：深藍、深灰、暖橘、湖水綠
+            const colors = ['#2C3E50', '#34495E', '#E67E22', '#16A085', '#2980B9', '#8E44AD'];
+            return colors[Math.floor(Math.random() * colors.length)];
         },
         rotateRatio: 0, // 全部橫向排版較好閱讀
         backgroundColor: 'transparent',
         drawOutOfBound: false,
-        shrinkToFit: true
+        shrinkToFit: true,
+        gridSize: Math.round(16 * document.body.clientWidth / 1024),
+        shape: 'circle'
     });
 }
 
