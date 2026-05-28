@@ -56,6 +56,34 @@ function renderHistory() {
     });
 }
 
+// 核心 JSONP 通訊函數 (破解 CORS)
+function fetchJSONP(url) {
+    return new Promise((resolve, reject) => {
+        const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+        
+        // 綁定全域回呼函數
+        window[callbackName] = function(data) {
+            delete window[callbackName];
+            document.body.removeChild(script);
+            resolve(data);
+        };
+        
+        // 將 callback 參數附加到網址
+        const finalUrl = new URL(url);
+        finalUrl.searchParams.append('callback', callbackName);
+
+        // 建立並插入 script 標籤
+        const script = document.createElement('script');
+        script.src = finalUrl.toString();
+        script.onerror = () => {
+            delete window[callbackName];
+            document.body.removeChild(script);
+            reject(new Error('JSONP 載入失敗'));
+        };
+        document.body.appendChild(script);
+    });
+}
+
 // 新增關鍵字
 async function addKeyword() {
     const keyword = inputEl.value.trim();
@@ -77,19 +105,7 @@ async function addKeyword() {
         url.searchParams.append('uuid', deviceUUID);
         url.searchParams.append('keyword', keyword);
 
-        const response = await fetch(url.toString(), {
-            method: 'GET'
-        });
-        
-        // 確保伺服器回傳的是 JSON
-        const responseText = await response.text();
-        let result;
-        try {
-            result = JSON.parse(responseText);
-        } catch(e) {
-            console.error('GAS 回傳非 JSON:', responseText);
-            throw new Error('伺服器回傳格式錯誤 (如果您剛更新程式碼，請記得在 GAS 點擊「新增部署作業」)');
-        }
+        const result = await fetchJSONP(url.toString());
 
         if (result.status === 'success') {
             // 寫入本地歷史紀錄
@@ -104,7 +120,7 @@ async function addKeyword() {
         }
     } catch (error) {
         console.error('Error adding keyword:', error);
-        alert('連線異常或設定錯誤：' + error.message + '\n請確認您部署時「誰可以存取」有選擇「所有人(Anyone)」');
+        alert('連線異常：' + error.message);
     } finally {
         resetSubmitBtn();
     }
@@ -120,18 +136,7 @@ async function deleteKeyword(keyword, index) {
         url.searchParams.append('uuid', deviceUUID);
         url.searchParams.append('keyword', keyword);
 
-        const response = await fetch(url.toString(), {
-            method: 'GET'
-        });
-        
-        const responseText = await response.text();
-        let result;
-        try {
-            result = JSON.parse(responseText);
-        } catch(e) {
-            console.error('GAS 回傳非 JSON:', responseText);
-            throw new Error('伺服器回傳格式錯誤 (如果您剛更新程式碼，請記得在 GAS 點擊「新增部署作業」)');
-        }
+        const result = await fetchJSONP(url.toString());
 
         if (result.status === 'success') {
             // 從本地移除
@@ -145,7 +150,7 @@ async function deleteKeyword(keyword, index) {
         }
     } catch (error) {
         console.error('Error deleting keyword:', error);
-        alert('連線異常或設定錯誤：' + error.message);
+        alert('連線異常：' + error.message);
     }
 }
 
@@ -161,8 +166,8 @@ async function fetchWordCloudData() {
 
     loadingEl.style.display = 'block';
     try {
-        const response = await fetch(GAS_API_URL);
-        const result = await response.json();
+        const url = new URL(GAS_API_URL);
+        const result = await fetchJSONP(url.toString());
 
         if (result.status === 'success') {
             wordCloudData = result.data; // [['keyword', weight], ...]
