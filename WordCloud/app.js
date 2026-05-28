@@ -33,6 +33,12 @@ function init() {
             renderWordCloud();
         }
     });
+    
+    // 顯示版本更新確認碼
+    setTimeout(() => {
+        const title = document.querySelector('h1');
+        if (title) title.innerHTML += ' <span style="font-size: 0.5em; color: #ffeb3b;">(v7)</span>';
+    }, 500);
 }
 
 // 渲染歷史紀錄列表
