@@ -1,5 +1,5 @@
 // 請在此處填寫您部署 Google Apps Script 後取得的 Web App URL
-const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbz6P72k94dFcMmNY-IE5w-FfdOxi-KwsWJn9O8yrB87dTeU7GsHqPiBkz7Mc5_J0_92gw/exec';
+const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbzjgl7LHGU3TawxToK3oL7Ix3ZNltxnLZwddqH45hFJ7_e3eI-cdcYFvN2JbMuEEJOKyg/exec';
 
 // 取得或產生裝置 UUID
 let deviceUUID = localStorage.getItem('device_uuid');
