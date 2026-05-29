@@ -126,11 +126,13 @@ function updateCalendarUI() {
   const contentEl = document.getElementById('actionContent');
   const weekdayEl = document.getElementById('cardWeekday');
   const topicEl = document.getElementById('cardTopic');
+  const extraContentEl = document.getElementById('extraContent');
   
   if (!dayData) {
     weekdayEl.textContent = '';
     topicEl.textContent = '尚無內容';
     contentEl.innerHTML = '';
+    extraContentEl.innerHTML = '';
     return;
   }
   
@@ -145,10 +147,26 @@ function updateCalendarUI() {
   else if (currentTab === 2) currentActionData = dayData.action2;
   else if (currentTab === 3) currentActionData = dayData.action3;
 
+  extraContentEl.innerHTML = ''; // 清空預設外加內容
+
   if (currentActionData) {
     weekdayEl.textContent = currentActionData.weekday || '週？';
     topicEl.textContent = currentActionData.topic || '無標題';
     contentEl.innerHTML = currentActionData.content || '';
+    
+    // 禱告大軍 (Tab 1) 專屬動態按鈕
+    if (currentTab === 1) {
+      if (currentActionData.weekday === '週一') {
+        extraContentEl.innerHTML = `<a href="../WordCloud/index.html" target="_blank" class="btn-outline" style="display:inline-block; margin-top:15px; width:100%; text-align:center;">☁️ 前往數位事工禱告雲</a>`;
+      } else if (currentActionData.weekday === '週二') {
+        const weekNum = Math.ceil(currentDay / 7);
+        if (weekNum === 1 || weekNum === 3) {
+          extraContentEl.innerHTML = `<a href="https://www.gbc.org.tw/missions/prayfortaiwan/" target="_blank" class="btn-outline" style="display:inline-block; margin-top:15px; width:100%; text-align:center;">🇹🇼 前往為台灣禱告</a>`;
+        } else if (weekNum === 2 || weekNum === 4) {
+          extraContentEl.innerHTML = `<a href="https://www.gbc.org.tw/missions/prayfornations/" target="_blank" class="btn-outline" style="display:inline-block; margin-top:15px; width:100%; text-align:center;">🌍 前往為萬國禱告</a>`;
+        }
+      }
+    }
   }
 }
 

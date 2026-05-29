@@ -21,7 +21,7 @@ const calendarData = {
     "action1": {
       "weekday": "週二",
       "topic": "為萬國禱告",
-      "content": "掃描差傳年會QRCode，抽取 1 個國家/地區，觀看其文宣影片，為當地的福音需要默默代禱。"
+      "content": "進入差傳年會頁面，點選「為台灣禱告」，觀看其文宣影片，為當地需要代禱。"
     },
     "action2": {
       "weekday": "週二",
@@ -38,7 +38,7 @@ const calendarData = {
     "action1": {
       "weekday": "週三",
       "topic": "為世代心靈",
-      "content": "為自己滑社群時的「FOMO 比較焦慮」禱告，求神賞賜免除定罪的真平安。"
+      "content": "為自己在3C上花費大量時間、情緒被挑逗失控、注意力被掠奪而無法享受安息禱告，求神賞賜免除定罪的真平安。"
     },
     "action2": {
       "weekday": "週三",
@@ -72,7 +72,7 @@ const calendarData = {
     "action1": {
       "weekday": "週五",
       "topic": "為數位宣教士",
-      "content": "為剛成立的「數位宣教士 Discord 實戰群組」禱告，求神預備同工的心志。"
+      "content": "為在台灣網路媒體上耕耘的基督徒禱告，求神祝福他們手上的工，能更多造就需要的人。"
     },
     "action2": {
       "weekday": "週五",
@@ -123,7 +123,7 @@ const calendarData = {
     "action1": {
       "weekday": "週一",
       "topic": "為事工守望",
-      "content": "特別為懷恩堂年會上大家期待的「數位禱告牆」事工的籌備、技術與同工預備禱告。"
+      "content": "特別為懷恩堂年會上大家期待的「數位事工禱告雲」事工的籌備、技術與同工預備禱告。"
     },
     "action2": {
       "weekday": "週一",
@@ -140,7 +140,7 @@ const calendarData = {
     "action1": {
       "weekday": "週二",
       "topic": "為萬國禱告",
-      "content": "再次掃碼抽取另一個不同的國家/地區，花 3 分鐘為當地的差傳需要與宣教士家庭的平安守望。"
+      "content": "進入差傳年會頁面，點選「為萬國禱告」，觀看文宣，並花 3 分鐘為當地的差傳需要與宣教士家庭的平安守望。"
     },
     "action2": {
       "weekday": "週二",
@@ -191,7 +191,7 @@ const calendarData = {
     "action1": {
       "weekday": "週五",
       "topic": "為數位宣教士",
-      "content": "為正在學習使用 AI 工具、準備將差傳年會單張轉化為網頁的同工們禱告，賜下聰明智慧。"
+      "content": "為懷恩堂能夠興起更多數位專業投入服事，使他們的恩賜為神所用、拓張神國的地界。"
     },
     "action2": {
       "weekday": "週五",
@@ -242,7 +242,7 @@ const calendarData = {
     "action1": {
       "weekday": "週一",
       "topic": "為事工守望",
-      "content": "為懷恩堂數位禱告牆的推廣禱告，求神讓這面牆成為無數軟弱弟兄姊妹得著安慰的避風港。"
+      "content": "為「數位事工禱告雲」點讚數最高的項目禱告，求神興起能夠推動此事工的同工。"
     },
     "action2": {
       "weekday": "週一",
@@ -259,7 +259,7 @@ const calendarData = {
     "action1": {
       "weekday": "週二",
       "topic": "為萬國禱告",
-      "content": "掃碼抽取 1 個正面臨戰爭、貧窮或信仰逼迫的地區，為當地的教會能在患難中做光做鹽迫切代求。"
+      "content": "點選「為台灣禱告」，為今天抽選到的行政地區，從google地圖找到該地教會，為教會對周遭環境做光做鹽代求。"
     },
     "action2": {
       "weekday": "週二",
@@ -310,7 +310,7 @@ const calendarData = {
     "action1": {
       "weekday": "週五",
       "topic": "為數位宣教士",
-      "content": "為本週進入「AI Agent 網頁實戰」的同工小組守望，求神賜下合一與突破技術 Bug 的耐心。"
+      "content": "為自己的數位能力拓展禱告，曾經期盼能夠學習更多的火熱，求神點燃、為主所用。"
     },
     "action2": {
       "weekday": "週五",
@@ -361,7 +361,7 @@ const calendarData = {
     "action1": {
       "weekday": "週一",
       "topic": "為事工守望",
-      "content": "為懷恩堂未來與實體牧養相結合的「線上心靈關懷事工」守望，宣告線上羊群將被帶回實體牧場。"
+      "content": "為你在這一個月對「數位事工」的感動、腦中浮現的畫面感謝神，相信做新事的神必為懷恩堂開路。"
     },
     "action2": {
       "weekday": "週一",
@@ -378,7 +378,7 @@ const calendarData = {
     "action1": {
       "weekday": "週二",
       "topic": "為萬國禱告",
-      "content": "掃碼抽取 1 個宣教士極少、福音未得之民比例極高的地區，宣告神的王權要在該地彰顯。"
+      "content": "點選「為萬國禱告」，為今天抽選到的國家，從google地圖找到其首都，宣告神的王權要在該地彰顯。"
     },
     "action2": {
       "weekday": "週二",
@@ -429,7 +429,7 @@ const calendarData = {
     "action1": {
       "weekday": "週五",
       "topic": "為數位宣教士",
-      "content": "為即將完成裝備、發布互動網頁的宣教士團隊祝福，宣告他們的網頁要成為成百上千人的祝福。"
+      "content": "為所有心中對數位宣教有熱忱的肢體，求神挪去他們前方的攔阻，充足地供應他們，使他們願意承接懷恩堂數位事工的呼召。"
     },
     "action2": {
       "weekday": "週五",
