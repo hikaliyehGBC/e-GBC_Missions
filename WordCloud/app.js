@@ -7,7 +7,7 @@
 // ══════════════════════════════════════
 
 const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbz5m04F8XoCj58iJheuF9e3HniHmMuwPymnAQEYDexZuxR5Kv7fntCJVG5lrovLPzR8fA/exec';
-const VERSION = 'v16';
+const VERSION = 'v17';
 
 // ── 裝置 UUID ──────────────────────────
 let deviceUUID = localStorage.getItem('device_uuid');
