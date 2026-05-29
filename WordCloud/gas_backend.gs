@@ -253,12 +253,25 @@ function handleLike(params) {
   }
 }
 
-// ── 取得全部留言 + 字雲資料 ────────────
+// ── 取得全部留言 + 字雲資料（含 60 秒 CacheService 快取）────────────
 function handleFetch(myUuid) {
-  const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
-  if (!sheet) throw new Error('Sheet not found');
+  const cache = CacheService.getScriptCache();
+  const CACHE_KEY = 'wordcloud_fetch_v1';
+  const CACHE_SEC = 60;
 
-  const data = sheet.getDataRange().getValues();
+  // 嘗試讀取快取（myUuid 相關的 isMine/isLiked 不快取，需個人化處理）
+  const cached = cache.get(CACHE_KEY);
+  let data;
+  if (cached) {
+    data = JSON.parse(cached);
+  } else {
+    const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
+    if (!sheet) throw new Error('Sheet not found');
+    data = sheet.getDataRange().getValues();
+    // 快取原始表格資料（JSON 字串）
+    try { cache.put(CACHE_KEY, JSON.stringify(data), CACHE_SEC); } catch(e) {}
+  }
+
   const submissions = [];
   const keywordScores = {};
 
@@ -281,7 +294,6 @@ function handleFetch(myUuid) {
       isLiked:  likedBy.indexOf(myUuid) !== -1
     });
 
-    // 字雲大小 = 出現次數 + 讚數（確保有出現就可見）
     keywords.forEach(function(kw) {
       if (kw) {
         keywordScores[kw] = (keywordScores[kw] || 0) + 1 + likeCount;
@@ -289,10 +301,8 @@ function handleFetch(myUuid) {
     });
   }
 
-  // 依讚數由高到低排序
   submissions.sort(function(a, b) { return b.likeCount - a.likeCount; });
 
-  // 字雲資料格式：[[keyword, score], ...]
   const cloudData = Object.keys(keywordScores).map(function(k) {
     return [k, keywordScores[k]];
   });
@@ -307,3 +317,62 @@ function doPost(e) {
     .createTextOutput(JSON.stringify({ status: 'error', message: '請使用 GET + JSONP 通訊' }))
     .setMimeType(ContentService.MimeType.JSON);
 }
+
+// ══════════════════════════════════════
+//  keepWarm 保溫系統
+//  保溫時段（UTC，GMT+8 時間減 8 小時）：
+//  ① 今晚測試：20:40–21:15 GMT+8 = 12:40–13:15 UTC on 2026-05-29
+//  ② 明天活動：14:00–15:30 GMT+8 = 06:00–07:30 UTC on 2026-05-30
+// ══════════════════════════════════════
+const WARM_WINDOWS = [
+  { date: '2026-05-29', startH: 12, startM: 38, endH: 13, endM: 20 },
+  { date: '2026-05-30', startH:  6, startM:  0, endH:  7, endM: 35 },
+];
+
+function keepWarm() {
+  const now = new Date();
+  const dateStr = Utilities.formatDate(now, 'UTC', 'yyyy-MM-dd');
+  const nowMin = now.getUTCHours() * 60 + now.getUTCMinutes();
+
+  const inWindow = WARM_WINDOWS.some(function(w) {
+    if (w.date !== dateStr) return false;
+    return nowMin >= (w.startH * 60 + w.startM) && nowMin <= (w.endH * 60 + w.endM);
+  });
+
+  if (!inWindow) {
+    Logger.log('keepWarm: 不在保溫時段，跳過。Now UTC=' + now.toISOString());
+    return;
+  }
+
+  // 執行快速讀取 + 清除快取，讓下一位使用者取得最新資料
+  try {
+    const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
+    sheet.getRange(1, 1).getValue();
+    CacheService.getScriptCache().remove('wordcloud_fetch_v1');
+    Logger.log('keepWarm: 成功保溫並清除快取 at ' + now.toISOString());
+  } catch(e) {
+    Logger.log('keepWarm error: ' + e.message);
+  }
+}
+
+// 執行一次以設定觸發器（在 GAS 編輯器手動執行此函式）
+function setupKeepWarmTrigger() {
+  // 先清除舊的 keepWarm trigger
+  ScriptApp.getProjectTriggers().forEach(function(t) {
+    if (t.getHandlerFunction() === 'keepWarm') ScriptApp.deleteTrigger(t);
+  });
+  // 建立每 5 分鐘執行一次的 trigger
+  ScriptApp.newTrigger('keepWarm').timeBased().everyMinutes(5).create();
+  Logger.log('keepWarm trigger 設置完成，每 5 分鐘執行，自動依時段判斷是否保溫。');
+}
+
+// 活動結束後清除 trigger（在 GAS 編輯器手動執行此函式）
+function cleanupKeepWarmTrigger() {
+  ScriptApp.getProjectTriggers().forEach(function(t) {
+    if (t.getHandlerFunction() === 'keepWarm') {
+      ScriptApp.deleteTrigger(t);
+      Logger.log('已刪除 keepWarm trigger');
+    }
+  });
+}
+
