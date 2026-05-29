@@ -393,27 +393,9 @@ html, body {
   transform: translateX(-50%) translateY(0);
 }
 
-/* ── 橫向模式 (Landscape) 左右雙欄 ──────── */
-@media (orientation: landscape) and (min-width: 600px) {
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr auto;
-    grid-template-areas: 
-      "header feed"
-      "cloud  feed"
-      "input  feed";
-    max-width: 1200px;
-    padding-bottom: 0;
-  }
-
-  #main-header { grid-area: header; padding: 16px 20px 8px; }
-  #main-title { font-size: 20px; }
-  
-  #cloud-section { grid-area: cloud; display: flex; flex-direction: column; overflow: hidden; padding-bottom: 0; }
-  #cloud-container { flex: 1; min-height: 150px; height: auto; }
-  
-  #feed-section { grid-area: feed; border-left: 1px solid var(--border); }
-  
-  #input-footer { grid-area: input; border-top: none; padding: 12px 16px; }
+/* ── 手機橫向模式微調 ─────────────────────── */
+@media (max-height: 500px) and (orientation: landscape) {
+  #cloud-container { height: 200px; }
+  #main-header { padding: 12px 20px 8px; }
+  #main-title { font-size: 18px; }
 }
