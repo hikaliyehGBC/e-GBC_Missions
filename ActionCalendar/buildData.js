@@ -9,7 +9,11 @@ const files = [
 const calendarData = {};
 for (let i = 1; i <= 30; i++) {
     const dayStr = String(i).padStart(2, '0');
-    calendarData[`06-${dayStr}`] = { action1: '', action2: '', action3: '' };
+    calendarData[`06-${dayStr}`] = { 
+        action1: { weekday: '', topic: '', content: '' }, 
+        action2: { weekday: '', topic: '', content: '' }, 
+        action3: { weekday: '', topic: '', content: '' } 
+    };
 }
 
 files.forEach(fileObj => {
@@ -24,10 +28,23 @@ files.forEach(fileObj => {
                 const day = parseInt(match[1]);
                 if (day >= 1 && day <= 30) {
                     const dayStr = String(day).padStart(2, '0');
-                    const title = match[2];
-                    const text = match[3];
-                    // 加上 HTML formatting
-                    calendarData[`06-${dayStr}`][fileObj.key] = `<strong style="color:var(--primary-dark)">${title}</strong><br><br>${text}`;
+                    const rawTopic = match[2].trim();
+                    const text = match[3].trim();
+                    
+                    let weekday = '';
+                    let topic = rawTopic;
+                    
+                    if (rawTopic.includes('・')) {
+                        const parts = rawTopic.split('・');
+                        weekday = parts[0];
+                        topic = parts.slice(1).join('・');
+                    }
+                    
+                    calendarData[`06-${dayStr}`][fileObj.key] = {
+                        weekday: weekday,
+                        topic: topic,
+                        content: text
+                    };
                 }
             }
         });
@@ -40,4 +57,4 @@ let output = '// 宣教行動月曆 6月1日 - 6月30日資料\n';
 output += 'const calendarData = ' + JSON.stringify(calendarData, null, 2) + ';\n';
 
 fs.writeFileSync('data.js', output, 'utf8');
-console.log('data.js successfully generated!');
+console.log('data.js successfully generated with new object structure!');

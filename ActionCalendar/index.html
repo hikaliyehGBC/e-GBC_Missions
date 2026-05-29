@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>宣教行動月曆 | 懷恩堂數位事工</title>
+  <title>30日數位宣教行動 | 懷恩堂數位事工</title>
   <meta name="description" content="三十天的數位事工宣教行動與禱告">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -11,48 +11,109 @@
 <body>
   <div id="app">
     
-    <!-- 頂部標題 -->
-    <header class="main-header">
-      <h1>數位事工 30 天宣教行動</h1>
+    <!-- 全局頂部標題 (點擊回首頁) -->
+    <header class="main-header" id="mainHeader">
+      <h1>30日數位宣教行動</h1>
       <p>與神連結，在數位世界做光做鹽</p>
     </header>
 
-    <!-- 日期導航器 -->
-    <div class="date-navigator">
-      <button id="prevBtn" class="nav-btn" title="前一天">
-        <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
-      </button>
-      <div class="current-date" id="dateDisplay">
-        <span class="month">6月</span>
-        <span class="day">1</span>
-        <span class="unit">日</span>
+    <!-- 首頁視圖 (Home View) -->
+    <div id="home-view" class="view-section active">
+      <div class="hero-section">
+        <h2>數位禾場：在指尖世界看見呼召</h2>
+        <p class="hero-text">人們的痛苦，就是福音的著陸點。<br>這是一片已經熟透的莊稼，我們能靠著主，在指尖踩下最美的腳蹤。</p>
       </div>
-      <button id="nextBtn" class="nav-btn" title="後一天">
-        <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-      </button>
+
+      <div class="pdf-downloads">
+        <h3>📄 行動指南下載</h3>
+        <div class="pdf-buttons">
+          <a href="#" class="btn-pdf">🙏 禱告大軍 (PDF)</a>
+          <a href="#" class="btn-pdf">🌿 數位安息 (PDF)</a>
+          <a href="#" class="btn-pdf">✨ 做光做鹽 (PDF)</a>
+        </div>
+        <p class="pdf-note">* PDF 檔案準備中，敬請期待</p>
+      </div>
+
+      <div class="iframe-section">
+        <h3>☁️ 會眾期待字雲</h3>
+        <p class="iframe-desc">大家對懷恩堂數位事工的期待，點擊畫面可互動</p>
+        <div class="iframe-container">
+          <iframe src="../WordCloud/index.html" frameborder="0"></iframe>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <a href="https://www.gbc.org.tw/%e5%ae%a3%e6%95%99/2026missionsconference/" target="_blank" class="btn-outline">前往 2026 懷恩堂差傳年會官方網站</a>
+      </div>
+      
+      <!-- 進入今日行動按鈕 -->
+      <div class="enter-calendar-box">
+        <button id="enterCalendarBtn" class="btn-primary">進入今日行動</button>
+      </div>
     </div>
 
-    <!-- 行動頁籤 -->
-    <div class="tabs-container">
-      <div class="tab active" data-tab="1">
-        <div class="tab-icon">🙏</div>
-        <div class="tab-text">為數位事工禱告</div>
+    <!-- 月曆視圖 (Calendar View) -->
+    <div id="calendar-view" class="view-section">
+      
+      <!-- 行動頁籤 -->
+      <div class="tabs-container">
+        <div class="tab active" data-tab="1">
+          <div class="tab-icon">🙏</div>
+          <div class="tab-text">禱告大軍</div>
+        </div>
+        <div class="tab" data-tab="2">
+          <div class="tab-icon">🌿</div>
+          <div class="tab-text">數位安息</div>
+        </div>
+        <div class="tab" data-tab="3">
+          <div class="tab-icon">✨</div>
+          <div class="tab-text">做光做鹽</div>
+        </div>
       </div>
-      <div class="tab" data-tab="2">
-        <div class="tab-icon">🌿</div>
-        <div class="tab-text">數位安息</div>
-      </div>
-      <div class="tab" data-tab="3">
-        <div class="tab-icon">✨</div>
-        <div class="tab-text">做光做鹽</div>
-      </div>
-    </div>
 
-    <!-- 內容展示區 -->
-    <div class="content-container">
-      <div class="content-card" id="actionContent">
-        <!-- JS 將動態填入內容 -->
+      <!-- 經文副標題 -->
+      <div class="scripture-box" id="scriptureBox">
+        <!-- JS 動態填入 -->
       </div>
+
+      <!-- 內容展示區 -->
+      <div class="content-container">
+        <div class="content-card">
+          <!-- 日期與標題排版區 -->
+          <div class="card-header">
+            <div class="big-date">
+              <span class="month-num">6</span><span class="slash">/</span><span class="day-num" id="cardDay">1</span>
+            </div>
+            <div class="date-info">
+              <div class="weekday" id="cardWeekday">週一</div>
+              <div class="topic-title" id="cardTopic">事工守望</div>
+            </div>
+          </div>
+          <hr class="card-divider">
+          <!-- 實際行動內容 -->
+          <div class="action-text" id="actionContent">
+            <!-- JS 將動態填入內容 -->
+          </div>
+          
+          <!-- 備註或 iframe 區塊 -->
+          <div class="extra-content" id="extraContent">
+             <!-- 預留區塊 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 畫面下方：左右切換按鈕 -->
+      <div class="bottom-nav">
+        <button id="prevBtn" class="nav-btn-large" title="前一天">
+          <svg viewBox="0 0 24 24" width="28" height="28"><path fill="currentColor" d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
+          <span>前一天</span>
+        </button>
+        <button id="nextBtn" class="nav-btn-large" title="後一天">
+          <span>後一天</span>
+          <svg viewBox="0 0 24 24" width="28" height="28"><path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+        </button>
+      </div>
+
     </div>
 
   </div>

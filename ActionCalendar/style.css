@@ -1,14 +1,15 @@
-/* 宣教行動月曆 v1 */
+/* 宣教行動月曆 v2 */
 :root {
-  --bg-color: #F4F9FB; /* 淡藍灰色背景，放鬆 */
+  --bg-color: #F4F9FB;
   --card-bg: #FFFFFF;
-  --primary: #3498DB; /* 天藍色 */
+  --primary: #3498DB;
   --primary-dark: #2980B9;
   --text-main: #2C3E50;
   --text-light: #7F8C8D;
   --border: #E8F1F5;
-  --tab-active-bg: #E3F2FD; /* 更淡的藍色，當作頁籤選中背景 */
+  --tab-active-bg: #E3F2FD;
   --tab-active-text: #1976D2;
+  --accent: #F59E0B; /* 溫暖的金色點綴 */
 }
 
 * {
@@ -31,94 +32,189 @@ body {
   width: 100%;
   max-width: 600px;
   background: transparent;
-  padding: 20px 16px 60px;
+  padding: 20px 16px 80px; /* 底部留白給導航按鈕 */
   display: flex;
   flex-direction: column;
 }
 
-/* ── 頁首 ────────────────────────────── */
+/* ── SPA 視圖切換 ──────────────────────── */
+.view-section {
+  display: none;
+  animation: fadeIn 0.4s ease-out;
+}
+.view-section.active {
+  display: block;
+}
+
+/* ── 頁首 (全局) ───────────────────────── */
 .main-header {
   text-align: center;
   margin-bottom: 24px;
   margin-top: 10px;
+  cursor: pointer; /* 點擊回首頁 */
+  transition: transform 0.2s;
 }
-
+.main-header:active {
+  transform: scale(0.98);
+}
 .main-header h1 {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 900;
   color: var(--primary-dark);
   letter-spacing: 1.5px;
   margin-bottom: 6px;
 }
-
 .main-header p {
   font-size: 14px;
   color: var(--text-light);
   font-weight: 500;
 }
 
-/* ── 日期導航器 ───────────────────────── */
-.date-navigator {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+/* =========================================
+   首頁視圖 (Home View)
+   ========================================= */
+.hero-section {
+  background: linear-gradient(135deg, #2980B9, #3498DB);
+  color: white;
+  border-radius: 20px;
+  padding: 30px 20px;
+  text-align: center;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 20px rgba(41, 128, 185, 0.2);
+}
+.hero-section h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #fff;
+}
+.hero-text {
+  font-size: 15px;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.pdf-downloads {
   background: var(--card-bg);
   border-radius: 20px;
-  padding: 12px 20px;
-  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.08);
+  padding: 20px;
   margin-bottom: 24px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+  text-align: center;
 }
-
-.nav-btn {
-  background: transparent;
-  border: none;
-  color: var(--primary);
+.pdf-downloads h3 {
+  font-size: 16px;
+  color: var(--primary-dark);
+  margin-bottom: 16px;
+}
+.pdf-buttons {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  flex-direction: column;
+  gap: 12px;
+}
+.btn-pdf {
+  display: block;
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  color: var(--text-main);
+  padding: 12px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+.btn-pdf:hover {
+  background: #e3f2fd;
+  border-color: var(--primary);
+  color: var(--primary-dark);
+}
+.pdf-note {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 12px;
+}
+
+.iframe-section {
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+}
+.iframe-section h3 {
+  font-size: 16px;
+  color: var(--primary-dark);
+  margin-bottom: 4px;
+  text-align: center;
+}
+.iframe-desc {
+  font-size: 13px;
+  color: var(--text-light);
+  text-align: center;
+  margin-bottom: 16px;
+}
+.iframe-container {
+  width: 100%;
+  height: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #fafafa;
+}
+.iframe-container iframe {
+  width: 100%;
+  height: 100%;
+}
+
+.footer-links {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.btn-outline {
+  display: inline-block;
+  padding: 12px 24px;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+.btn-outline:hover {
+  background: var(--primary);
+  color: white;
+}
+.enter-calendar-box {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 40px;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 16px 36px;
+  font-size: 18px;
+  font-weight: 900;
+  border-radius: 30px;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
   cursor: pointer;
-  transition: background 0.2s;
+  transition: transform 0.2s;
 }
-
-.nav-btn:hover {
-  background: rgba(52, 152, 219, 0.1);
-}
-
-.nav-btn:active {
+.btn-primary:active {
   transform: scale(0.95);
 }
 
-.nav-btn:disabled {
-  color: #bdc3c7;
-  pointer-events: none;
-}
-
-.current-date {
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 4px;
-  color: var(--primary-dark);
-}
-
-.current-date .month, .current-date .unit {
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.current-date .day {
-  font-size: 28px;
-  font-weight: 900;
-}
+/* =========================================
+   月曆視圖 (Calendar View)
+   ========================================= */
 
 /* ── 頁籤 ─────────────────────────────── */
 .tabs-container {
   display: flex;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .tab {
@@ -126,7 +222,7 @@ body {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 14px 8px;
+  padding: 12px 6px;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -136,47 +232,158 @@ body {
   gap: 6px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.02);
 }
-
 .tab-icon {
   font-size: 20px;
 }
-
 .tab-text {
   font-size: 13px;
   font-weight: 700;
   color: var(--text-light);
 }
-
 .tab:hover {
   border-color: var(--primary);
 }
-
 .tab.active {
   background: var(--tab-active-bg);
   border-color: var(--primary);
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(25, 118, 210, 0.1);
 }
-
 .tab.active .tab-text {
   color: var(--tab-active-text);
 }
 
-/* ── 內容展示區 ───────────────────────── */
-.content-container {
-  flex: 1;
+/* ── 經文副標題 ──────────────────────── */
+.scripture-box {
+  background: rgba(41, 128, 185, 0.05);
+  border-left: 4px solid var(--primary);
+  padding: 12px 16px;
+  border-radius: 0 12px 12px 0;
+  margin-bottom: 20px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-main);
+  font-weight: 500;
+  transition: opacity 0.3s;
 }
 
+/* ── 內容展示區與排版 ─────────────────── */
+.content-container {
+  flex: 1;
+  margin-bottom: 20px;
+}
 .content-card {
   background: var(--card-bg);
   border-radius: 20px;
   padding: 24px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.04);
-  font-size: 16px;
-  line-height: 1.7;
-  color: var(--text-main);
-  min-height: 250px;
   animation: fadeIn 0.3s ease-out;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.big-date {
+  font-family: 'Arial', sans-serif;
+  color: var(--primary-dark);
+  line-height: 1;
+}
+.big-date .month-num {
+  font-size: 24px;
+  font-weight: 700;
+}
+.big-date .slash {
+  font-size: 24px;
+  font-weight: 300;
+  margin: 0 4px;
+  color: #bdc3c7;
+}
+.big-date .day-num {
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: -2px;
+}
+
+.date-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.date-info .weekday {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-light);
+  background: #f1f2f6;
+  padding: 2px 8px;
+  border-radius: 8px;
+  display: inline-block;
+  align-self: flex-start;
+}
+.date-info .topic-title {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--text-main);
+}
+
+.card-divider {
+  border: 0;
+  height: 1px;
+  background: var(--border);
+  margin-bottom: 20px;
+}
+
+.action-text {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #34495e;
+}
+.action-text strong {
+  color: var(--primary-dark);
+}
+
+.extra-content {
+  margin-top: 20px;
+}
+
+/* ── 畫面下方導航按鈕 ─────────────────── */
+.bottom-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 10px;
+}
+.nav-btn-large {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  padding: 14px;
+  border-radius: 16px;
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+  transition: all 0.2s;
+}
+.nav-btn-large:hover:not(:disabled) {
+  background: var(--tab-active-bg);
+  border-color: var(--primary);
+}
+.nav-btn-large:active:not(:disabled) {
+  transform: scale(0.98);
+}
+.nav-btn-large:disabled {
+  color: #bdc3c7;
+  background: #f8f9fa;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
 @keyframes fadeIn {
