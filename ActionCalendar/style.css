@@ -1,0 +1,185 @@
+/* 宣教行動月曆 v1 */
+:root {
+  --bg-color: #F4F9FB; /* 淡藍灰色背景，放鬆 */
+  --card-bg: #FFFFFF;
+  --primary: #3498DB; /* 天藍色 */
+  --primary-dark: #2980B9;
+  --text-main: #2C3E50;
+  --text-light: #7F8C8D;
+  --border: #E8F1F5;
+  --tab-active-bg: #E3F2FD; /* 更淡的藍色，當作頁籤選中背景 */
+  --tab-active-text: #1976D2;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  width: 100%;
+  max-width: 600px;
+  background: transparent;
+  padding: 20px 16px 60px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── 頁首 ────────────────────────────── */
+.main-header {
+  text-align: center;
+  margin-bottom: 24px;
+  margin-top: 10px;
+}
+
+.main-header h1 {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--primary-dark);
+  letter-spacing: 1.5px;
+  margin-bottom: 6px;
+}
+
+.main-header p {
+  font-size: 14px;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+/* ── 日期導航器 ───────────────────────── */
+.date-navigator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 12px 20px;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.08);
+  margin-bottom: 24px;
+}
+
+.nav-btn {
+  background: transparent;
+  border: none;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.nav-btn:hover {
+  background: rgba(52, 152, 219, 0.1);
+}
+
+.nav-btn:active {
+  transform: scale(0.95);
+}
+
+.nav-btn:disabled {
+  color: #bdc3c7;
+  pointer-events: none;
+}
+
+.current-date {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+  color: var(--primary-dark);
+}
+
+.current-date .month, .current-date .unit {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.current-date .day {
+  font-size: 28px;
+  font-weight: 900;
+}
+
+/* ── 頁籤 ─────────────────────────────── */
+.tabs-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab {
+  flex: 1;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+.tab-icon {
+  font-size: 20px;
+}
+
+.tab-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-light);
+}
+
+.tab:hover {
+  border-color: var(--primary);
+}
+
+.tab.active {
+  background: var(--tab-active-bg);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(25, 118, 210, 0.1);
+}
+
+.tab.active .tab-text {
+  color: var(--tab-active-text);
+}
+
+/* ── 內容展示區 ───────────────────────── */
+.content-container {
+  flex: 1;
+}
+
+.content-card {
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.04);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-main);
+  min-height: 250px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

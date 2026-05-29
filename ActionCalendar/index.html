@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>宣教行動月曆 | 懷恩堂數位事工</title>
+  <meta name="description" content="三十天的數位事工宣教行動與禱告">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    
+    <!-- 頂部標題 -->
+    <header class="main-header">
+      <h1>數位事工 30 天宣教行動</h1>
+      <p>與神連結，在數位世界做光做鹽</p>
+    </header>
+
+    <!-- 日期導航器 -->
+    <div class="date-navigator">
+      <button id="prevBtn" class="nav-btn" title="前一天">
+        <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
+      </button>
+      <div class="current-date" id="dateDisplay">
+        <span class="month">6月</span>
+        <span class="day">1</span>
+        <span class="unit">日</span>
+      </div>
+      <button id="nextBtn" class="nav-btn" title="後一天">
+        <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+      </button>
+    </div>
+
+    <!-- 行動頁籤 -->
+    <div class="tabs-container">
+      <div class="tab active" data-tab="1">
+        <div class="tab-icon">🙏</div>
+        <div class="tab-text">為數位事工禱告</div>
+      </div>
+      <div class="tab" data-tab="2">
+        <div class="tab-icon">🌿</div>
+        <div class="tab-text">數位安息</div>
+      </div>
+      <div class="tab" data-tab="3">
+        <div class="tab-icon">✨</div>
+        <div class="tab-text">做光做鹽</div>
+      </div>
+    </div>
+
+    <!-- 內容展示區 -->
+    <div class="content-container">
+      <div class="content-card" id="actionContent">
+        <!-- JS 將動態填入內容 -->
+      </div>
+    </div>
+
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
