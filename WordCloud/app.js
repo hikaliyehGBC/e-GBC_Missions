@@ -34,11 +34,6 @@ const cloudEmpty   = document.getElementById('cloud-empty');
 
 // ── 版本標記 ───────────────────────────
 window.addEventListener('DOMContentLoaded', function() {
-  const title = document.getElementById('main-title');
-  if (title) {
-    title.insertAdjacentHTML('beforeend',
-      ' <span style="font-size:0.4em;color:#f39c12;vertical-align:middle;">('+VERSION+')</span>');
-  }
   createToast();
 });
 
@@ -258,6 +253,10 @@ function renderCard(sub) {
 //  渲染：字雲
 // ══════════════════════════════════════
 function renderWordCloud() {
+  // 先將 canvas 縮到最小，避免舊尺寸撐開父容器，影響測量
+  canvas.width = 1;
+  canvas.height = 1;
+  
   const rect = cloudContainer.getBoundingClientRect();
   canvas.width  = rect.width  || 600;
   canvas.height = rect.height || 260;
@@ -366,15 +365,9 @@ let lastWidth = window.innerWidth;
 window.addEventListener('resize', function() {
   clearTimeout(resizeTimeout);
   resizeTimeout = setTimeout(function() {
-    // 解決轉向問題：如果寬度有實質改變才重繪，且強制重取 container 寬度
     if (Math.abs(window.innerWidth - lastWidth) > 30) {
       lastWidth = window.innerWidth;
-      // 先將 canvas 隱藏，讓 container 能正確縮回
-      canvas.style.display = 'none';
-      setTimeout(function() {
-        canvas.style.display = 'block';
-        if (currentCloudData.length > 0) renderWordCloud();
-      }, 50);
+      if (currentCloudData.length > 0) renderWordCloud();
     }
   }, 300);
 });
