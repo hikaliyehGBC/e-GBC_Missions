@@ -108,19 +108,22 @@ body {
   margin-bottom: 16px;
 }
 .pdf-buttons {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 .btn-pdf {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: #f8f9fa;
   border: 1px solid #e0e0e0;
   color: var(--text-main);
-  padding: 12px;
+  padding: 12px 8px;
   border-radius: 12px;
   text-decoration: none;
   font-weight: 700;
+  font-size: 14px;
   transition: all 0.2s;
 }
 .btn-pdf:hover {
@@ -143,9 +146,17 @@ body {
 }
 .iframe-section h3 {
   font-size: 16px;
-  color: var(--primary-dark);
   margin-bottom: 4px;
   text-align: center;
+}
+.iframe-title-link {
+  color: var(--primary-dark);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.iframe-title-link:hover {
+  color: var(--accent);
+  text-decoration: underline;
 }
 .iframe-desc {
   font-size: 13px;
@@ -187,7 +198,7 @@ body {
 }
 .enter-calendar-box {
   text-align: center;
-  margin-top: 10px;
+  margin-top: 0px;
   margin-bottom: 40px;
 }
 .btn-primary {
@@ -204,6 +215,23 @@ body {
 }
 .btn-primary:active {
   transform: scale(0.95);
+}
+
+.copyright-footer {
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: #95a5a6;
+  line-height: 1.6;
+}
+.copyright-footer a {
+  color: #7f8c8d;
+  text-decoration: none;
+}
+.copyright-footer a:hover {
+  text-decoration: underline;
 }
 
 /* =========================================
