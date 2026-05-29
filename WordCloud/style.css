@@ -24,7 +24,8 @@
 }
 
 html, body {
-  min-height: 100vh;
+  height: auto;
+  min-height: 100%;
   background: var(--bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
@@ -133,6 +134,9 @@ html, body {
 /* ── 留言牆 ───────────────────────────── */
 #feed-section {
   padding: 8px 16px 16px;
+  height: auto !important;
+  overflow: visible !important;
+  flex: none !important;
 }
 
 /* ── 分頁 ───────────────────────────── */
