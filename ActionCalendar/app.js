@@ -3,9 +3,9 @@ let currentTab = 1;
 let isHomeView = true;
 
 const SCRIPTURES = {
-  1: "以弗所書 6:18：「靠著聖靈，隨時多方禱告祈求；並要在此警醒不倦，為眾聖徒祈求。」",
-  2: "哥林多前書 6:19：「豈不知你們的身子就是聖靈的殿嗎？這聖靈是從神而來，住在你們裡頭的。」",
-  3: "馬太福音 5:13-16：「你們是世上的鹽...你們的光也當這樣照在人前，叫他們看見你們的好行為，便將榮耀歸給你們在天上的父。」"
+  1: { text: "「靠著聖靈，隨時多方禱告祈求；並要在此警醒不倦，為眾聖徒祈求。」", source: "以弗所書 6:18" },
+  2: { text: "「豈不知你們的身子就是聖靈的殿嗎？這聖靈是從神而來，住在你們裡頭的。」", source: "哥林多前書 6:19" },
+  3: { text: "「你們是世上的鹽...你們的光也當這樣照在人前，叫他們看見你們的好行為，便將榮耀歸給你們在天上的父。」", source: "馬太福音 5:13-16" }
 };
 
 // 初始化
@@ -67,6 +67,15 @@ function setupListeners() {
       updateCalendarUI();
     }
   });
+  
+  // 返回今天
+  document.getElementById('todayBtn').addEventListener('click', () => {
+    const today = new Date();
+    if (today.getMonth() === 5 && today.getDate() >= 1 && today.getDate() <= 30) {
+      currentDay = today.getDate();
+      updateCalendarUI();
+    }
+  });
 
   // 頁籤切換
   const tabs = document.querySelectorAll('.tab');
@@ -89,10 +98,26 @@ function updateCalendarUI() {
   // 2. 更新底部導航按鈕狀態
   document.getElementById('prevBtn').disabled = (currentDay === 1);
   document.getElementById('nextBtn').disabled = (currentDay === 30);
+  
+  // 判斷是否顯示返回今天按鈕
+  const today = new Date();
+  const todayBtn = document.getElementById('todayBtn');
+  if (today.getMonth() === 5 && today.getDate() >= 1 && today.getDate() <= 30) {
+    // 是六月，但如果 currentDay 不是今天，就顯示
+    if (currentDay !== today.getDate()) {
+      todayBtn.style.display = 'block';
+    } else {
+      todayBtn.style.display = 'none';
+    }
+  } else {
+    // 非六月，隱藏
+    todayBtn.style.display = 'none';
+  }
 
   // 3. 更新經文副標題
-  const scriptureBox = document.getElementById('scriptureBox');
-  scriptureBox.textContent = SCRIPTURES[currentTab];
+  const scripData = SCRIPTURES[currentTab];
+  document.getElementById('scriptureText').textContent = scripData.text;
+  document.getElementById('scriptureSource').textContent = scripData.source;
 
   // 4. 取得當日資料 (新版物件結構)
   const dayStr = String(currentDay).padStart(2, '0');

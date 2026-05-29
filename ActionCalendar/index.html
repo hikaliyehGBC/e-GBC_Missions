@@ -64,6 +64,12 @@
     <!-- 月曆視圖 (Calendar View) -->
     <div id="calendar-view" class="view-section">
       
+      <!-- 經文副標題 -->
+      <div class="scripture-box" id="scriptureBox">
+        <div id="scriptureText"></div>
+        <div id="scriptureSource"></div>
+      </div>
+
       <!-- 行動頁籤 -->
       <div class="tabs-container">
         <div class="tab active" data-tab="1">
@@ -78,11 +84,6 @@
           <div class="tab-icon">✨</div>
           <div class="tab-text">做光做鹽</div>
         </div>
-      </div>
-
-      <!-- 經文副標題 -->
-      <div class="scripture-box" id="scriptureBox">
-        <!-- JS 動態填入 -->
       </div>
 
       <!-- 內容展示區 -->
@@ -116,6 +117,9 @@
         <button id="prevBtn" class="nav-btn-large" title="前一天">
           <svg viewBox="0 0 24 24" width="28" height="28"><path fill="currentColor" d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
           <span>前一天</span>
+        </button>
+        <button id="todayBtn" class="nav-btn-large today-btn" style="display: none;">
+          返回今天
         </button>
         <button id="nextBtn" class="nav-btn-large" title="後一天">
           <span>後一天</span>

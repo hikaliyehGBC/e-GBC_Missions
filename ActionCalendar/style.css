@@ -26,6 +26,7 @@ body {
   display: flex;
   justify-content: center;
   -webkit-font-smoothing: antialiased;
+  font-size: 18px; /* 加大基礎字體讓長輩好閱讀 */
 }
 
 #app {
@@ -284,15 +285,23 @@ body {
 /* ── 經文副標題 ──────────────────────── */
 .scripture-box {
   background: rgba(41, 128, 185, 0.05);
-  border-left: 4px solid var(--primary);
-  padding: 12px 16px;
-  border-radius: 0 12px 12px 0;
+  padding: 16px 20px;
+  border-radius: 12px;
   margin-bottom: 20px;
-  font-size: 14px;
-  line-height: 1.6;
   color: var(--text-main);
-  font-weight: 500;
   transition: opacity 0.3s;
+  text-align: center;
+}
+#scriptureText {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+#scriptureSource {
+  font-size: 14px;
+  color: var(--text-light);
+  font-weight: 700;
 }
 
 /* ── 內容展示區與排版 ─────────────────── */
@@ -337,23 +346,20 @@ body {
 
 .date-info {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 8px;
 }
 .date-info .weekday {
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 700;
-  color: var(--text-light);
-  background: #f1f2f6;
-  padding: 2px 8px;
-  border-radius: 8px;
-  display: inline-block;
-  align-self: flex-start;
+  color: var(--primary-dark);
 }
 .date-info .topic-title {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 900;
   color: var(--text-main);
+  white-space: nowrap;
 }
 
 .card-divider {
@@ -364,7 +370,7 @@ body {
 }
 
 .action-text {
-  font-size: 16px;
+  font-size: 18px; /* 放大大內文 */
   line-height: 1.8;
   color: #34495e;
 }
@@ -380,7 +386,7 @@ body {
 .bottom-nav {
   display: flex;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
   margin-top: 10px;
 }
 .nav-btn-large {
@@ -388,10 +394,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 4px;
   background: var(--card-bg);
   border: 1px solid var(--border);
-  padding: 14px;
+  padding: 14px 8px;
   border-radius: 16px;
   color: var(--primary);
   font-weight: 700;
@@ -399,6 +405,10 @@ body {
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0,0,0,0.03);
   transition: all 0.2s;
+}
+.today-btn {
+  color: var(--text-light);
+  font-size: 15px;
 }
 .nav-btn-large:hover:not(:disabled) {
   background: var(--tab-active-bg);
