@@ -26,6 +26,8 @@ function buildHtml(sourcePath, destPath, title) {
   .day-text { flex: 1; }
   .day-tag { font-weight: 700; color: #2980B9; }
   .day-desc { margin-top: 2px; color: #34495e; }
+  .week-group-footer { column-span: all; margin-top: 15px; border-top: 2px dashed #ecf0f1; padding-top: 10px; }
+  .footer-days { display: grid; grid-template-columns: 1fr 1fr; column-gap: 8mm; }
 </style>
 </head>
 <body>
@@ -45,10 +47,14 @@ function buildHtml(sourcePath, destPath, title) {
             if (!line || line.startsWith('---') || line.startsWith('=')) return;
             
             // 匹配週次標題，例如 🟢 第一週：微步啟航
-            const weekMatch = line.match(/^[\uD800-\uDBFF\uDC00-\uDFFF\u2000-\u3300\uFE0F]*\s*(第[一二三四]週.*|🏁.*)/);
+            const weekMatch = line.match(/^[\uD800-\uDBFF\uDC00-\uDFFF\u2000-\u3300\uFE0F]*\s*(第[一二三四]週.*|🏁.*|行動結尾.*)/);
             if (weekMatch) {
                 if (weekContent) {
-                    htmlStr += `<div class="week-group"><div class="week-title">${currentWeek}</div>${weekContent}</div>`;
+                    if (currentWeek.includes('🏁') || currentWeek.includes('結尾')) {
+                        htmlStr += `<div class="week-group week-group-footer"><div class="week-title">${currentWeek}</div><div class="footer-days">${weekContent}</div></div>`;
+                    } else {
+                        htmlStr += `<div class="week-group"><div class="week-title">${currentWeek}</div>${weekContent}</div>`;
+                    }
                 }
                 currentWeek = line;
                 weekContent = '';
@@ -73,7 +79,11 @@ function buildHtml(sourcePath, destPath, title) {
         });
         
         if (weekContent) {
-            htmlStr += `<div class="week-group"><div class="week-title">${currentWeek}</div>${weekContent}</div>`;
+            if (currentWeek.includes('🏁') || currentWeek.includes('結尾')) {
+                htmlStr += `<div class="week-group week-group-footer"><div class="week-title">${currentWeek}</div><div class="footer-days">${weekContent}</div></div>`;
+            } else {
+                htmlStr += `<div class="week-group"><div class="week-title">${currentWeek}</div>${weekContent}</div>`;
+            }
         }
 
         htmlStr += `</div></div></body></html>`;
