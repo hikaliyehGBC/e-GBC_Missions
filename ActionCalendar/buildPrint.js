@@ -13,19 +13,19 @@ function buildHtml(sourcePath, destPath, title) {
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
   @page { size: A4 portrait; margin: 6mm 8mm; }
-  body { font-family: 'Noto Sans TC', sans-serif; font-size: 8.5pt; line-height: 1.35; color: #2c3e50; margin: 0; padding: 0; background: #fff; }
+  body { font-family: 'Noto Sans TC', sans-serif; font-size: 9pt; line-height: 1.4; color: #2c3e50; margin: 0; padding: 0; background: #fff; }
   .page { width: 100%; max-width: 210mm; margin: 0 auto; }
   .header { text-align: center; margin-bottom: 4px; border-bottom: 2px solid #2980B9; padding-bottom: 4px; }
   .header h1 { margin: 0 0 2px 0; color: #2980B9; font-size: 14pt; letter-spacing: 1px; }
   .header p { margin: 0; color: #7f8c8d; font-size: 8.5pt; }
   .columns { column-count: 2; column-gap: 6mm; }
   .week-group { margin-bottom: 6px; break-inside: avoid; }
-  .week-title { font-weight: 900; font-size: 9.5pt; color: #d35400; margin-bottom: 2px; border-bottom: 1px dashed #ecf0f1; padding-bottom: 2px; }
+  .week-title { font-weight: 900; font-size: 10pt; color: #d35400; margin-bottom: 2px; border-bottom: 1px dashed #ecf0f1; padding-bottom: 2px; }
   .day-item { display: flex; align-items: flex-start; margin-bottom: 3px; break-inside: avoid; }
   .checkbox { width: 10px; height: 10px; border: 1.5px solid #bdc3c7; border-radius: 2px; margin-right: 4px; margin-top: 2px; flex-shrink: 0; }
   .day-text { flex: 1; }
-  .day-tag { font-weight: 700; color: #2980B9; font-size: 8.5pt; }
-  .day-desc { margin-top: 0; color: #34495e; font-size: 8.5pt; }
+  .day-tag { font-weight: 700; color: #2980B9; font-size: 9pt; }
+  .day-desc { margin-top: 0; color: #34495e; font-size: 9pt; }
   .week-group-footer { column-span: all; margin-top: 6px; border-top: 2px dashed #ecf0f1; padding-top: 4px; }
   .footer-days { display: grid; grid-template-columns: 1fr 1fr; column-gap: 6mm; }
 </style>
@@ -46,9 +46,11 @@ function buildHtml(sourcePath, destPath, title) {
             line = line.trim();
             if (!line || line.startsWith('---') || line.startsWith('=')) return;
             
-            // 匹配週次標題，例如 🟢 第一週：微步啟航
             const weekMatch = line.match(/^[\uD800-\uDBFF\uDC00-\uDFFF\u2000-\u3300\uFE0F]*\s*(第[一二三四]週.*|🏁.*|行動結尾.*)/);
             if (weekMatch) {
+                // 移除日期與分鐘數等贅字，只保留「第X週：小標題」
+                let cleanTitle = line.replace(/\s*\(.*?\).*$/, '').replace(/──.*$/, '').trim();
+                
                 if (weekContent) {
                     if (currentWeek.includes('🏁') || currentWeek.includes('結尾')) {
                         htmlStr += `<div class="week-group week-group-footer"><div class="week-title">${currentWeek}</div><div class="footer-days">${weekContent}</div></div>`;
@@ -56,7 +58,7 @@ function buildHtml(sourcePath, destPath, title) {
                         htmlStr += `<div class="week-group"><div class="week-title">${currentWeek}</div>${weekContent}</div>`;
                     }
                 }
-                currentWeek = line;
+                currentWeek = cleanTitle;
                 weekContent = '';
                 return;
             }
