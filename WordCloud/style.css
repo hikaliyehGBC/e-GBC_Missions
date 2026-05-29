@@ -393,48 +393,87 @@ html, body {
   transform: translateX(-50%) translateY(0);
 }
 
-/* ── 手機橫向模式微調 ─────────────────────── */
-@media (max-height: 500px) and (orientation: landscape) {
-  #cloud-container { height: 200px; }
-  #main-header { padding: 12px 20px 8px; }
-  #main-title { font-size: 18px; }
+/* ── 版本號標籤 (v11) ─────────────────────── */
+.version-badge {
+  font-size: 0.4em;
+  color: var(--accent);
+  vertical-align: middle;
+  cursor: pointer;
+  padding: 4px 8px;
+  background: rgba(41, 128, 185, 0.1);
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.version-badge:active {
+  background: rgba(41, 128, 185, 0.3);
 }
 
-/* ── 強制鎖定直向遮罩 ─────────────────────── */
-#orientation-lock {
+/* ── 旋轉重整按鈕 ─────────────────────── */
+#rotate-reload-btn {
   display: none;
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  bottom: 80px;
+  right: 20px;
   background: var(--accent);
-  color: #ffffff;
-  z-index: 99999;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 1px;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 9999;
+  cursor: pointer;
+  animation: popIn 0.3s ease-out forwards;
+}
+@keyframes popIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
-#orientation-lock .lock-icon {
-  font-size: 60px;
-  margin-bottom: 24px;
-  animation: rotatePhone 1.5s infinite ease-in-out;
-}
-
-@keyframes rotatePhone {
-  0% { transform: rotate(-90deg); }
-  50% { transform: rotate(0deg); }
-  100% { transform: rotate(0deg); }
-}
-
-/* 偵測手機橫向並顯示遮罩 */
-@media (max-height: 500px) and (max-width: 950px) and (orientation: landscape) {
+/* ── 橫向模式 (Landscape) 左右雙欄 ──────── */
+@media (orientation: landscape) and (min-width: 600px) {
   #app {
-    display: none; /* 隱藏底層防止變形 */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr auto;
+    grid-template-areas: 
+      "cloud  feed"
+      "input  feed";
+    max-width: 1200px;
+    height: 100dvh;
+    max-height: 100dvh;
+    padding-bottom: 0;
   }
-  #orientation-lock {
-    display: flex;
+
+  /* 隱藏標題，讓字雲有更多空間 */
+  #main-header { 
+    display: none; 
+  }
+  
+  #cloud-section { 
+    grid-area: cloud; 
+    display: flex; 
+    flex-direction: column; 
+    overflow: hidden; 
+    padding: 16px 16px 0; 
+  }
+  #cloud-container { 
+    flex: 1; 
+    min-height: 150px; 
+    height: auto; 
+  }
+  
+  #feed-section { 
+    grid-area: feed; 
+    border-left: 1px solid var(--border); 
+    min-height: 0; /* 關鍵：防止內容撐破容器導致滾動失效 */
+    height: 100%;
+  }
+  
+  #input-footer { 
+    grid-area: input; 
+    border-top: none; 
+    padding: 12px 16px; 
   }
 }

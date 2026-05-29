@@ -2,18 +2,18 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>你對懷恩堂數位事工的期待 | 懷恩堂差傳年會</title>
   <meta name="description" content="與 200 人一起點亮星光，分享你對數位事工的期待">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=11">
 </head>
 <body>
   <div id="app">
 
     <!-- 頁首 -->
     <header id="main-header">
-      <h1 id="main-title">你對懷恩堂數位事工的期待</h1>
+      <h1 id="main-title">你對懷恩堂數位事工的期待 <span class="version-badge" onclick="window.location.reload(true)">(v11)</span></h1>
       <p class="subtitle">請輸入簡短的文字，為每份期盼能做成新事工禱告</p>
     </header>
 
@@ -62,13 +62,9 @@
 
   </div>
 
-  <!-- 強制直向提示遮罩 -->
-  <div id="orientation-lock">
-    <div class="lock-icon">📱</div>
-    <p>請將手機轉為直立<br>以獲得最佳體驗</p>
-  </div>
+  <button id="rotate-reload-btn" onclick="window.location.reload(true)">↻ 重整版面</button>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v=11"></script>
 </body>
 </html>

@@ -362,9 +362,19 @@ inputEl.addEventListener('keypress', function(e) {
 
 let resizeTimeout;
 let lastWidth = window.innerWidth;
+let currentOrientation = window.innerWidth > window.innerHeight ? 'landscape' : 'portrait';
+
 window.addEventListener('resize', function() {
   clearTimeout(resizeTimeout);
   resizeTimeout = setTimeout(function() {
+    // 偵測是否真的發生了轉向
+    const newOrientation = window.innerWidth > window.innerHeight ? 'landscape' : 'portrait';
+    if (newOrientation !== currentOrientation) {
+      currentOrientation = newOrientation;
+      const btn = document.getElementById('rotate-reload-btn');
+      if (btn) btn.style.display = 'block';
+    }
+
     if (Math.abs(window.innerWidth - lastWidth) > 30) {
       lastWidth = window.innerWidth;
       if (currentCloudData.length > 0) renderWordCloud();
