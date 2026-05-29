@@ -1,236 +1,358 @@
-// 請在此處填寫您部署 Google Apps Script 後取得的 Web App URL
-const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbyGO3OWxQPMTFBPqdKdiq40Q9VSq9jFjkO6ALGyULxS9uSamhm2C1hSKNsAPxkI9j_kEA/exec';
+// ══════════════════════════════════════
+//  字雲社群回饋系統 v8 前端邏輯
+//  - JSONP 通訊（繞過 Google Workspace CORS）
+//  - 字雲點擊篩選留言
+//  - 按讚 / 取消讚（樂觀更新）
+//  - 30 秒輪詢
+// ══════════════════════════════════════
 
-// 取得或產生裝置 UUID
+const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbz5m04F8XoCj58iJheuF9e3HniHmMuwPymnAQEYDexZuxR5Kv7fntCJVG5lrovLPzR8fA/exec';
+const VERSION = 'v8';
+
+// ── 裝置 UUID ──────────────────────────
 let deviceUUID = localStorage.getItem('device_uuid');
 if (!deviceUUID) {
-    deviceUUID = 'uuid_' + Math.random().toString(36).substr(2, 9);
-    localStorage.setItem('device_uuid', deviceUUID);
+  deviceUUID = 'uuid_' + Math.random().toString(36).substr(2, 12);
+  localStorage.setItem('device_uuid', deviceUUID);
 }
 
-// 取得本地歷史紀錄
-let historyList = JSON.parse(localStorage.getItem('historyList') || '[]');
+// ── 狀態 ───────────────────────────────
+let allSubmissions   = [];   // 完整留言列表
+let currentCloudData = [];   // 字雲資料
+let activeFilter     = null; // 目前篩選的關鍵字
 
-const inputEl = document.getElementById('keyword-input');
-const submitBtn = document.getElementById('submit-btn');
-const historyUl = document.getElementById('history-list');
-const canvas = document.getElementById('word-cloud');
+// ── DOM 參照 ───────────────────────────
+const inputEl      = document.getElementById('keyword-input');
+const submitBtn    = document.getElementById('submit-btn');
+const feedList     = document.getElementById('feed-list');
+const feedMeta     = document.getElementById('feed-meta');
+const filterBadge  = document.getElementById('filter-badge');
+const filterLabel  = document.getElementById('filter-label');
+const canvas       = document.getElementById('word-cloud');
 const cloudContainer = document.getElementById('cloud-container');
-const loadingEl = document.getElementById('loading');
+const cloudEmpty   = document.getElementById('cloud-empty');
 
-let wordCloudData = [];
-
-// 初始化
-function init() {
-    renderHistory();
-    fetchWordCloudData();
-    // 設定每 10 秒自動更新一次字雲，減少伺服器壓力
-    setInterval(fetchWordCloudData, 10000);
-
-    // 監聽螢幕旋轉或視窗大小改變，重新繪製字雲
-    window.addEventListener('resize', () => {
-        if (wordCloudData.length > 0) {
-            renderWordCloud();
-        }
-    });
-    
-    // 顯示版本更新確認碼
-    setTimeout(() => {
-        const title = document.querySelector('h1');
-        if (title) title.innerHTML += ' <span style="font-size: 0.5em; color: #ffeb3b;">(v7)</span>';
-    }, 500);
-}
-
-// 渲染歷史紀錄列表
-function renderHistory() {
-    historyUl.innerHTML = '';
-    historyList.forEach((keyword, index) => {
-        const li = document.createElement('li');
-        li.className = 'history-item';
-
-        const textSpan = document.createElement('span');
-        textSpan.textContent = keyword;
-
-        const delBtn = document.createElement('button');
-        delBtn.className = 'delete-btn';
-        delBtn.textContent = '刪除';
-        delBtn.onclick = () => deleteKeyword(keyword, index);
-
-        li.appendChild(textSpan);
-        li.appendChild(delBtn);
-        historyUl.appendChild(li);
-    });
-}
-
-// 核心 JSONP 通訊函數 (破解 CORS)
-function fetchJSONP(url) {
-    return new Promise((resolve, reject) => {
-        const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-        
-        // 綁定全域回呼函數
-        window[callbackName] = function(data) {
-            delete window[callbackName];
-            document.body.removeChild(script);
-            resolve(data);
-        };
-        
-        // 將 callback 參數附加到網址
-        const finalUrl = new URL(url);
-        finalUrl.searchParams.append('callback', callbackName);
-
-        // 建立並插入 script 標籤
-        const script = document.createElement('script');
-        script.src = finalUrl.toString();
-        script.onerror = () => {
-            delete window[callbackName];
-            document.body.removeChild(script);
-            reject(new Error('JSONP 載入失敗'));
-        };
-        document.body.appendChild(script);
-    });
-}
-
-// 新增關鍵字
-async function addKeyword() {
-    const keyword = inputEl.value.trim();
-    if (!keyword) return;
-
-    // 鎖定按鈕避免重複提交
-    submitBtn.disabled = true;
-    submitBtn.textContent = '發送中...';
-
-    try {
-        if (GAS_API_URL === 'YOUR_GAS_WEB_APP_URL_HERE') {
-            alert('請先在 app.js 中設定 GAS_API_URL');
-            resetSubmitBtn();
-            return;
-        }
-
-        const url = new URL(GAS_API_URL);
-        url.searchParams.append('action', 'add');
-        url.searchParams.append('uuid', deviceUUID);
-        url.searchParams.append('keyword', keyword);
-
-        const result = await fetchJSONP(url.toString());
-
-        if (result.status === 'success') {
-            // 寫入本地歷史紀錄
-            historyList.unshift(keyword); // 插在最前面
-            localStorage.setItem('historyList', JSON.stringify(historyList));
-
-            inputEl.value = '';
-            renderHistory();
-            fetchWordCloudData(); // 立即刷新字雲
-        } else {
-            alert('發送失敗：' + result.message);
-        }
-    } catch (error) {
-        console.error('Error adding keyword:', error);
-        alert('連線異常：' + error.message);
-    } finally {
-        resetSubmitBtn();
-    }
-}
-
-// 刪除關鍵字
-async function deleteKeyword(keyword, index) {
-    if (!confirm(`確定要刪除「${keyword}」嗎？`)) return;
-
-    try {
-        const url = new URL(GAS_API_URL);
-        url.searchParams.append('action', 'delete');
-        url.searchParams.append('uuid', deviceUUID);
-        url.searchParams.append('keyword', keyword);
-
-        const result = await fetchJSONP(url.toString());
-
-        if (result.status === 'success') {
-            // 從本地移除
-            historyList.splice(index, 1);
-            localStorage.setItem('historyList', JSON.stringify(historyList));
-
-            renderHistory();
-            fetchWordCloudData(); // 立即刷新字雲
-        } else {
-            alert('刪除失敗：' + result.message);
-        }
-    } catch (error) {
-        console.error('Error deleting keyword:', error);
-        alert('連線異常：' + error.message);
-    }
-}
-
-// 重置送出按鈕
-function resetSubmitBtn() {
-    submitBtn.disabled = false;
-    submitBtn.textContent = '發送';
-}
-
-// 取得字雲資料
-async function fetchWordCloudData() {
-    if (GAS_API_URL === 'YOUR_GAS_WEB_APP_URL_HERE') return;
-
-    loadingEl.style.display = 'block';
-    try {
-        const url = new URL(GAS_API_URL);
-        const result = await fetchJSONP(url.toString());
-
-        if (result.status === 'success') {
-            wordCloudData = result.data; // [['keyword', weight], ...]
-            renderWordCloud();
-        }
-    } catch (error) {
-        console.error('Error fetching word cloud data:', error);
-    } finally {
-        loadingEl.style.display = 'none';
-    }
-}
-
-// 渲染字雲
-function renderWordCloud() {
-    // 確保 canvas 尺寸正確對應容器 (這對 resize 適應很重要)
-    const rect = cloudContainer.getBoundingClientRect();
-    canvas.width = rect.width;
-    canvas.height = rect.height;
-
-    if (wordCloudData.length === 0) {
-        const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.font = '16px Noto Sans TC';
-        ctx.fillStyle = '#aaaaaa';
-        ctx.textAlign = 'center';
-        ctx.fillText('目前還沒有期許，趕快發送第一個吧！', canvas.width / 2, canvas.height / 2);
-        return;
-    }
-
-    WordCloud(canvas, {
-        list: wordCloudData,
-        fontFamily: 'Noto Sans TC, sans-serif',
-        weightFactor: function (size) {
-            // size 是出現的次數。基礎大小給 30px，每多一次加 15px
-            return (size * 15) + 30;
-        },
-        color: function () {
-            // 加入溫暖與沉穩的色系：深藍、深灰、暖橘、湖水綠
-            const colors = ['#2C3E50', '#34495E', '#E67E22', '#16A085', '#2980B9', '#8E44AD'];
-            return colors[Math.floor(Math.random() * colors.length)];
-        },
-        rotateRatio: 0, // 全部橫向排版較好閱讀
-        backgroundColor: 'transparent',
-        drawOutOfBound: false,
-        shrinkToFit: true,
-        gridSize: Math.round(16 * document.body.clientWidth / 1024),
-        shape: 'circle'
-    });
-}
-
-// 事件綁定
-submitBtn.addEventListener('click', addKeyword);
-inputEl.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        addKeyword();
-    }
+// ── 版本標記 ───────────────────────────
+window.addEventListener('DOMContentLoaded', function() {
+  const title = document.getElementById('main-title');
+  if (title) {
+    title.insertAdjacentHTML('beforeend',
+      ' <span style="font-size:0.4em;color:#f39c12;vertical-align:middle;">('+VERSION+')</span>');
+  }
+  createToast();
 });
 
-// 啟動應用
-init();
+function createToast() {
+  const t = document.createElement('div');
+  t.id = 'toast';
+  document.body.appendChild(t);
+}
+
+// ══════════════════════════════════════
+//  JSONP 通訊核心
+// ══════════════════════════════════════
+function fetchJSONP(url) {
+  return new Promise(function(resolve, reject) {
+    const cbName = 'jsonp_' + Date.now() + '_' + Math.floor(Math.random() * 9999);
+    let script;
+
+    window[cbName] = function(data) {
+      delete window[cbName];
+      if (script && script.parentNode) script.parentNode.removeChild(script);
+      resolve(data);
+    };
+
+    const u = new URL(url);
+    u.searchParams.set('callback', cbName);
+
+    script = document.createElement('script');
+    script.src = u.toString();
+    script.onerror = function() {
+      delete window[cbName];
+      if (script && script.parentNode) script.parentNode.removeChild(script);
+      reject(new Error('JSONP 載入失敗'));
+    };
+    document.body.appendChild(script);
+  });
+}
+
+// ══════════════════════════════════════
+//  API 呼叫封裝
+// ══════════════════════════════════════
+function apiCall(params) {
+  const u = new URL(GAS_API_URL);
+  u.searchParams.set('uuid', deviceUUID);
+  Object.keys(params).forEach(function(k) { u.searchParams.set(k, params[k]); });
+  return fetchJSONP(u.toString());
+}
+
+// ══════════════════════════════════════
+//  主流程：送出留言
+// ══════════════════════════════════════
+async function submitKeyword() {
+  const text = inputEl.value.trim();
+  if (!text) return;
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = '發送中...';
+
+  try {
+    const res = await apiCall({ action: 'add', text: text });
+    if (res.status === 'success') {
+      inputEl.value = '';
+      const kws = (res.keywords || []).join('、');
+      showToast('✅ 已送出！擷取關鍵詞：' + (kws || text));
+      await fetchData(); // 立即重整
+    } else {
+      showToast('⚠️ 送出失敗：' + res.message);
+    }
+  } catch (e) {
+    showToast('⚠️ 連線異常：' + e.message);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = '發送';
+  }
+}
+
+// ══════════════════════════════════════
+//  按讚 / 取消讚
+// ══════════════════════════════════════
+async function toggleLike(rowId) {
+  // 找到對應留言做樂觀更新
+  const sub = allSubmissions.find(function(s) { return s.rowId === rowId; });
+  if (!sub) return;
+
+  const wasLiked = sub.isLiked;
+  sub.isLiked = !wasLiked;
+  sub.likeCount = wasLiked ? Math.max(0, sub.likeCount - 1) : sub.likeCount + 1;
+  updateCardUI(rowId, sub.isLiked, sub.likeCount);
+
+  try {
+    const res = await apiCall({ action: 'like', rowId: rowId });
+    if (res.status !== 'success') {
+      // 還原樂觀更新
+      sub.isLiked = wasLiked;
+      sub.likeCount = wasLiked ? sub.likeCount + 1 : Math.max(0, sub.likeCount - 1);
+      updateCardUI(rowId, sub.isLiked, sub.likeCount);
+    }
+  } catch (e) {
+    sub.isLiked = wasLiked;
+    sub.likeCount = wasLiked ? sub.likeCount + 1 : Math.max(0, sub.likeCount - 1);
+    updateCardUI(rowId, sub.isLiked, sub.likeCount);
+  }
+}
+
+function updateCardUI(rowId, isLiked, likeCount) {
+  const btn = document.querySelector('[data-rowid="' + rowId + '"] .like-btn');
+  if (!btn) return;
+  btn.classList.toggle('liked', isLiked);
+  btn.querySelector('.like-count').textContent = likeCount;
+  btn.querySelector('.like-icon').textContent = isLiked ? '❤️' : '🤍';
+}
+
+// ══════════════════════════════════════
+//  刪除留言
+// ══════════════════════════════════════
+async function deleteSubmission(rowId) {
+  if (!confirm('確定要刪除這則期許嗎？')) return;
+  try {
+    const res = await apiCall({ action: 'delete', rowId: rowId });
+    if (res.status === 'success') {
+      allSubmissions = allSubmissions.filter(function(s) { return s.rowId !== rowId; });
+      renderFeed();
+      renderWordCloud();
+    } else {
+      showToast('⚠️ 刪除失敗：' + res.message);
+    }
+  } catch (e) {
+    showToast('⚠️ 連線異常：' + e.message);
+  }
+}
+
+// ══════════════════════════════════════
+//  取得資料並刷新
+// ══════════════════════════════════════
+async function fetchData() {
+  try {
+    const res = await apiCall({});
+    if (res.status === 'success') {
+      allSubmissions   = res.submissions || [];
+      currentCloudData = res.cloudData   || [];
+      renderFeed();
+      renderWordCloud();
+    }
+  } catch (e) {
+    // 靜默失敗，等下次輪詢
+    console.warn('fetch error:', e.message);
+  }
+}
+
+// ══════════════════════════════════════
+//  渲染：留言牆
+// ══════════════════════════════════════
+function renderFeed() {
+  // 依讚數排序（本地）
+  const sorted = allSubmissions.slice().sort(function(a, b) {
+    return b.likeCount - a.likeCount;
+  });
+
+  let filtered = sorted;
+  if (activeFilter) {
+    filtered = sorted.filter(function(s) {
+      return s.keywords && s.keywords.indexOf(activeFilter) !== -1;
+    });
+  }
+
+  // 更新 meta
+  const total = allSubmissions.length;
+  const shown = filtered.length;
+  feedMeta.textContent = activeFilter
+    ? shown + ' 則相關 / 共 ' + total + ' 則'
+    : '共 ' + total + ' 則';
+
+  if (filtered.length === 0) {
+    feedList.innerHTML = '<div class="feed-empty">' +
+      (activeFilter ? '這個關鍵字目前還沒有相關期許' : '還沒有期許，趕快發送第一個吧！') +
+      '</div>';
+    return;
+  }
+
+  feedList.innerHTML = filtered.map(function(sub) {
+    return renderCard(sub);
+  }).join('');
+}
+
+function renderCard(sub) {
+  const tagsHtml = (sub.keywords || []).map(function(kw) {
+    return '<span class="card-tag" onclick="filterByKeyword(\'' +
+      escapeAttr(kw) + '\')">' + escapeHtml(kw) + '</span>';
+  }).join('');
+
+  const likeIcon   = sub.isLiked ? '❤️' : '🤍';
+  const likedClass = sub.isLiked ? 'liked' : '';
+  const mineClass  = sub.isMine  ? 'is-mine' : '';
+
+  const deleteBtn = sub.isMine
+    ? '<button class="delete-card-btn" onclick="deleteSubmission(\'' + sub.rowId + '\')">刪除</button>'
+    : '';
+
+  return '<div class="feed-card ' + mineClass + '" data-rowid="' + sub.rowId + '">' +
+    '<p class="card-text">' + escapeHtml(sub.text) + '</p>' +
+    (tagsHtml ? '<div class="card-tags">' + tagsHtml + '</div>' : '') +
+    '<div class="card-actions">' +
+      '<button class="like-btn ' + likedClass + '" onclick="toggleLike(\'' + sub.rowId + '\')">' +
+        '<span class="like-icon">' + likeIcon + '</span>' +
+        '<span class="like-count">' + sub.likeCount + '</span>' +
+        '<span> 讚</span>' +
+      '</button>' +
+      deleteBtn +
+    '</div>' +
+  '</div>';
+}
+
+// ══════════════════════════════════════
+//  渲染：字雲
+// ══════════════════════════════════════
+function renderWordCloud() {
+  const rect = cloudContainer.getBoundingClientRect();
+  canvas.width  = rect.width  || 600;
+  canvas.height = rect.height || 260;
+
+  if (!currentCloudData || currentCloudData.length === 0) {
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    cloudEmpty.style.display = 'block';
+    return;
+  }
+  cloudEmpty.style.display = 'none';
+
+  // 計算最大分數以便正規化
+  const maxScore = currentCloudData.reduce(function(m, d) { return Math.max(m, d[1]); }, 1);
+
+  WordCloud(canvas, {
+    list: currentCloudData,
+    fontFamily: 'Noto Sans TC, sans-serif',
+    weightFactor: function(size) {
+      // 正規化後給 30–130 的範圍，確保單一詞也可見
+      return 30 + (size / maxScore) * 100;
+    },
+    color: function(word) {
+      // 篩選中的關鍵字高亮
+      if (activeFilter && word === activeFilter) return '#e74c3c';
+      const palette = ['#2C3E50', '#2980B9', '#16A085', '#8E44AD', '#E67E22', '#2C3E50'];
+      return palette[Math.floor(Math.random() * palette.length)];
+    },
+    rotateRatio: 0,
+    backgroundColor: 'transparent',
+    drawOutOfBound: false,
+    shrinkToFit: true,
+    gridSize: Math.round(8 * canvas.width / 600),
+    click: function(item) {
+      filterByKeyword(item[0]);
+    },
+    hover: function(item) {
+      canvas.style.cursor = item ? 'pointer' : 'default';
+    }
+  });
+}
+
+// ══════════════════════════════════════
+//  篩選功能
+// ══════════════════════════════════════
+function filterByKeyword(kw) {
+  activeFilter = kw;
+  filterLabel.textContent = kw;
+  filterBadge.classList.add('active');
+  renderFeed();
+  renderWordCloud(); // 重繪以高亮選中詞
+  // 滾動到留言牆
+  document.getElementById('feed-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+function clearFilter() {
+  activeFilter = null;
+  filterBadge.classList.remove('active');
+  renderFeed();
+  renderWordCloud();
+}
+
+// ══════════════════════════════════════
+//  工具函數
+// ══════════════════════════════════════
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function escapeAttr(str) {
+  return String(str).replace(/'/g, "\\'");
+}
+
+function showToast(msg) {
+  let t = document.getElementById('toast');
+  if (!t) { createToast(); t = document.getElementById('toast'); }
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 3500);
+}
+
+// ══════════════════════════════════════
+//  事件綁定 & 初始化
+// ══════════════════════════════════════
+submitBtn.addEventListener('click', submitKeyword);
+inputEl.addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') submitKeyword();
+});
+
+window.addEventListener('resize', function() {
+  if (currentCloudData.length > 0) renderWordCloud();
+});
+
+// 初始載入
+fetchData();
+
+// 30 秒輪詢
+setInterval(fetchData, 30000);

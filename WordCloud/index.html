@@ -1,44 +1,68 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>懷恩堂 - 數位禾場呼召</title>
-    <!-- 引入極簡中文字體 -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>數位禾場的期待 | 懷恩堂差傳年會</title>
+  <meta name="description" content="與 200 人一起點亮星光，分享你對數位事工的期待">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <!-- 頂部標題 -->
-        <header>
-            <h1>數位禾場的期待</h1>
-            <p>與 200 人一起點亮星光</p>
-        </header>
+  <div id="app">
 
-        <!-- 字雲顯示區 -->
-        <div class="cloud-container" id="cloud-container">
-            <canvas id="word-cloud"></canvas>
-            <div id="loading" class="loading">正在載入祈願...</div>
+    <!-- 頁首 -->
+    <header id="main-header">
+      <h1 id="main-title">數位禾場的期待</h1>
+      <p class="subtitle">與 200 人一起點亮星光</p>
+    </header>
+
+    <!-- 字雲區 -->
+    <section id="cloud-section">
+      <div id="cloud-container">
+        <canvas id="word-cloud"></canvas>
+        <div id="cloud-empty">還沒有期許，趕快發送第一個吧！</div>
+      </div>
+      <!-- 篩選狀態標籤 -->
+      <div id="filter-badge">
+        <span class="filter-icon">🔍</span>
+        <span id="filter-label"></span>
+        <button id="clear-filter" onclick="clearFilter()">✕ 清除篩選</button>
+      </div>
+    </section>
+
+    <!-- 公開留言牆 -->
+    <section id="feed-section">
+      <div class="feed-header">
+        <h2>💬 大家的期待</h2>
+        <span id="feed-meta"></span>
+      </div>
+      <div id="feed-list">
+        <div class="feed-skeleton" id="feed-loading">
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
         </div>
+      </div>
+    </section>
 
-        <!-- 輸入區塊 -->
-        <div class="input-section">
-            <input type="text" id="keyword-input" placeholder="輸入你想對數位事工的期許..." maxlength="15">
-            <button id="submit-btn">發送</button>
-        </div>
+    <!-- 底部輸入列 -->
+    <footer id="input-footer">
+      <div id="input-bar">
+        <input
+          type="text"
+          id="keyword-input"
+          placeholder="輸入你對數位事工的期許..."
+          maxlength="50"
+          autocomplete="off"
+        >
+        <button id="submit-btn">發送</button>
+      </div>
+    </footer>
 
-        <!-- 歷史紀錄與刪除區塊 -->
-        <div class="history-section" id="history-section">
-            <h3>您的期許紀錄</h3>
-            <ul id="history-list">
-                <!-- 紀錄將由 JS 動態生成 -->
-            </ul>
-        </div>
-    </div>
+  </div>
 
-    <!-- 引入字雲套件 wordcloud2.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
-    <script src="app.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
