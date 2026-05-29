@@ -421,5 +421,11 @@ window.addEventListener('resize', function() {
 // 初始載入
 fetchData();
 
-// 30 秒輪詢
-setInterval(fetchData, 30000);
+// 判斷是否為靜態模式 (例如從月曆首頁載入 iframe)
+const urlParams = new URLSearchParams(window.location.search);
+const isStatic = urlParams.get('static') === 'true';
+
+// 如果不是靜態模式，才開啟 30 秒輪詢
+if (!isStatic) {
+  setInterval(fetchData, 30000);
+}
