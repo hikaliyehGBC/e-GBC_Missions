@@ -7,7 +7,7 @@
 // ══════════════════════════════════════
 
 const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbz5m04F8XoCj58iJheuF9e3HniHmMuwPymnAQEYDexZuxR5Kv7fntCJVG5lrovLPzR8fA/exec';
-const VERSION = 'v8';
+const VERSION = 'v9';
 
 // ── 裝置 UUID ──────────────────────────
 let deviceUUID = localStorage.getItem('device_uuid');
@@ -237,9 +237,11 @@ function renderCard(sub) {
     : '';
 
   return '<div class="feed-card ' + mineClass + '" data-rowid="' + sub.rowId + '">' +
-    '<p class="card-text">' + escapeHtml(sub.text) + '</p>' +
-    (tagsHtml ? '<div class="card-tags">' + tagsHtml + '</div>' : '') +
-    '<div class="card-actions">' +
+    '<div class="card-main">' +
+      '<p class="card-text">' + escapeHtml(sub.text) + '</p>' +
+      (tagsHtml ? '<div class="card-tags">' + tagsHtml + '</div>' : '') +
+    '</div>' +
+    '<div class="card-side">' +
       '<button class="like-btn ' + likedClass + '" onclick="toggleLike(\'' + sub.rowId + '\')">' +
         '<span class="like-icon">' + likeIcon + '</span>' +
         '<span class="like-count">' + sub.likeCount + '</span>' +
@@ -279,8 +281,13 @@ function renderWordCloud() {
     color: function(word) {
       // 篩選中的關鍵字高亮
       if (activeFilter && word === activeFilter) return '#e74c3c';
-      const palette = ['#2C3E50', '#2980B9', '#16A085', '#8E44AD', '#E67E22', '#2C3E50'];
-      return palette[Math.floor(Math.random() * palette.length)];
+      const palette = ['#2C3E50', '#2980B9', '#16A085', '#8E44AD', '#E67E22'];
+      // 使用字串 Hash 決定固定顏色，避免重繪時變色
+      let hash = 0;
+      for (let i = 0; i < word.length; i++) {
+        hash = word.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      return palette[Math.abs(hash) % palette.length];
     },
     rotateRatio: 0,
     backgroundColor: 'transparent',
@@ -347,8 +354,22 @@ inputEl.addEventListener('keypress', function(e) {
   if (e.key === 'Enter') submitKeyword();
 });
 
+let resizeTimeout;
+let lastWidth = window.innerWidth;
 window.addEventListener('resize', function() {
-  if (currentCloudData.length > 0) renderWordCloud();
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(function() {
+    // 解決轉向問題：如果寬度有實質改變才重繪，且強制重取 container 寬度
+    if (Math.abs(window.innerWidth - lastWidth) > 30) {
+      lastWidth = window.innerWidth;
+      // 先將 canvas 隱藏，讓 container 能正確縮回
+      canvas.style.display = 'none';
+      setTimeout(function() {
+        canvas.style.display = 'block';
+        if (currentCloudData.length > 0) renderWordCloud();
+      }, 50);
+    }
+  }, 300);
 });
 
 // 初始載入

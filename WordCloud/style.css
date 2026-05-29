@@ -84,6 +84,7 @@ html, body {
 #word-cloud {
   width: 100%;
   height: 100%;
+  max-width: 100%;
 }
 
 #cloud-empty {
@@ -167,6 +168,10 @@ html, body {
   padding: 14px 16px;
   margin-bottom: 10px;
   transition: box-shadow 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 12px;
 }
 
 .feed-card:hover {
@@ -190,7 +195,6 @@ html, body {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-bottom: 12px;
 }
 
 .card-tag {
@@ -208,10 +212,20 @@ html, body {
   background: #c5d9f5;
 }
 
-.card-actions {
+.card-main {
+  flex: 1;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.card-side {
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
+  align-items: flex-end;
+  min-width: 65px;
 }
 
 /* 按讚按鈕 */
@@ -306,6 +320,7 @@ html, body {
   padding: 10px 16px;
   max-width: 800px;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 #input-bar {
@@ -316,6 +331,7 @@ html, body {
 
 #keyword-input {
   flex: 1;
+  min-width: 0;
   padding: 14px 16px;
   font-size: 16px;
   border: 2px solid var(--border);
