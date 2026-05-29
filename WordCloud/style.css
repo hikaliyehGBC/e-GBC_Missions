@@ -24,20 +24,17 @@
 }
 
 html, body {
-  height: 100dvh;
+  min-height: 100vh;
   background: var(--bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
-  overflow: hidden; /* 防止整頁滾動，交由內部區域滾動 */
+  padding-bottom: 70px; /* 給底部固定輸入框留出空間 */
 }
 
 /* ── 版面結構 ─────────────────────────── */
 #app {
-  display: flex;
-  flex-direction: column;
   max-width: 800px;
   margin: 0 auto;
-  height: 100%;
 }
 
 /* ── 頁首 ─────────────────────────────── */
@@ -135,10 +132,7 @@ html, body {
 
 /* ── 留言牆 ───────────────────────────── */
 #feed-section {
-  flex: 1;
   padding: 8px 16px 16px;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch; /* iOS 順滑滾動 */
 }
 
 .feed-header {
@@ -320,11 +314,16 @@ html, body {
 
 /* ── 底部輸入列 ───────────────────────── */
 #input-footer {
-  flex-shrink: 0;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
   background: var(--bg);
   border-top: 1px solid var(--border);
   padding: 10px 16px;
-  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
   box-sizing: border-box;
 }
 
@@ -431,49 +430,9 @@ html, body {
   100% { transform: scale(1); opacity: 1; }
 }
 
-/* ── 橫向模式 (Landscape) 左右雙欄 ──────── */
-@media (orientation: landscape) and (min-width: 600px) {
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr auto;
-    grid-template-areas: 
-      "cloud  feed"
-      "input  feed";
-    max-width: 1200px;
-    height: 100dvh;
-    max-height: 100dvh;
-    padding-bottom: 0;
-  }
-
-  /* 隱藏標題，讓字雲有更多空間 */
-  #main-header { 
-    display: none; 
-  }
-  
-  #cloud-section { 
-    grid-area: cloud; 
-    display: flex; 
-    flex-direction: column; 
-    overflow: hidden; 
-    padding: 16px 16px 0; 
-  }
-  #cloud-container { 
-    flex: 1; 
-    min-height: 150px; 
-    height: auto; 
-  }
-  
-  #feed-section { 
-    grid-area: feed; 
-    border-left: 1px solid var(--border); 
-    min-height: 0; /* 關鍵：防止內容撐破容器導致滾動失效 */
-    height: 100%;
-  }
-  
-  #input-footer { 
-    grid-area: input; 
-    border-top: none; 
-    padding: 12px 16px; 
-  }
+/* ── 橫向字雲微調 ──────── */
+@media (orientation: landscape) and (max-height: 500px) {
+  #cloud-container { height: 180px; }
+  #main-header { padding: 12px 20px 8px; }
+  #main-title { font-size: 18px; }
 }

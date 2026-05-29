@@ -7,7 +7,7 @@
 // ══════════════════════════════════════
 
 const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbz5m04F8XoCj58iJheuF9e3HniHmMuwPymnAQEYDexZuxR5Kv7fntCJVG5lrovLPzR8fA/exec';
-const VERSION = 'v10';
+const VERSION = 'v12';
 
 // ── 裝置 UUID ──────────────────────────
 let deviceUUID = localStorage.getItem('device_uuid');
@@ -361,24 +361,19 @@ inputEl.addEventListener('keypress', function(e) {
 });
 
 let resizeTimeout;
-let lastWidth = window.innerWidth;
 let currentOrientation = window.innerWidth > window.innerHeight ? 'landscape' : 'portrait';
 
 window.addEventListener('resize', function() {
   clearTimeout(resizeTimeout);
   resizeTimeout = setTimeout(function() {
-    // 偵測是否真的發生了轉向
+    // 偵測是否發生了轉向
     const newOrientation = window.innerWidth > window.innerHeight ? 'landscape' : 'portrait';
     if (newOrientation !== currentOrientation) {
       currentOrientation = newOrientation;
       const btn = document.getElementById('rotate-reload-btn');
       if (btn) btn.style.display = 'block';
     }
-
-    if (Math.abs(window.innerWidth - lastWidth) > 30) {
-      lastWidth = window.innerWidth;
-      if (currentCloudData.length > 0) renderWordCloud();
-    }
+    // ⚠️ 已經移除 resize 時的 renderWordCloud()，以解決 iOS Safari 瘋狂重繪導致手機發燙的問題。
   }, 300);
 });
 
