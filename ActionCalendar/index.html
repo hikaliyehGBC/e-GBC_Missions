@@ -1,40 +1,44 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>30日數位宣教行動 | 懷恩堂數位事工</title>
   <meta name="description" content="三十天的數位事工宣教行動與禱告">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <div id="app">
-    
+
     <!-- 全局頂部標題 (點擊回首頁) -->
     <header class="main-header" id="mainHeader">
       <h1>30日數位宣教行動</h1>
-      <p>打破宣教時空藩籬，現在就為福音做出行動</p>
     </header>
 
     <!-- 首頁視圖 (Home View) -->
     <div id="home-view" class="view-section active">
       <div class="hero-section">
         <h2>數位禾場：在指尖世界看見呼召</h2>
-        <p class="hero-text">你是否聽見在五光十色的數位世界背後網友們對真實連結、心靈平靜的渴求？<br>人們的痛苦，就是福音的著陸點。<br>這是一片已經熟透的莊稼，我們能靠著主，在指尖踩下最美的腳蹤。</p>
+        <p class="hero-text">你是否聽見在五光十色的數位世界背後<br>網友們對真實連結、心靈平靜的渴求？<br>人們的痛苦，就是福音的著陸點。<br>打破宣教時空藩籬，現在就為福音做出行動</p>
       </div>
 
       <div class="pdf-downloads">
         <h3>📄 行動指南下載</h3>
         <div class="pdf-buttons">
-          <a href="print_prayer.html" target="_blank" class="btn-pdf">🙏 禱告大軍 (A4列印版)</a>
-          <a href="print_sabbath.html" target="_blank" class="btn-pdf">🌿 數位安息 (A4列印版)</a>
+          <a href="print_prayer.html" target="_blank" class="btn-pdf">🙏 禱告大軍 (列印版)</a>
+          <a href="print_sabbath.html" target="_blank" class="btn-pdf">🌿 數位安息 (列印版)</a>
           <a href="#" class="btn-pdf">✨ 做光做鹽 (準備中)</a>
           <a href="#" class="btn-pdf">💻 數位宣教士</a>
         </div>
         <p class="pdf-note">* PDF 檔案準備中，敬請期待</p>
       </div>
-      
+
       <!-- 進入今日行動按鈕 -->
       <div class="enter-calendar-box">
         <button id="enterCalendarBtn" class="btn-primary">進入今日行動</button>
@@ -42,17 +46,28 @@
 
       <div class="iframe-section">
         <h3><a href="../WordCloud/index.html" target="_blank" class="iframe-title-link">☁️ 數位事工禱告雲</a></h3>
-        <p class="iframe-desc">大家對懷恩堂數位事工的期待，點擊圖片可進入互動頁面</p>
+        <p class="iframe-desc">對懷恩堂數位事工的期待與禱告，點擊可進入頁面</p>
         <div class="iframe-container" style="position: relative; display: block;">
-          <a href="../WordCloud/index.html" target="_blank" style="display: block; width: 100%; height: 100%;">
-            <!-- 載入後即停止輪詢，並加上 pointer-events: none 徹底阻斷互動消耗，宛如一張即時截圖 -->
-            <iframe src="../WordCloud/index.html?static=true" frameborder="0" style="pointer-events: none;"></iframe>
-          </a>
+          <!-- iframe 與 <a> 並列（不包裹），避免 iOS Safari 觸控事件被攔截 -->
+          <iframe
+            src="../WordCloud/index.html?static=true"
+            frameborder="0"
+            loading="lazy"
+            style="pointer-events: none; width: 100%; height: 100%; display: block; border: none;"
+          ></iframe>
+          <!-- 透明覆蓋層，負責處理點擊事件 -->
+          <a
+            href="../WordCloud/index.html"
+            target="_blank"
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5;"
+            aria-label="進入數位事工禱告雲互動頁面"
+          ></a>
         </div>
       </div>
 
       <div class="footer-links">
-        <a href="https://www.gbc.org.tw/%e5%ae%a3%e6%95%99/2026missionsconference/" target="_blank" class="btn-outline">前往 2026 懷恩堂差傳年會官方網站</a>
+        <a href="https://www.gbc.org.tw/%e5%ae%a3%e6%95%99/2026missionsconference/" target="_blank"
+          class="btn-outline">前往 2026 懷恩堂差傳年會官方網站</a>
       </div>
 
       <div class="copyright-footer">
@@ -63,7 +78,7 @@
 
     <!-- 月曆視圖 (Calendar View) -->
     <div id="calendar-view" class="view-section">
-      
+
       <!-- 經文副標題 -->
       <div class="scripture-box" id="scriptureBox">
         <div id="scriptureText"></div>
@@ -104,10 +119,10 @@
           <div class="action-text" id="actionContent">
             <!-- JS 將動態填入內容 -->
           </div>
-          
+
           <!-- 備註或 iframe 區塊 -->
           <div class="extra-content" id="extraContent">
-             <!-- 預留區塊 -->
+            <!-- 預留區塊 -->
           </div>
         </div>
       </div>
@@ -115,7 +130,9 @@
       <!-- 畫面下方：左右切換按鈕 -->
       <div class="bottom-nav">
         <button id="prevBtn" class="nav-btn-large" title="前一天">
-          <svg viewBox="0 0 24 24" width="28" height="28"><path fill="currentColor" d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
+          <svg viewBox="0 0 24 24" width="28" height="28">
+            <path fill="currentColor" d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
+          </svg>
           <span>前一天</span>
         </button>
         <button id="todayBtn" class="nav-btn-large today-btn" style="display: none;">
@@ -123,7 +140,9 @@
         </button>
         <button id="nextBtn" class="nav-btn-large" title="後一天">
           <span>後一天</span>
-          <svg viewBox="0 0 24 24" width="28" height="28"><path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+          <svg viewBox="0 0 24 24" width="28" height="28">
+            <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+          </svg>
         </button>
       </div>
 
@@ -134,4 +153,5 @@
   <script src="data.js"></script>
   <script src="app.js"></script>
 </body>
+
 </html>
