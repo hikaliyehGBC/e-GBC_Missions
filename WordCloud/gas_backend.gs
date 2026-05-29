@@ -241,8 +241,8 @@ function handleLike(params) {
           newLikeCount = (Number(data[i][6]) || 0) + 1;
         }
 
-        sheet.getRange(i + 1, 7).setValue(newLikeCount);
-        sheet.getRange(i + 1, 8).setValue(newLikedBy.join(','));
+        // 合併為一次 I/O，減少一次 Sheets 往返
+        sheet.getRange(i + 1, 7, 1, 2).setValues([[newLikeCount, newLikedBy.join(',')]]);
 
         return { status: 'success', liked: !alreadyLiked, likeCount: newLikeCount };
       }

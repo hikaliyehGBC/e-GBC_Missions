@@ -52,12 +52,21 @@ function fetchJSONP(url) {
   return new Promise(function(resolve, reject) {
     const cbName = 'jsonp_' + Date.now() + '_' + Math.floor(Math.random() * 9999);
     let script;
+    let timer;
 
     window[cbName] = function(data) {
+      clearTimeout(timer);
       delete window[cbName];
       if (script && script.parentNode) script.parentNode.removeChild(script);
       resolve(data);
     };
+
+    // 15 秒 timeout 保護，避免 GAS 危橪時 UI 假死
+    timer = setTimeout(function() {
+      delete window[cbName];
+      if (script && script.parentNode) script.parentNode.removeChild(script);
+      reject(new Error('JSONP 連綫逾時，請稍後再試'));
+    }, 15000);
 
     const u = new URL(url);
     u.searchParams.set('callback', cbName);
@@ -418,14 +427,14 @@ window.addEventListener('resize', function() {
   }, 300);
 });
 
-// 初始載入
-fetchData();
-
-// 判斷是否為靜態模式 (例如從月曆首頁載入 iframe)
+// 判斷是否為静態模式——必須先判斷再決定是否發起請求
 const urlParams = new URLSearchParams(window.location.search);
 const isStatic = urlParams.get('static') === 'true';
 
-// 如果不是靜態模式，才開啟 30 秒輪詢
+// 靜態模式：完全不發起任何網路請求，0 耗電
 if (!isStatic) {
+  // 初始載入
+  fetchData();
+  // 30 秒輪詢
   setInterval(fetchData, 30000);
 }
