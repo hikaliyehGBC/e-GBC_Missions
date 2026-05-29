@@ -173,9 +173,51 @@ body {
   border: 1px solid var(--border);
   background: #fafafa;
 }
-.iframe-container iframe {
-  width: 100%;
-  height: 100%;
+
+/* 可點擊的字雲卡片 */
+.cloud-card-link {
+  text-decoration: none;
+  display: block;
+  margin-top: 4px;
+}
+.cloud-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: linear-gradient(135deg, #EBF5FB, #D6EAF8);
+  border: 1px solid #AED6F1;
+  border-radius: 16px;
+  padding: 18px 20px;
+  transition: all 0.2s;
+}
+.cloud-card:hover, .cloud-card:active {
+  background: linear-gradient(135deg, #D6EAF8, #AED6F1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(41, 128, 185, 0.15);
+}
+.cloud-card-icon {
+  font-size: 36px;
+  flex-shrink: 0;
+}
+.cloud-card-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cloud-card-text strong {
+  font-size: 16px;
+  color: var(--primary-dark);
+  font-weight: 900;
+}
+.cloud-card-text span {
+  font-size: 13px;
+  color: var(--text-light);
+}
+.cloud-card-arrow {
+  font-size: 28px;
+  color: var(--primary);
+  font-weight: 300;
 }
 
 .footer-links {

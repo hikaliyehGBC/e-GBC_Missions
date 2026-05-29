@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>你對懷恩堂數位事工的期待 | 懷恩堂差傳年會</title>
-  <meta name="description" content="與 200 人一起點亮星光，分享你對數位事工的期待">
+  <meta name="description" content="分享你對數位事工的期待與想像">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=17">
 </head>
+
 <body>
   <div id="app">
 
     <!-- 頁首 (加入點擊重整功能) -->
     <header id="main-header" onclick="window.location.reload(true)" style="cursor: pointer;" title="點擊重新整理">
       <h1 id="main-title">你對懷恩堂數位事工的期待</h1>
-      <p class="subtitle">請輸入簡短的文字，為每份期盼能做成新事工禱告</p>
+      <p class="subtitle">輸入簡短文字，為每份期盼作成新事工禱告</p>
     </header>
 
     <!-- 字雲區 -->
@@ -47,16 +49,16 @@
     <!-- 底部輸入列 -->
     <footer id="input-footer">
       <div id="input-bar">
-        <input
-          type="text"
-          id="keyword-input"
-          placeholder="輸入你對數位事工的期許..."
-          maxlength="50"
-          autocomplete="off"
-        >
+        <input type="text" id="keyword-input" placeholder="輸入對數位事工的期許..." maxlength="50" autocomplete="off">
         <button id="submit-btn">發送</button>
       </div>
     </footer>
+
+    <!-- 版權說明 Footer -->
+    <div class="site-copyright">
+      <p>e-gbc 2026差傳年會 數位事工禱告互動頁面</p>
+      <p>如有疑問或建議，請聯絡資訊同工 嘉惠：<a href="mailto:hikaliyeh@gbc.org.tw">hikaliyeh@gbc.org.tw</a></p>
+    </div>
 
   </div>
 
@@ -72,4 +74,5 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
   <script src="app.js?v=17"></script>
 </body>
+
 </html>

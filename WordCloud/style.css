@@ -467,3 +467,21 @@ html, body {
   #main-header { padding: 12px 20px 8px; }
   #main-title { font-size: 18px; }
 }
+
+/* ── 版權說明 Footer ──────── */
+.site-copyright {
+  text-align: center;
+  margin: 16px 16px 80px; /* 底部留空給 input-footer */
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-sub);
+  line-height: 1.8;
+}
+.site-copyright a {
+  color: var(--text-sub);
+  text-decoration: none;
+}
+.site-copyright a:hover {
+  text-decoration: underline;
+}
