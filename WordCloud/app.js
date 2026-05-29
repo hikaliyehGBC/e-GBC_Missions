@@ -427,14 +427,13 @@ window.addEventListener('resize', function() {
   }, 300);
 });
 
-// 判斷是否為静態模式——必須先判斷再決定是否發起請求
+// 判斷是否為靜態模式——必須先判斷再決定是否發起請求
 const urlParams = new URLSearchParams(window.location.search);
 const isStatic = urlParams.get('static') === 'true';
 
-// 靜態模式：完全不發起任何網路請求，0 耗電
+// 靜態模式：只載入一次，不啟動 30 秒輪詢（省電）
+// 一般模式：載入 + 每 30 秒輪詢
+fetchData();
 if (!isStatic) {
-  // 初始載入
-  fetchData();
-  // 30 秒輪詢
   setInterval(fetchData, 30000);
 }
