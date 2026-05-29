@@ -7,7 +7,7 @@
 // ══════════════════════════════════════
 
 const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbz5m04F8XoCj58iJheuF9e3HniHmMuwPymnAQEYDexZuxR5Kv7fntCJVG5lrovLPzR8fA/exec';
-const VERSION = 'v9';
+const VERSION = 'v10';
 
 // ── 裝置 UUID ──────────────────────────
 let deviceUUID = localStorage.getItem('device_uuid');
@@ -236,9 +236,11 @@ function renderCard(sub) {
     ? '<button class="delete-card-btn" onclick="deleteSubmission(\'' + sub.rowId + '\')">刪除</button>'
     : '';
 
+  const mineBadge = sub.isMine ? '<span class="is-mine-badge">⭐ 我的期許</span>' : '';
+
   return '<div class="feed-card ' + mineClass + '" data-rowid="' + sub.rowId + '">' +
     '<div class="card-main">' +
-      '<p class="card-text">' + escapeHtml(sub.text) + '</p>' +
+      '<p class="card-text">' + escapeHtml(sub.text) + mineBadge + '</p>' +
       (tagsHtml ? '<div class="card-tags">' + tagsHtml + '</div>' : '') +
     '</div>' +
     '<div class="card-side">' +
@@ -271,12 +273,17 @@ function renderWordCloud() {
   // 計算最大分數以便正規化
   const maxScore = currentCloudData.reduce(function(m, d) { return Math.max(m, d[1]); }, 1);
 
+  // 根據螢幕寬度自適應
+  const isMobile = canvas.width < 500;
+  const baseWeight = isMobile ? 15 : 30;
+  const multiplier = isMobile ? 60 : 100;
+  const grid = Math.round((isMobile ? 5 : 8) * canvas.width / 600);
+
   WordCloud(canvas, {
     list: currentCloudData,
     fontFamily: 'Noto Sans TC, sans-serif',
     weightFactor: function(size) {
-      // 正規化後給 30–130 的範圍，確保單一詞也可見
-      return 30 + (size / maxScore) * 100;
+      return baseWeight + (size / maxScore) * multiplier;
     },
     color: function(word) {
       // 篩選中的關鍵字高亮
@@ -289,11 +296,11 @@ function renderWordCloud() {
       }
       return palette[Math.abs(hash) % palette.length];
     },
-    rotateRatio: 0,
+    rotateRatio: isMobile ? 0 : 0.1, // 手機完全不旋轉以節省空間
     backgroundColor: 'transparent',
     drawOutOfBound: false,
     shrinkToFit: true,
-    gridSize: Math.round(8 * canvas.width / 600),
+    gridSize: grid,
     click: function(item) {
       filterByKeyword(item[0]);
     },
