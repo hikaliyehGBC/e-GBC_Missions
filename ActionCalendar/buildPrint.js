@@ -12,22 +12,22 @@ function buildHtml(sourcePath, destPath, title) {
 <title>${title}</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-  @page { size: A4 portrait; margin: 12mm; }
-  body { font-family: 'Noto Sans TC', sans-serif; font-size: 9.5pt; line-height: 1.45; color: #2c3e50; margin: 0; padding: 0; background: #fff; }
+  @page { size: A4 portrait; margin: 6mm 8mm; }
+  body { font-family: 'Noto Sans TC', sans-serif; font-size: 8.5pt; line-height: 1.35; color: #2c3e50; margin: 0; padding: 0; background: #fff; }
   .page { width: 100%; max-width: 210mm; margin: 0 auto; }
-  .header { text-align: center; margin-bottom: 10px; border-bottom: 2px solid #2980B9; padding-bottom: 8px; }
-  .header h1 { margin: 0 0 4px 0; color: #2980B9; font-size: 18pt; letter-spacing: 1px; }
-  .header p { margin: 0; color: #7f8c8d; font-size: 10pt; }
-  .columns { column-count: 2; column-gap: 8mm; }
-  .week-group { margin-bottom: 12px; break-inside: avoid; }
-  .week-title { font-weight: 900; font-size: 11pt; color: #d35400; margin-bottom: 6px; border-bottom: 1px dashed #ecf0f1; padding-bottom: 4px; }
-  .day-item { display: flex; align-items: flex-start; margin-bottom: 8px; break-inside: avoid; }
-  .checkbox { width: 12px; height: 12px; border: 1.5px solid #bdc3c7; border-radius: 2px; margin-right: 6px; margin-top: 3px; flex-shrink: 0; }
+  .header { text-align: center; margin-bottom: 4px; border-bottom: 2px solid #2980B9; padding-bottom: 4px; }
+  .header h1 { margin: 0 0 2px 0; color: #2980B9; font-size: 14pt; letter-spacing: 1px; }
+  .header p { margin: 0; color: #7f8c8d; font-size: 8.5pt; }
+  .columns { column-count: 2; column-gap: 6mm; }
+  .week-group { margin-bottom: 6px; break-inside: avoid; }
+  .week-title { font-weight: 900; font-size: 9.5pt; color: #d35400; margin-bottom: 2px; border-bottom: 1px dashed #ecf0f1; padding-bottom: 2px; }
+  .day-item { display: flex; align-items: flex-start; margin-bottom: 3px; break-inside: avoid; }
+  .checkbox { width: 10px; height: 10px; border: 1.5px solid #bdc3c7; border-radius: 2px; margin-right: 4px; margin-top: 2px; flex-shrink: 0; }
   .day-text { flex: 1; }
-  .day-tag { font-weight: 700; color: #2980B9; }
-  .day-desc { margin-top: 2px; color: #34495e; }
-  .week-group-footer { column-span: all; margin-top: 15px; border-top: 2px dashed #ecf0f1; padding-top: 10px; }
-  .footer-days { display: grid; grid-template-columns: 1fr 1fr; column-gap: 8mm; }
+  .day-tag { font-weight: 700; color: #2980B9; font-size: 8.5pt; }
+  .day-desc { margin-top: 0; color: #34495e; font-size: 8.5pt; }
+  .week-group-footer { column-span: all; margin-top: 6px; border-top: 2px dashed #ecf0f1; padding-top: 4px; }
+  .footer-days { display: grid; grid-template-columns: 1fr 1fr; column-gap: 6mm; }
 </style>
 </head>
 <body>
