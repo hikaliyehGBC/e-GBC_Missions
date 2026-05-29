@@ -20,6 +20,8 @@ if (!deviceUUID) {
 let allSubmissions   = [];   // 完整留言列表
 let currentCloudData = [];   // 字雲資料
 let activeFilter     = null; // 目前篩選的關鍵字
+let currentPage      = 1;
+const ITEMS_PER_PAGE = 20;
 
 // ── DOM 參照 ───────────────────────────
 const inputEl      = document.getElementById('keyword-input');
@@ -171,13 +173,18 @@ async function fetchData() {
   try {
     const res = await apiCall({});
     if (res.status === 'success') {
-      allSubmissions   = res.submissions || [];
-      currentCloudData = res.cloudData   || [];
+      allSubmissions = res.submissions || [];
+      const newCloudData = res.cloudData || [];
+      
+      // 比對字雲資料是否改變，沒改變就不重繪，省下大量 CPU
+      if (JSON.stringify(newCloudData) !== JSON.stringify(currentCloudData)) {
+        currentCloudData = newCloudData;
+        renderWordCloud();
+      }
       renderFeed();
-      renderWordCloud();
     }
   } catch (e) {
-    // 靜默失敗，等下次輪詢
+    // 靜默失敗
     console.warn('fetch error:', e.message);
   }
 }
@@ -209,12 +216,45 @@ function renderFeed() {
     feedList.innerHTML = '<div class="feed-empty">' +
       (activeFilter ? '這個關鍵字目前還沒有相關期許' : '還沒有期許，趕快發送第一個吧！') +
       '</div>';
+    document.getElementById('feed-pagination').innerHTML = '';
     return;
   }
 
-  feedList.innerHTML = filtered.map(function(sub) {
+  // 分頁邏輯
+  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+  if (currentPage > totalPages) currentPage = totalPages;
+  if (currentPage < 1) currentPage = 1;
+
+  const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+  const pageItems = filtered.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+
+  feedList.innerHTML = pageItems.map(function(sub) {
     return renderCard(sub);
   }).join('');
+
+  renderPagination(totalPages);
+}
+
+function renderPagination(totalPages) {
+  const container = document.getElementById('feed-pagination');
+  if (totalPages <= 1) {
+    container.innerHTML = '';
+    return;
+  }
+  const prevDisabled = currentPage === 1 ? 'disabled' : '';
+  const nextDisabled = currentPage === totalPages ? 'disabled' : '';
+  
+  container.innerHTML = 
+    '<button class="page-btn" ' + prevDisabled + ' onclick="changePage(-1)">上一頁</button>' +
+    '<span class="page-info">' + currentPage + ' / ' + totalPages + '</span>' +
+    '<button class="page-btn" ' + nextDisabled + ' onclick="changePage(1)">下一頁</button>';
+}
+
+window.changePage = function(delta) {
+  currentPage += delta;
+  renderFeed();
+  // 讓畫面捲動到留言牆頂部
+  document.getElementById('feed-section').scrollIntoView({ behavior: 'smooth' });
 }
 
 function renderCard(sub) {
@@ -314,19 +354,20 @@ function renderWordCloud() {
 // ══════════════════════════════════════
 function filterByKeyword(kw) {
   activeFilter = kw;
+  currentPage = 1; // 篩選時回到第一頁
   filterLabel.textContent = kw;
   filterBadge.classList.add('active');
   renderFeed();
-  renderWordCloud(); // 重繪以高亮選中詞
-  // 滾動到留言牆
+  // ⚠️ 已經拔除 renderWordCloud() 呼叫，徹底解決點擊卡死與手機發燙問題
   document.getElementById('feed-section').scrollIntoView({ behavior: 'smooth' });
 }
 
 function clearFilter() {
   activeFilter = null;
+  currentPage = 1;
   filterBadge.classList.remove('active');
   renderFeed();
-  renderWordCloud();
+  // ⚠️ 已經拔除 renderWordCloud() 呼叫
 }
 
 // ══════════════════════════════════════
