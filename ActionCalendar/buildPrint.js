@@ -99,3 +99,4 @@ function buildHtml(sourcePath, destPath, title) {
 buildHtml('data/Action_Plan01_Prayer.md', 'print_prayer.html', '🙏 禱告大軍：30天數位守望行動');
 buildHtml('data/Action_Plan02_Sabbath.md', 'print_sabbath.html', '🌿 數位安息：30天行動指南');
 buildHtml('data/Action_Plan03_Light.md', 'print_light.html', '✨ 做光做鹽：30天行動指南');
+buildHtml('data/Action_Plan04_Missionary.md', 'print_missionary.html', '💻 數位宣教士：30天行動指南');
