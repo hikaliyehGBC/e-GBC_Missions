@@ -6,7 +6,7 @@ const SCRIPTURES = {
   1: { text: "「靠著聖靈，隨時多方禱告祈求；並要在此警醒不倦，為眾聖徒祈求。」", source: "以弗所書 6:18" },
   2: { text: "「豈不知你們的身子就是聖靈的殿嗎？這聖靈是從神而來，住在你們裡頭的。」", source: "哥林多前書 6:19" },
   3: { text: "「你們是世上的鹽...你們的光也當這樣照在人前，叫他們看見你們的好行為，便將榮耀歸給你們在天上的父。」", source: "馬太福音 5:13-16" },
-  4: { text: "「我又聽見主的聲音說：『我可以差遣誰呢？誰肯為我們去呢？』我說：『我在這裡，請差遣我！』」", source: "以賽亞書 6:8" }
+  4: { text: "「各人要照所得的恩賜彼此服侍，做神百般恩賜的好管家。 若有講道的，要按著神的聖言講；若有服侍人的，要按著神所賜的力量服侍，叫神在凡事上因耶穌基督得榮耀」", source: "彼得前書 4:10-11" }
 };
 
 // 初始化
@@ -167,6 +167,10 @@ function updateCalendarUI() {
         } else if (weekNum === 2 || weekNum === 4) {
           extraContentEl.innerHTML = `<a href="https://www.gbc.org.tw/missions/prayfornations/" target="_blank" class="btn-outline" style="display:inline-block; margin-top:15px; width:100%; text-align:center;">🌍 前往為萬國禱告</a>`;
         }
+      }
+    } else if (currentTab === 4) {
+      if (currentDay === 6) {
+        extraContentEl.innerHTML = `<a href="../WordCloud/index.html" target="_blank" class="btn-outline" style="display:inline-block; margin-top:15px; width:100%; text-align:center;">☁️ 前往數位事工禱告雲</a>`;
       }
     }
   }

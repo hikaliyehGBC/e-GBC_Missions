@@ -3,7 +3,8 @@ const fs = require('fs');
 const files = [
     { key: 'action1', path: 'data/Action_Plan01_Prayer.md' },
     { key: 'action2', path: 'data/Action_Plan02_Sabbath.md' },
-    { key: 'action3', path: 'data/Action_Plan03_Light.md' }
+    { key: 'action3', path: 'data/Action_Plan03_Light.md' },
+    { key: 'action4', path: 'data/Action_Plan04_Missionary.md' }
 ];
 
 const calendarData = {};
@@ -12,7 +13,8 @@ for (let i = 1; i <= 30; i++) {
     calendarData[`06-${dayStr}`] = { 
         action1: { weekday: '', topic: '', content: '' }, 
         action2: { weekday: '', topic: '', content: '' }, 
-        action3: { weekday: '', topic: '', content: '' } 
+        action3: { weekday: '', topic: '', content: '' },
+        action4: { weekday: '', topic: '', content: '' } 
     };
 }
 
