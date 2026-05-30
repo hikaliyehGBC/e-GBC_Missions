@@ -634,7 +634,7 @@ const calendarData = {
     },
     "action4": {
       "weekday": "週一",
-      "topic": "行動結尾與延續",
+      "topic": "行動還會延續",
       "content": "回顧這三十天，神在「數位宣教士」的呼召上給了你什麼清楚的異象與感動？寫下來。"
     }
   },
@@ -656,7 +656,7 @@ const calendarData = {
     },
     "action4": {
       "weekday": "週二",
-      "topic": "行動結尾與延續",
+      "topic": "行動還會延續",
       "content": "為接下來懷恩堂即將開展的數位事工禱告，宣告自己已經預備好，隨時回應神的差遣！"
     }
   }
