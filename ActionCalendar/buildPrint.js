@@ -1,12 +1,16 @@
 const fs = require('fs');
 
-function buildHtml(sourcePath, destPath, title) {
+function buildHtml(sourcePath, destPath, title, lang = 'zh-TW') {
     try {
         const content = fs.readFileSync(sourcePath, 'utf8');
         const lines = content.split('\n');
         
+        const subtitle = lang === 'en' 
+            ? 'Please print this page or save it as a PDF. Connect with God and leave beautiful footsteps in the digital world.'
+            : '請將本頁列印或存為 PDF，與神連結，在指尖世界踩下最美腳蹤';
+
         let htmlStr = `<!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="${lang}">
 <head>
 <meta charset="UTF-8">
 <title>${title}</title>
@@ -34,7 +38,7 @@ function buildHtml(sourcePath, destPath, title) {
 <div class="page">
 <div class="header">
   <h1>${title}</h1>
-  <p>請將本頁列印或存為 PDF，與神連結，在指尖世界踩下最美腳蹤</p>
+  <p>${subtitle}</p>
 </div>
 <div class="columns">
 `;
@@ -46,13 +50,13 @@ function buildHtml(sourcePath, destPath, title) {
             line = line.trim();
             if (!line || line.startsWith('---') || line.startsWith('=')) return;
             
-            const weekMatch = line.match(/^[\uD800-\uDBFF\uDC00-\uDFFF\u2000-\u3300\uFE0F]*\s*(第[一二三四]週.*|🏁.*|行動結尾.*)/);
+            const weekMatch = line.match(/^[\uD800-\uDBFF\uDC00-\uDFFF\u2000-\u3300\uFE0F]*\s*(第[一二三四]週.*|Week [1234].*|🏁.*|行動結尾.*|Conclusion.*)/i);
             if (weekMatch) {
-                // 移除日期與分鐘數等贅字，只保留「第X週：小標題」
-                let cleanTitle = line.replace(/\s*\(.*?\).*$/, '').replace(/──.*$/, '').trim();
+                // 移除日期與分鐘數等贅字
+                let cleanTitle = line.replace(/\s*\(\s*6\/.*?\).*$/, '').replace(/──.*$/, '').trim();
                 
                 if (weekContent) {
-                    if (currentWeek.includes('🏁') || currentWeek.includes('結尾')) {
+                    if (currentWeek.includes('🏁') || currentWeek.includes('結尾') || currentWeek.includes('Conclusion')) {
                         htmlStr += `<div class="week-group week-group-footer"><div class="week-title">${currentWeek}</div><div class="footer-days">${weekContent}</div></div>`;
                     } else {
                         htmlStr += `<div class="week-group"><div class="week-title">${currentWeek}</div>${weekContent}</div>`;
@@ -81,7 +85,7 @@ function buildHtml(sourcePath, destPath, title) {
         });
         
         if (weekContent) {
-            if (currentWeek.includes('🏁') || currentWeek.includes('結尾')) {
+            if (currentWeek.includes('🏁') || currentWeek.includes('結尾') || currentWeek.includes('Conclusion')) {
                 htmlStr += `<div class="week-group week-group-footer"><div class="week-title">${currentWeek}</div><div class="footer-days">${weekContent}</div></div>`;
             } else {
                 htmlStr += `<div class="week-group"><div class="week-title">${currentWeek}</div>${weekContent}</div>`;
@@ -96,7 +100,14 @@ function buildHtml(sourcePath, destPath, title) {
     }
 }
 
+// 中文版
 buildHtml('data/Action_Plan01_Prayer.md', 'print_prayer.html', '🙏 禱告大軍：30天數位守望行動');
 buildHtml('data/Action_Plan02_Sabbath.md', 'print_sabbath.html', '🌿 數位安息：30天行動指南');
 buildHtml('data/Action_Plan03_Light.md', 'print_light.html', '✨ 做光做鹽：30天行動指南');
 buildHtml('data/Action_Plan04_Missionary.md', 'print_missionary.html', '💻 數位宣教士：30天行動指南');
+
+// 英文版
+buildHtml('data/en/Action_Plan01_Prayer_en.md', 'print_prayer_en.html', '🙏 Prayer Warriors: 30-Day Watch', 'en');
+buildHtml('data/en/Action_Plan02_Sabbath_en.md', 'print_sabbath_en.html', '🌿 Digital Sabbath: 30-Day Guide', 'en');
+buildHtml('data/en/Action_Plan03_Light_en.md', 'print_light_en.html', '✨ Salt and Light: 30-Day Guide', 'en');
+buildHtml('data/en/Action_Plan04_Missionary_en.md', 'print_missionary_en.html', '💻 Digital Missionary: 30-Day Guide', 'en');

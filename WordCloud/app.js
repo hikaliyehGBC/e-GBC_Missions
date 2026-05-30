@@ -1,5 +1,5 @@
 // ══════════════════════════════════════
-//  字雲社群回饋系統 v8 前端邏輯
+//  字雲社群回饋系統 v18 前端邏輯 (支援雙語)
 //  - JSONP 通訊（繞過 Google Workspace CORS）
 //  - 字雲點擊篩選留言
 //  - 按讚 / 取消讚（樂觀更新）
@@ -7,7 +7,93 @@
 // ══════════════════════════════════════
 
 const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbz5m04F8XoCj58iJheuF9e3HniHmMuwPymnAQEYDexZuxR5Kv7fntCJVG5lrovLPzR8fA/exec';
-const VERSION = 'v17';
+const VERSION = 'v18';
+
+// ── 多語系設定 ─────────────────────────
+let currentLang = localStorage.getItem('action_lang') || 'zh';
+
+const I18N = {
+  zh: {
+    'title': '你對懷恩堂數位事工的期待',
+    'subtitle': '輸入簡短文字，為每份期盼作成新事工禱告',
+    'cloud-empty': '還沒有期許，趕快發送第一個吧！',
+    'feed-title': '💬 大家的期待',
+    'submit-btn': '發送',
+    'clear-filter': '✕ 清除篩選',
+    'rotate-btn': '↻ 重整版面',
+    'footer-copy1': 'e-gbc 2026差傳年會 數位事工禱告互動頁面',
+    'footer-copy2': '如有疑問或建議，請聯絡資訊同工 嘉惠：',
+    'feed-meta-all': '共 {total} 則',
+    'feed-meta-filter': '{shown} 則相關 / 共 {total} 則',
+    'feed-empty': '還沒有期許，趕快發送第一個吧！',
+    'feed-empty-filter': '這個關鍵字目前還沒有相關期許',
+    'btn-prev': '上一頁',
+    'btn-next': '下一頁',
+    'btn-delete': '刪除',
+    'mine-badge': '⭐ 我的期許',
+    'like-text': ' 讚',
+    'confirm-delete': '確定要刪除這則期許嗎？',
+    'toast-success': '✅ 已送出！擷取關鍵詞：',
+    'toast-fail': '⚠️ 送出失敗：',
+    'toast-error': '⚠️ 連線異常：',
+    'toast-del-fail': '⚠️ 刪除失敗：',
+    'btn-submitting': '發送中...',
+    'input-placeholder': '輸入對數位事工的期許...'
+  },
+  en: {
+    'title': 'Expectations for GBC Digital Ministry',
+    'subtitle': 'Enter a short text to turn each expectation into a prayer',
+    'cloud-empty': 'No expectations yet. Be the first to share!',
+    'feed-title': '💬 Everyone\'s Expectations',
+    'submit-btn': 'Send',
+    'clear-filter': '✕ Clear Filter',
+    'rotate-btn': '↻ Reload Layout',
+    'footer-copy1': 'e-gbc 2026 Missions Conference Digital Ministry Interactive Page',
+    'footer-copy2': 'For questions or suggestions, please contact IT coworker Jiahui: ',
+    'feed-meta-all': 'Total {total}',
+    'feed-meta-filter': '{shown} matches / Total {total}',
+    'feed-empty': 'No expectations yet. Be the first to share!',
+    'feed-empty-filter': 'No expectations found for this keyword.',
+    'btn-prev': 'Prev',
+    'btn-next': 'Next',
+    'btn-delete': 'Delete',
+    'mine-badge': '⭐ My Expectation',
+    'like-text': ' Likes',
+    'confirm-delete': 'Are you sure you want to delete this expectation?',
+    'toast-success': '✅ Sent! Extracted keywords: ',
+    'toast-fail': '⚠️ Send failed: ',
+    'toast-error': '⚠️ Connection error: ',
+    'toast-del-fail': '⚠️ Delete failed: ',
+    'btn-submitting': 'Sending...',
+    'input-placeholder': 'Enter your expectations...'
+  }
+};
+
+function applyLanguage() {
+  document.documentElement.lang = currentLang === 'zh' ? 'zh-TW' : 'en';
+  
+  const langBtn = document.getElementById('langToggleBtn');
+  if(langBtn) langBtn.textContent = currentLang === 'zh' ? 'EN' : '中';
+  
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (I18N[currentLang][key]) {
+      el.innerHTML = I18N[currentLang][key];
+    }
+  });
+
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (I18N[currentLang][key]) {
+      el.setAttribute('placeholder', I18N[currentLang][key]);
+    }
+  });
+
+  // 重新渲染依賴語言的動態組件
+  if (allSubmissions.length > 0 || currentCloudData.length > 0) {
+    renderFeed();
+  }
+}
 
 // ── 裝置 UUID ──────────────────────────
 let deviceUUID = localStorage.getItem('device_uuid');
@@ -17,9 +103,9 @@ if (!deviceUUID) {
 }
 
 // ── 狀態 ───────────────────────────────
-let allSubmissions   = [];   // 完整留言列表
-let currentCloudData = [];   // 字雲資料
-let activeFilter     = null; // 目前篩選的關鍵字
+let allSubmissions   = [];   
+let currentCloudData = [];   
+let activeFilter     = null; 
 let currentPage      = 1;
 const ITEMS_PER_PAGE = 20;
 
@@ -37,6 +123,18 @@ const cloudEmpty   = document.getElementById('cloud-empty');
 // ── 版本標記 ───────────────────────────
 window.addEventListener('DOMContentLoaded', function() {
   createToast();
+  applyLanguage();
+  
+  // 語言切換按鈕事件
+  const langToggleBtn = document.getElementById('langToggleBtn');
+  if (langToggleBtn) {
+    langToggleBtn.addEventListener('click', function(e) {
+      e.stopPropagation(); // 阻止 header 的點擊重整
+      currentLang = currentLang === 'zh' ? 'en' : 'zh';
+      localStorage.setItem('action_lang', currentLang);
+      applyLanguage();
+    });
+  }
 });
 
 function createToast() {
@@ -61,11 +159,10 @@ function fetchJSONP(url) {
       resolve(data);
     };
 
-    // 15 秒 timeout 保護，避免 GAS 危橪時 UI 假死
     timer = setTimeout(function() {
       delete window[cbName];
       if (script && script.parentNode) script.parentNode.removeChild(script);
-      reject(new Error('JSONP 連綫逾時，請稍後再試'));
+      reject(new Error('Timeout'));
     }, 15000);
 
     const u = new URL(url);
@@ -76,7 +173,7 @@ function fetchJSONP(url) {
     script.onerror = function() {
       delete window[cbName];
       if (script && script.parentNode) script.parentNode.removeChild(script);
-      reject(new Error('JSONP 載入失敗'));
+      reject(new Error('Network error'));
     };
     document.body.appendChild(script);
   });
@@ -100,23 +197,23 @@ async function submitKeyword() {
   if (!text) return;
 
   submitBtn.disabled = true;
-  submitBtn.textContent = '發送中...';
+  submitBtn.textContent = I18N[currentLang]['btn-submitting'];
 
   try {
     const res = await apiCall({ action: 'add', text: text });
     if (res.status === 'success') {
       inputEl.value = '';
       const kws = (res.keywords || []).join('、');
-      showToast('✅ 已送出！擷取關鍵詞：' + (kws || text));
-      await fetchData(); // 立即重整
+      showToast(I18N[currentLang]['toast-success'] + (kws || text));
+      await fetchData(); 
     } else {
-      showToast('⚠️ 送出失敗：' + res.message);
+      showToast(I18N[currentLang]['toast-fail'] + res.message);
     }
   } catch (e) {
-    showToast('⚠️ 連線異常：' + e.message);
+    showToast(I18N[currentLang]['toast-error'] + e.message);
   } finally {
     submitBtn.disabled = false;
-    submitBtn.textContent = '發送';
+    submitBtn.textContent = I18N[currentLang]['submit-btn'];
   }
 }
 
@@ -124,7 +221,6 @@ async function submitKeyword() {
 //  按讚 / 取消讚
 // ══════════════════════════════════════
 async function toggleLike(rowId) {
-  // 找到對應留言做樂觀更新
   const sub = allSubmissions.find(function(s) { return s.rowId === rowId; });
   if (!sub) return;
 
@@ -136,7 +232,6 @@ async function toggleLike(rowId) {
   try {
     const res = await apiCall({ action: 'like', rowId: rowId });
     if (res.status !== 'success') {
-      // 還原樂觀更新
       sub.isLiked = wasLiked;
       sub.likeCount = wasLiked ? sub.likeCount + 1 : Math.max(0, sub.likeCount - 1);
       updateCardUI(rowId, sub.isLiked, sub.likeCount);
@@ -160,7 +255,7 @@ function updateCardUI(rowId, isLiked, likeCount) {
 //  刪除留言
 // ══════════════════════════════════════
 async function deleteSubmission(rowId) {
-  if (!confirm('確定要刪除這則期許嗎？')) return;
+  if (!confirm(I18N[currentLang]['confirm-delete'])) return;
   try {
     const res = await apiCall({ action: 'delete', rowId: rowId });
     if (res.status === 'success') {
@@ -168,10 +263,10 @@ async function deleteSubmission(rowId) {
       renderFeed();
       renderWordCloud();
     } else {
-      showToast('⚠️ 刪除失敗：' + res.message);
+      showToast(I18N[currentLang]['toast-del-fail'] + res.message);
     }
   } catch (e) {
-    showToast('⚠️ 連線異常：' + e.message);
+    showToast(I18N[currentLang]['toast-error'] + e.message);
   }
 }
 
@@ -185,7 +280,6 @@ async function fetchData() {
       allSubmissions = res.submissions || [];
       const newCloudData = res.cloudData || [];
       
-      // 比對字雲資料是否改變，沒改變就不重繪，省下大量 CPU
       if (JSON.stringify(newCloudData) !== JSON.stringify(currentCloudData)) {
         currentCloudData = newCloudData;
         renderWordCloud();
@@ -193,7 +287,6 @@ async function fetchData() {
       renderFeed();
     }
   } catch (e) {
-    // 靜默失敗
     console.warn('fetch error:', e.message);
   }
 }
@@ -202,7 +295,6 @@ async function fetchData() {
 //  渲染：留言牆
 // ══════════════════════════════════════
 function renderFeed() {
-  // 依讚數排序（本地）
   const sorted = allSubmissions.slice().sort(function(a, b) {
     return b.likeCount - a.likeCount;
   });
@@ -214,22 +306,22 @@ function renderFeed() {
     });
   }
 
-  // 更新 meta
   const total = allSubmissions.length;
   const shown = filtered.length;
-  feedMeta.textContent = activeFilter
-    ? shown + ' 則相關 / 共 ' + total + ' 則'
-    : '共 ' + total + ' 則';
+  
+  if (activeFilter) {
+    feedMeta.textContent = I18N[currentLang]['feed-meta-filter'].replace('{shown}', shown).replace('{total}', total);
+  } else {
+    feedMeta.textContent = I18N[currentLang]['feed-meta-all'].replace('{total}', total);
+  }
 
   if (filtered.length === 0) {
-    feedList.innerHTML = '<div class="feed-empty">' +
-      (activeFilter ? '這個關鍵字目前還沒有相關期許' : '還沒有期許，趕快發送第一個吧！') +
-      '</div>';
+    const emptyText = activeFilter ? I18N[currentLang]['feed-empty-filter'] : I18N[currentLang]['feed-empty'];
+    feedList.innerHTML = '<div class="feed-empty">' + emptyText + '</div>';
     document.getElementById('feed-pagination').innerHTML = '';
     return;
   }
 
-  // 分頁邏輯
   const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
   if (currentPage > totalPages) currentPage = totalPages;
   if (currentPage < 1) currentPage = 1;
@@ -254,15 +346,14 @@ function renderPagination(totalPages) {
   const nextDisabled = currentPage === totalPages ? 'disabled' : '';
   
   container.innerHTML = 
-    '<button class="page-btn" ' + prevDisabled + ' onclick="changePage(-1)">上一頁</button>' +
+    '<button class="page-btn" ' + prevDisabled + ' onclick="changePage(-1)">' + I18N[currentLang]['btn-prev'] + '</button>' +
     '<span class="page-info">' + currentPage + ' / ' + totalPages + '</span>' +
-    '<button class="page-btn" ' + nextDisabled + ' onclick="changePage(1)">下一頁</button>';
+    '<button class="page-btn" ' + nextDisabled + ' onclick="changePage(1)">' + I18N[currentLang]['btn-next'] + '</button>';
 }
 
 window.changePage = function(delta) {
   currentPage += delta;
   renderFeed();
-  // 讓畫面捲動到留言牆頂部
   document.getElementById('feed-section').scrollIntoView({ behavior: 'smooth' });
 }
 
@@ -277,10 +368,10 @@ function renderCard(sub) {
   const mineClass  = sub.isMine  ? 'is-mine' : '';
 
   const deleteBtn = sub.isMine
-    ? '<button class="delete-card-btn" onclick="deleteSubmission(\'' + sub.rowId + '\')">刪除</button>'
+    ? '<button class="delete-card-btn" onclick="deleteSubmission(\'' + sub.rowId + '\')">' + I18N[currentLang]['btn-delete'] + '</button>'
     : '';
 
-  const mineBadge = sub.isMine ? '<span class="is-mine-badge">⭐ 我的期許</span>' : '';
+  const mineBadge = sub.isMine ? '<span class="is-mine-badge">' + I18N[currentLang]['mine-badge'] + '</span>' : '';
 
   return '<div class="feed-card ' + mineClass + '" data-rowid="' + sub.rowId + '">' +
     '<div class="card-main">' +
@@ -291,7 +382,7 @@ function renderCard(sub) {
       '<button class="like-btn ' + likedClass + '" onclick="toggleLike(\'' + sub.rowId + '\')">' +
         '<span class="like-icon">' + likeIcon + '</span>' +
         '<span class="like-count">' + sub.likeCount + '</span>' +
-        '<span> 讚</span>' +
+        '<span>' + I18N[currentLang]['like-text'] + '</span>' +
       '</button>' +
       deleteBtn +
     '</div>' +
@@ -302,7 +393,6 @@ function renderCard(sub) {
 //  渲染：字雲
 // ══════════════════════════════════════
 function renderWordCloud() {
-  // 先將 canvas 縮到最小，避免舊尺寸撐開父容器，影響測量
   canvas.width = 1;
   canvas.height = 1;
   
@@ -318,10 +408,7 @@ function renderWordCloud() {
   }
   cloudEmpty.style.display = 'none';
 
-  // 計算最大分數以便正規化
   const maxScore = currentCloudData.reduce(function(m, d) { return Math.max(m, d[1]); }, 1);
-
-  // 根據螢幕寬度自適應
   const isMobile = canvas.width < 500;
   const baseWeight = isMobile ? 15 : 30;
   const multiplier = isMobile ? 60 : 100;
@@ -334,17 +421,15 @@ function renderWordCloud() {
       return baseWeight + (size / maxScore) * multiplier;
     },
     color: function(word) {
-      // 篩選中的關鍵字高亮
       if (activeFilter && word === activeFilter) return '#e74c3c';
       const palette = ['#2C3E50', '#2980B9', '#16A085', '#8E44AD', '#E67E22'];
-      // 使用字串 Hash 決定固定顏色，避免重繪時變色
       let hash = 0;
       for (let i = 0; i < word.length; i++) {
         hash = word.charCodeAt(i) + ((hash << 5) - hash);
       }
       return palette[Math.abs(hash) % palette.length];
     },
-    rotateRatio: isMobile ? 0 : 0.1, // 手機完全不旋轉以節省空間
+    rotateRatio: isMobile ? 0 : 0.1, 
     backgroundColor: 'transparent',
     drawOutOfBound: false,
     shrinkToFit: true,
@@ -363,20 +448,18 @@ function renderWordCloud() {
 // ══════════════════════════════════════
 function filterByKeyword(kw) {
   activeFilter = kw;
-  currentPage = 1; // 篩選時回到第一頁
+  currentPage = 1;
   filterLabel.textContent = kw;
   filterBadge.classList.add('active');
   renderFeed();
-  // ⚠️ 已經拔除 renderWordCloud() 呼叫，徹底解決點擊卡死與手機發燙問題
   document.getElementById('feed-section').scrollIntoView({ behavior: 'smooth' });
 }
 
-function clearFilter() {
+window.clearFilter = function() {
   activeFilter = null;
   currentPage = 1;
   filterBadge.classList.remove('active');
   renderFeed();
-  // ⚠️ 已經拔除 renderWordCloud() 呼叫
 }
 
 // ══════════════════════════════════════
@@ -416,23 +499,18 @@ let currentOrientation = window.innerWidth > window.innerHeight ? 'landscape' : 
 window.addEventListener('resize', function() {
   clearTimeout(resizeTimeout);
   resizeTimeout = setTimeout(function() {
-    // 偵測是否發生了轉向
     const newOrientation = window.innerWidth > window.innerHeight ? 'landscape' : 'portrait';
     if (newOrientation !== currentOrientation) {
       currentOrientation = newOrientation;
       const btn = document.getElementById('rotate-reload-btn');
       if (btn) btn.style.display = 'block';
     }
-    // ⚠️ 已經移除 resize 時的 renderWordCloud()，以解決 iOS Safari 瘋狂重繪導致手機發燙的問題。
   }, 300);
 });
 
-// 判斷是否為靜態模式——必須先判斷再決定是否發起請求
 const urlParams = new URLSearchParams(window.location.search);
 const isStatic = urlParams.get('static') === 'true';
 
-// 靜態模式：只載入一次，不啟動 30 秒輪詢（省電）
-// 一般模式：載入 + 每 30 秒輪詢
 fetchData();
 if (!isStatic) {
   setInterval(fetchData, 30000);

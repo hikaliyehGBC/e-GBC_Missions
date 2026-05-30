@@ -11,36 +11,57 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <style>
+    .lang-toggle-btn {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid #fff;
+      color: #fff;
+      border-radius: 20px;
+      padding: 4px 12px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .lang-toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+    .main-header { position: relative; }
+  </style>
 </head>
 
 <body>
   <div id="app">
 
     <!-- 全局頂部標題 (點擊回首頁) -->
-    <header class="main-header" id="mainHeader">
-      <h1>30日數位宣教行動</h1>
+    <header class="main-header">
+      <h1 id="mainHeader" data-i18n="hero-title" style="cursor:pointer;">30日數位宣教行動</h1>
+      <button id="langToggleBtn" class="lang-toggle-btn">EN</button>
     </header>
 
     <!-- 首頁視圖 (Home View) -->
     <div id="home-view" class="view-section active">
       <div class="hero-section">
-        <h2>數位禾場：在指尖世界看見呼召</h2>
-        <p class="hero-text">你是否聽見在五光十色的數位世界背後<br>網友們對真實連結、心靈平靜的渴求？<br>人們的痛苦，就是福音的著陸點。<br>打破宣教時空藩籬，現在就為福音做出行動</p>
+        <h2 data-i18n="hero-subtitle">數位禾場：在指尖世界看見呼召</h2>
+        <p class="hero-text" data-i18n="hero-text">你是否聽見在五光十色的數位世界背後<br>網友們對真實連結、心靈平靜的渴求？<br>人們的痛苦，就是福音的著陸點。<br>打破宣教時空藩籬，現在就為福音做出行動</p>
       </div>
 
       <div class="pdf-downloads">
-        <h3>📄 30日行動指南 A4列印版</h3>
+        <h3 data-i18n="print-title">📄 30日行動指南 A4列印版</h3>
         <div class="pdf-buttons">
-          <a href="print_prayer.html" target="_blank" class="btn-pdf">🙏 禱告大軍</a>
-          <a href="print_sabbath.html" target="_blank" class="btn-pdf">🌿 數位安息</a>
-          <a href="print_light.html" target="_blank" class="btn-pdf">✨ 做光做鹽</a>
-          <a href="print_missionary.html" target="_blank" class="btn-pdf">💻 數位宣教士</a>
+          <a href="print_prayer.html" target="_blank" class="btn-pdf" id="btn-print-prayer" data-i18n="print-prayer">🙏 禱告大軍</a>
+          <a href="print_sabbath.html" target="_blank" class="btn-pdf" id="btn-print-sabbath" data-i18n="print-sabbath">🌿 數位安息</a>
+          <a href="print_light.html" target="_blank" class="btn-pdf" id="btn-print-light" data-i18n="print-light">✨ 做光做鹽</a>
+          <a href="print_missionary.html" target="_blank" class="btn-pdf" id="btn-print-missionary" data-i18n="print-missionary">💻 數位宣教士</a>
         </div>
       </div>
 
       <!-- 進入今日行動按鈕 -->
       <div class="enter-calendar-box">
-        <button id="enterCalendarBtn" class="btn-primary">進入今日行動</button>
+        <button id="enterCalendarBtn" class="btn-primary" data-i18n="enter-calendar">進入今日行動</button>
       </div>
 
       <div class="iframe-section" style="padding: 0; background: transparent; box-shadow: none;">
@@ -48,8 +69,8 @@
           <div class="cloud-card">
             <div class="cloud-card-icon">☁️</div>
             <div class="cloud-card-text">
-              <strong>數位事工禱告雲</strong>
-              <span>大家對懷恩堂數位事工的期待與禱告</span>
+              <strong data-i18n="cloud-title">數位事工禱告雲</strong>
+              <span data-i18n="cloud-desc">大家對懷恩堂數位事工的期待與禱告</span>
             </div>
             <div class="cloud-card-arrow">›</div>
           </div>
@@ -58,12 +79,12 @@
 
       <div class="footer-links">
         <a href="https://www.gbc.org.tw/%e5%ae%a3%e6%95%99/2026missionsconference/" target="_blank"
-          class="btn-outline">前往 2026 懷恩堂差傳年會官方網站</a>
+          class="btn-outline" data-i18n="footer-link">前往 2026 懷恩堂差傳年會官方網站</a>
       </div>
 
       <div class="copyright-footer">
-        <p>e-gbc 2026差傳年會 數位事工禱告互動頁面</p>
-        <p>如有疑問或建議，請聯絡資訊同工 嘉惠：<a href="mailto:hikaliyeh@gbc.org.tw">hikaliyeh@gbc.org.tw</a></p>
+        <p data-i18n="footer-copy1">e-gbc 2026差傳年會 數位事工禱告互動頁面</p>
+        <p><span data-i18n="footer-copy2">如有疑問或建議，請聯絡資訊同工 嘉惠：</span><a href="mailto:hikaliyeh@gbc.org.tw">hikaliyeh@gbc.org.tw</a></p>
       </div>
     </div>
 
@@ -80,19 +101,19 @@
       <div class="tabs-container">
         <div class="tab active" data-tab="1">
           <div class="tab-icon">🙏</div>
-          <div class="tab-text">禱告大軍</div>
+          <div class="tab-text" data-i18n="tab-prayer">禱告大軍</div>
         </div>
         <div class="tab" data-tab="2">
           <div class="tab-icon">🌿</div>
-          <div class="tab-text">數位安息</div>
+          <div class="tab-text" data-i18n="tab-sabbath">數位安息</div>
         </div>
         <div class="tab" data-tab="3">
           <div class="tab-icon">✨</div>
-          <div class="tab-text">做光做鹽</div>
+          <div class="tab-text" data-i18n="tab-light">做光做鹽</div>
         </div>
         <div class="tab" data-tab="4">
           <div class="tab-icon">💻</div>
-          <div class="tab-text">數位宣教士</div>
+          <div class="tab-text" data-i18n="tab-missionary">數位宣教士</div>
         </div>
       </div>
 
@@ -128,13 +149,13 @@
           <svg viewBox="0 0 24 24" width="28" height="28">
             <path fill="currentColor" d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
           </svg>
-          <span>前一天</span>
+          <span data-i18n="nav-prev">前一天</span>
         </button>
-        <button id="todayBtn" class="nav-btn-large today-btn" style="display: none;">
+        <button id="todayBtn" class="nav-btn-large today-btn" style="display: none;" data-i18n="nav-today">
           返回今天
         </button>
         <button id="nextBtn" class="nav-btn-large" title="後一天">
-          <span>後一天</span>
+          <span data-i18n="nav-next">後一天</span>
           <svg viewBox="0 0 24 24" width="28" height="28">
             <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
           </svg>

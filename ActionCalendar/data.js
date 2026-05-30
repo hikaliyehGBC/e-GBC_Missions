@@ -1,663 +1,1327 @@
-// 宣教行動月曆 6月1日 - 6月30日資料
+// 宣教行動月曆 6月1日 - 6月30日資料 (雙語)
 const calendarData = {
-  "06-01": {
-    "action1": {
-      "weekday": "週一",
-      "topic": "為事工守望",
-      "content": "為懷恩堂差傳年會剛結束、數位事工異象的萌芽求神保守，讓會眾的心不冷卻。"
+  "zh": {
+    "06-01": {
+      "action1": {
+        "weekday": "週一",
+        "topic": "為事工守望",
+        "content": "為懷恩堂差傳年會剛結束、數位事工異象的萌芽求神保守，讓會眾的心不冷卻。"
+      },
+      "action2": {
+        "weekday": "週一",
+        "topic": "環境清掃",
+        "content": "檢查手機APP退播通知，挑選三個能夠關閉通知的項目，減少主動干擾。（如：購物、遊戲、新聞的按讚或推播通知）。"
+      },
+      "action3": {
+        "weekday": "週一",
+        "topic": "指尖防守",
+        "content": "看到聳動、挑起對立的新聞或 Threads 廢文時，手指絕不點開，直接滑過去。"
+      },
+      "action4": {
+        "weekday": "週一",
+        "topic": "釐清你的數位呼召",
+        "content": "安靜來到神面前，求神開啟你的屬靈眼睛，看見數位世代中尚未被滿足的福音需要。"
+      }
     },
-    "action2": {
-      "weekday": "週一",
-      "topic": "環境清掃",
-      "content": "檢查手機APP退播通知，挑選三個能夠關閉通知的項目，減少主動干擾。（如：購物、遊戲、新聞的按讚或推播通知）。"
+    "06-02": {
+      "action1": {
+        "weekday": "週二",
+        "topic": "為萬國禱告",
+        "content": "進入差傳年會頁面，點選「為台灣禱告」，觀看其文宣影片，為當地需要代禱。"
+      },
+      "action2": {
+        "weekday": "週二",
+        "topic": "收操放電",
+        "content": "今天每一次使用3C告一段落後，強制將視線移開，注視綠色植物、陽台盆栽或看著窗外天空 1 分鐘。"
+      },
+      "action3": {
+        "weekday": "週二",
+        "topic": "垃圾清理",
+        "content": "封鎖或取消追蹤 3 個經常發布負能量、酸民言論的粉專或帳號。"
+      },
+      "action4": {
+        "weekday": "週二",
+        "topic": "釐清你的數位呼召",
+        "content": "思考「網紅、做影片、做圖卡、定期發文」等網路內容面，這是否是神給你的感動？"
+      }
     },
-    "action3": {
-      "weekday": "週一",
-      "topic": "指尖防守",
-      "content": "看到聳動、挑起對立的新聞或 Threads 廢文時，手指絕不點開，直接滑過去。"
+    "06-03": {
+      "action1": {
+        "weekday": "週三",
+        "topic": "為世代心靈",
+        "content": "為自己在3C上花費大量時間、情緒被挑逗失控、注意力被掠奪而無法享受安息禱告，求神賞賜免除定罪的真平安。"
+      },
+      "action2": {
+        "weekday": "週三",
+        "topic": "實體單工",
+        "content": "在今天工作或讀書的其中一個時段（如 30 分鐘），將手機翻面朝下、或不額外掛著影音陪襯。"
+      },
+      "action3": {
+        "weekday": "週三",
+        "topic": "正面點讚",
+        "content": "主動為你河道上 3 則帶有溫暖、歡樂、或正能量的好友貼文點讚，給他最直接的支持。"
+      },
+      "action4": {
+        "weekday": "週三",
+        "topic": "釐清你的數位呼召",
+        "content": "思考「建立小組，關懷經營並牧養網路慕道友」的社群面，你是否對失喪靈魂有牧養的負擔？"
+      }
     },
-    "action4": {
-      "weekday": "週一",
-      "topic": "釐清你的數位呼召",
-      "content": "安靜來到神面前，求神開啟你的屬靈眼睛，看見數位世代中尚未被滿足的福音需要。"
+    "06-04": {
+      "action1": {
+        "weekday": "週四",
+        "topic": "為環境媒體",
+        "content": "為你今天所滑過的三大平台（FB, LINE, Threads）的網路環境禱告，求神保守你的心不隨怒火起舞。"
+      },
+      "action2": {
+        "weekday": "週四",
+        "topic": "餐桌安息",
+        "content": "今天的午餐時間，將手機設定為靜音或關閉電腦螢幕，專注享受食物的滋味。"
+      },
+      "action3": {
+        "weekday": "週四",
+        "topic": "溫暖留言",
+        "content": "在 1 位好朋友分享日常生活的貼文下，留下真誠、簡單的問候（如：「看到你的分享，今天心情也變好了！」）。"
+      },
+      "action4": {
+        "weekday": "週四",
+        "topic": "釐清你的數位呼召",
+        "content": "思考「撰寫設計更符合數位世代的主日學教材」的教育面，你是否有將真理轉譯的熱忱？"
+      }
+    },
+    "06-05": {
+      "action1": {
+        "weekday": "週五",
+        "topic": "為數位宣教士",
+        "content": "為在台灣網路媒體上耕耘的基督徒禱告，求神祝福他們手上的工，能更多造就需要的人。"
+      },
+      "action2": {
+        "weekday": "週五",
+        "topic": "夜間斷電",
+        "content": "睡前一小時前，關閉房間的燈，關閉或遮罩額外光源，讓你的睡眠能更安穩。"
+      },
+      "action3": {
+        "weekday": "週五",
+        "topic": "感恩發送",
+        "content": "在社群上（或 LINE 動態）分享 1 件你今天遇到、感到很感恩的小確幸，傳遞正面微光。"
+      },
+      "action4": {
+        "weekday": "週五",
+        "topic": "釐清你的數位呼召",
+        "content": "思考「製作教會 APP、提昇行政效能」的技術面，你是否願意將專業技術奉獻給神國？"
+      }
+    },
+    "06-06": {
+      "action1": {
+        "weekday": "週六",
+        "topic": "為自身悔改禱告",
+        "content": "閉眼 1 分鐘，回顧這週的手機使用，求神洗淨我們因被動點閱沒營養八卦所累積的煩躁。"
+      },
+      "action2": {
+        "weekday": "週六",
+        "topic": "健康體魄",
+        "content": "進行 20 分鐘慢跑或快走，在過程中為這一週所經歷的喜樂禱告、讚美神。"
+      },
+      "action3": {
+        "weekday": "週六",
+        "topic": "真實生活",
+        "content": "分享一張你散步時拍下的美麗自然景物照片，不加濾鏡，寫下一句感謝上帝創造的心聲。"
+      },
+      "action4": {
+        "weekday": "週六",
+        "topic": "釐清你的數位呼召",
+        "content": "打開「數位事工禱告雲」，你是否從關鍵字中看見異象？求神啟發你如何用新穎的方式傳遞信仰。"
+      }
+    },
+    "06-07": {
+      "action1": {
+        "weekday": "週日",
+        "topic": "為主日安息",
+        "content": "崇拜開始前 10 分鐘，將手機關機或靜音放入包包，安靜為身旁正要一起崇拜的會眾能得著安息禱告。"
+      },
+      "action2": {
+        "weekday": "週日",
+        "topic": "實體聖經",
+        "content": "主日拿起實體聖經讀經，不要使用手機 App 看經文，體驗手指翻閱紙張的專注溫度。"
+      },
+      "action3": {
+        "weekday": "週日",
+        "topic": "小卡轉發",
+        "content": "轉貼一則你認為非常值得被更多人閱讀的文章，用心寫下你轉錄推薦的理由。"
+      },
+      "action4": {
+        "weekday": "週日",
+        "topic": "釐清你的數位呼召",
+        "content": "在主日安息中，將這幾天所思考的種種可能性交託給主，求神親自為你指明道路。"
+      }
+    },
+    "06-08": {
+      "action1": {
+        "weekday": "週一",
+        "topic": "為事工守望",
+        "content": "特別為懷恩堂年會上大家期待的「數位事工禱告雲」事工的籌備、技術與同工預備禱告。"
+      },
+      "action2": {
+        "weekday": "週一",
+        "topic": "環境清掃",
+        "content": "打開你的youtube或社群平台，清理那些很久不看的追蹤帳號。"
+      },
+      "action3": {
+        "weekday": "週一",
+        "topic": "指尖防守",
+        "content": "遇到別人在 Threads 或臉書留言區大肆爭吵、公審時，堅持不留下任何冷嘲熱諷的隻字片語。"
+      },
+      "action4": {
+        "weekday": "週一",
+        "topic": "整理你的數位履歷",
+        "content": "寫下三項你最擅長的數位技能或軟體工具（例如：影片剪輯、文案撰寫、程式開發等）。"
+      }
+    },
+    "06-09": {
+      "action1": {
+        "weekday": "週二",
+        "topic": "為萬國禱告",
+        "content": "進入差傳年會頁面，點選「為萬國禱告」，觀看文宣，並花 3 分鐘為當地的差傳需要與宣教士家庭的平安守望。"
+      },
+      "action2": {
+        "weekday": "週二",
+        "topic": "收操放電",
+        "content": "每次連續滑手機超過 15 分鐘，放下手機後，立刻走向陽台或庭院，做 5 分鐘的動植物接觸或觀察天空。"
+      },
+      "action3": {
+        "weekday": "週二",
+        "topic": "垃圾清理",
+        "content": "主動退出一個經常傳播政治八卦、陰謀論或情緒罵戰的 LINE 垃圾群組。"
+      },
+      "action4": {
+        "weekday": "週二",
+        "topic": "整理你的數位履歷",
+        "content": "寫下你擁有但尚未成熟，卻非常有興趣學習的一項數位技能，為這份學習的熱忱禱告。"
+      }
+    },
+    "06-10": {
+      "action1": {
+        "weekday": "週三",
+        "topic": "為世代心靈",
+        "content": "特別為 30 歲以下、深受 IG 與短影音完美濾鏡綁架的青少年心靈禱告，求神賜下無條件被愛與接納的安全感。"
+      },
+      "action2": {
+        "weekday": "週三",
+        "topic": "實體單工",
+        "content": "在最容易使用3C的空間放上隨時可見的提示字條：「專心不分心」、「看完3C記得放電」。"
+      },
+      "action3": {
+        "weekday": "週三",
+        "topic": "正面點讚",
+        "content": "主動為你河道上 3 則帶有正能量、有價值或具備專業知識的良善內容按讚投票。"
+      },
+      "action4": {
+        "weekday": "週三",
+        "topic": "整理你的數位履歷",
+        "content": "檢視過去你在工作或服事中的經驗，有哪些「世俗」的專業能力其實是可以為主所用的？"
+      }
+    },
+    "06-11": {
+      "action1": {
+        "weekday": "週四",
+        "topic": "為環境媒體",
+        "content": "為在數位平台尋找信仰答案的「隱形慕道友」禱告，求神的真光藉著網路內容引導他們。"
+      },
+      "action2": {
+        "weekday": "週四",
+        "topic": "餐桌安息",
+        "content": "今天的晚餐時間，與家人或室友用餐時，大家一起將手機收在餐桌旁的籃子裡，專注面對面聊天。"
+      },
+      "action3": {
+        "weekday": "週四",
+        "topic": "溫暖留言",
+        "content": "在一位朋友的發文下，留下具體且造就人的鼓勵（如：「謝謝你的分享，這段話今天對我非常有啟發！」）。"
+      },
+      "action4": {
+        "weekday": "週四",
+        "topic": "整理你的數位履歷",
+        "content": "為自己感到不足的地方禱告，承認我們無法做全部的事，學習謙卑仰望神的供應。"
+      }
+    },
+    "06-12": {
+      "action1": {
+        "weekday": "週五",
+        "topic": "為數位宣教士",
+        "content": "為懷恩堂能夠興起更多數位專業投入服事，使他們的恩賜為神所用、拓張神國的地界。"
+      },
+      "action2": {
+        "weekday": "週五",
+        "topic": "夜間斷電",
+        "content": "睡前最後 30 分鐘關閉發光螢幕。用閱讀實體書、手寫日記或拉伸代替滑手機。"
+      },
+      "action3": {
+        "weekday": "週五",
+        "topic": "感恩發送",
+        "content": "分享一段你最近從實體書、或是靈修中讀到的有智慧的金句，配上你的一句話心得。"
+      },
+      "action4": {
+        "weekday": "週五",
+        "topic": "整理你的數位履歷",
+        "content": "為懷恩堂的弟兄姊妹禱告，求神親自將擁有不同恩賜的肢體連結起來，形成堅強的團隊。"
+      }
+    },
+    "06-13": {
+      "action1": {
+        "weekday": "週六",
+        "topic": "為自身悔改禱告",
+        "content": "為自己這週在 LINE 群組中，是否有順手轉發未經證實的假訊息或八卦進行反思與求神赦免。"
+      },
+      "action2": {
+        "weekday": "週六",
+        "topic": "健康體魄",
+        "content": "進行 30 分鐘慢跑或快走，在過程中為這一週所經歷的喜樂禱告、讚美神。"
+      },
+      "action3": {
+        "weekday": "週六",
+        "topic": "真實生活",
+        "content": "分享你在教會見過最有愛的夫妻與家庭關係，不讓男女對立與家庭衝突掌控社群話語權。"
+      },
+      "action4": {
+        "weekday": "週六",
+        "topic": "整理你的數位履歷",
+        "content": "思考你可以如何主動認識其他對數位宣教有負擔的肢體，為未來的團隊合作預備心。"
+      }
+    },
+    "06-14": {
+      "action1": {
+        "weekday": "週日",
+        "topic": "為主日安息",
+        "content": "在主日崇拜中，為講員的口舌與所有會眾的聽道心田禱告，求神的話語成為大家面對週一挑戰的盾牌。"
+      },
+      "action2": {
+        "weekday": "週日",
+        "topic": "實體聖經",
+        "content": "主日崇拜不使用手機，預備紙張或筆記本，抄寫本週的經文，寫下今日領受的信息。"
+      },
+      "action3": {
+        "weekday": "週日",
+        "topic": "小卡轉發",
+        "content": "挑選一張傳遞心靈安息的圖文，分享到你的家長群組或工作群組，配上一句：「送給這週辛苦奮鬥的大家。」"
+      },
+      "action4": {
+        "weekday": "週日",
+        "topic": "整理你的數位履歷",
+        "content": "將你整理好的「數位履歷」在禱告中呈獻給神，宣告這一切能力都將指向神的心意。"
+      }
+    },
+    "06-15": {
+      "action1": {
+        "weekday": "週一",
+        "topic": "為事工守望",
+        "content": "為「數位事工禱告雲」點讚數最高的項目禱告，求神興起能夠推動此事工的同工。"
+      },
+      "action2": {
+        "weekday": "週一",
+        "topic": "環境清掃",
+        "content": "檢查手機系統的「螢幕使用時間」，並在系統中為最常滑的社群 App 設定嚴格的「每日限時 45 分鐘」。"
+      },
+      "action3": {
+        "weekday": "週一",
+        "topic": "指尖防守",
+        "content": "收到群組傳來未經證實的八卦或假消息時，拒絕順手轉發，用你的冷靜阻斷謠言的傳播。"
+      },
+      "action4": {
+        "weekday": "週一",
+        "topic": "嘗試接觸新的 AI 工具",
+        "content": "決定一款你這週要探索的 AI 工具（如 ChatGPT、Midjourney、Notion AI 等），並註冊帳號。"
+      }
+    },
+    "06-16": {
+      "action1": {
+        "weekday": "週二",
+        "topic": "為萬國禱告",
+        "content": "點選「為台灣禱告」，為今天抽選到的行政地區，從google地圖找到該地教會，為教會對周遭環境做光做鹽代求。"
+      },
+      "action2": {
+        "weekday": "週二",
+        "topic": "收操放電",
+        "content": "今天滑完手機後，與家中的寵物互動、去公園看松鼠與飛鳥、或赤腳踩踩草地 5 分鐘，重建大腦與真實世界的感官連結。"
+      },
+      "action3": {
+        "weekday": "週二",
+        "topic": "垃圾清理",
+        "content": "看到純粹挑起對立的廣告或假帳號，不留言爭論，直接按下「檢舉並封鎖」，主動做數位環境清潔。"
+      },
+      "action4": {
+        "weekday": "週二",
+        "topic": "嘗試接觸新的 AI 工具",
+        "content": "花 15 分鐘觀看該 AI 工具的入門教學影片，了解它的基本功能與應用場景。"
+      }
+    },
+    "06-17": {
+      "action1": {
+        "weekday": "週三",
+        "topic": "為世代心靈",
+        "content": "特別為 40 歲以上、每天被海量 LINE 群組訊息與對立輿論轟炸得精神疲憊的成人求神賞賜平靜。"
+      },
+      "action2": {
+        "weekday": "週三",
+        "topic": "實體單工",
+        "content": "在今天看一本書、或是寫一份報告的 45 分鐘內，挑戰「單一任務」，絕不一邊滑手機一邊做別的事。"
+      },
+      "action3": {
+        "weekday": "週三",
+        "topic": "正面點讚",
+        "content": "主動為 3 位很少受到關注、但一直在努力分享日常或服事的好友按讚，成為他們的默默支持者。"
+      },
+      "action4": {
+        "weekday": "週三",
+        "topic": "嘗試接觸新的 AI 工具",
+        "content": "實際動手操作！嘗試用該工具生成一段簡短的見證文案、一張配圖，或整理一篇靈修筆記。"
+      }
+    },
+    "06-18": {
+      "action1": {
+        "weekday": "週四",
+        "topic": "為環境媒體",
+        "content": "為在網路上發揮影響力的基督教媒體 KOL 與影音創作者禱告，求神保護他們的靈命與家庭。"
+      },
+      "action2": {
+        "weekday": "週四",
+        "topic": "餐桌安息",
+        "content": "今天的前五口飯菜，嘗試用心咀嚼30下再吞嚥。飯後回想這一週是否有吃到15種不同的蔬菜？"
+      },
+      "action3": {
+        "weekday": "週四",
+        "topic": "溫暖留言",
+        "content": "主動在社群上傳私訊給一位最近面臨工作、功課或服事重壓的同工，向他表達你誠摯的讚賞與關懷。"
+      },
+      "action4": {
+        "weekday": "週四",
+        "topic": "嘗試接觸新的 AI 工具",
+        "content": "思考這項工具可以如何應用在教會服事或個人傳福音的過程中？寫下一個具體的點子。"
+      }
+    },
+    "06-19": {
+      "action1": {
+        "weekday": "週五",
+        "topic": "為數位宣教士",
+        "content": "為自己的數位能力拓展禱告，曾經期盼能夠學習更多的火熱，求神點燃、為主所用。"
+      },
+      "action2": {
+        "weekday": "週五",
+        "topic": "夜間斷電",
+        "content": "嘗試「睡前 45 分鐘斷電」。將手機充電器徹底移出臥室，改用實體鬧鐘，享受高質量的安穩睡眠。"
+      },
+      "action3": {
+        "weekday": "週五",
+        "topic": "感恩發送",
+        "content": "分享一首能為你心靈帶來平靜、安息的優質音樂或詩歌連結，並手寫寫下它如何陪伴了你度過低谷。"
+      },
+      "action4": {
+        "weekday": "週五",
+        "topic": "嘗試接觸新的 AI 工具",
+        "content": "與一位朋友分享你這幾天嘗試新工具的心得，激發彼此對數位宣教的想像。"
+      }
+    },
+    "06-20": {
+      "action1": {
+        "weekday": "週六",
+        "topic": "為自身悔改禱告",
+        "content": "面對這週可能因網路輿論、群組爭論產生的血氣與論斷，在禱告中求耶穌的溫柔重置（Reset）我們。"
+      },
+      "action2": {
+        "weekday": "週六",
+        "topic": "健康體魄",
+        "content": "安排一個下午，到附近的公園漫遊，在公園草地上，找到至少10種不一樣的野花，把它們拍下來。"
+      },
+      "action3": {
+        "weekday": "週六",
+        "topic": "真實生活",
+        "content": "分享你如何正值良善與愛心回應職場困境，不讓撒但建造的虛假對立營壘形塑社會價值觀。"
+      },
+      "action4": {
+        "weekday": "週六",
+        "topic": "嘗試接觸新的 AI 工具",
+        "content": "評估這項工具是否適合持續深入學習？若是，為自己規劃接下來的學習步驟。"
+      }
+    },
+    "06-21": {
+      "action1": {
+        "weekday": "週日",
+        "topic": "為主日安息",
+        "content": "禱告求神保守我們在主日能徹底放下工作的 LINE 訊息，享受與神、與弟兄姊妹面對面相處的聖日安息。"
+      },
+      "action2": {
+        "weekday": "週日",
+        "topic": "實體聖經",
+        "content": "今天主日，從崇拜到小組查經，全程使用實體聖經，完全不打開手機的經文 App，專注於上帝話語的直接同在。"
+      },
+      "action3": {
+        "weekday": "週日",
+        "topic": "小卡轉發",
+        "content": "轉發推薦一個讓你感覺有盼望的影音頻道或藝術家，用心寫下你推薦的理由。"
+      },
+      "action4": {
+        "weekday": "週日",
+        "topic": "嘗試接觸新的 AI 工具",
+        "content": "感謝神賜下科技的智慧，求神保守我們善用工具，成為傳遞愛與真理的器皿，而不被工具轄制。"
+      }
+    },
+    "06-22": {
+      "action1": {
+        "weekday": "週一",
+        "topic": "為事工守望",
+        "content": "為你在這一個月對「數位事工」的感動、腦中浮現的畫面感謝神，相信做新事的神必為懷恩堂開路。"
+      },
+      "action2": {
+        "weekday": "週一",
+        "topic": "環境清掃",
+        "content": "打開你的youtube或社群平台，將首頁跳出的前20則訊息，挑出3-5個項目選擇「不感興趣」。"
+      },
+      "action3": {
+        "weekday": "週一",
+        "topic": "指尖防守",
+        "content": "享受關閉非人際推送的第四週。面對敏感的社會爭議議題時，若要發言，堅持只寫下促進和睦與理解的字眼。"
+      },
+      "action4": {
+        "weekday": "週一",
+        "topic": "為主留下時間與空間",
+        "content": "誠實面對自己：我是否經常覺得「太忙了，沒時間服事」？為這份被世界塞滿的忙碌向神悔改。"
+      }
+    },
+    "06-23": {
+      "action1": {
+        "weekday": "週二",
+        "topic": "為萬國禱告",
+        "content": "點選「為萬國禱告」，為今天抽選到的國家，從google地圖找到其首都，宣告神的王權要在該地彰顯。"
+      },
+      "action2": {
+        "weekday": "週二",
+        "topic": "收操放電",
+        "content": "使用完3C後進行 5 分鐘自然接觸已成為肌肉記憶。感受自己在大腦 Reset 後，專注力與心靈平靜度的顯著提升。"
+      },
+      "action3": {
+        "weekday": "週二",
+        "topic": "垃圾清理",
+        "content": "協助你的孩子、家人或身邊長輩，教導他們如何封鎖詐騙與隱藏垃圾廢文，當他們數位環境的管家。"
+      },
+      "action4": {
+        "weekday": "週二",
+        "topic": "為主留下時間與空間",
+        "content": "檢視你的每週行事曆，找出哪些時間是浪費在無意義的滑手機或追劇上？"
+      }
+    },
+    "06-24": {
+      "action1": {
+        "weekday": "週三",
+        "topic": "為世代心靈",
+        "content": "為台灣在 Threads 上集體傾倒焦慮與空虛的年輕世代禱告，求神興起更多能陪伴他們的年輕信徒。"
+      },
+      "action2": {
+        "weekday": "週三",
+        "topic": "實體單工",
+        "content": "和身邊一位朋友分享這一個月來專心於實體、不被手機/3C分新的經驗與感受。"
+      },
+      "action3": {
+        "weekday": "週三",
+        "topic": "正面點讚",
+        "content": "主動為你所看到的優質基督教媒體、福音創作者的貼文按讚與留言，用實際行動在數位禾場上托住他們。"
+      },
+      "action4": {
+        "weekday": "週三",
+        "topic": "為主留下時間與空間",
+        "content": "嘗試每天刻意空出 15 分鐘，甚麼都不做，單單等候神，將這段時間完全分別為聖。"
+      }
+    },
+    "06-25": {
+      "action1": {
+        "weekday": "週四",
+        "topic": "為環境媒體",
+        "content": "祝福所有在網路上傳遞真理、安慰的福音貼文與信仰小卡，宣告這些內容要像微光照亮深夜的黑暗。"
+      },
+      "action2": {
+        "weekday": "週四",
+        "topic": "餐桌安息",
+        "content": "享受每一餐沒有手機干擾的美味，回想你這一個月吃得最開心的一餐，為美好的用餐心情禱告。"
+      },
+      "action3": {
+        "weekday": "週四",
+        "topic": "溫暖留言",
+        "content": "主動關心一位在社群上發出沮喪、空虛文字的朋友，用私訊送出溫暖的代求與問候，不說教，只傾聽。"
+      },
+      "action4": {
+        "weekday": "週四",
+        "topic": "為主留下時間與空間",
+        "content": "求神賜給我們智慧，懂得拒絕不必要的應酬或瑣事，讓生命留下更多時間給神。"
+      }
+    },
+    "06-26": {
+      "action1": {
+        "weekday": "週五",
+        "topic": "為數位宣教士",
+        "content": "為所有心中對數位宣教有熱忱的肢體，求神挪去他們前方的攔阻，充足地供應他們，使他們願意承接懷恩堂數位事工的呼召。"
+      },
+      "action2": {
+        "weekday": "週五",
+        "topic": "夜間斷電",
+        "content": "享受長達一個月睡前斷電的恩典，感受睡眠品質的大幅改善與清晨起床時的清爽。"
+      },
+      "action3": {
+        "weekday": "週五",
+        "topic": "感恩發送",
+        "content": "分享你過去一個月實踐「數位安息」的感恩得著，見證神如何在你安靜下來時重新更新了你。"
+      },
+      "action4": {
+        "weekday": "週五",
+        "topic": "為主留下時間與空間",
+        "content": "禱告求神調整我們的價值觀：「不是塞滿了所有時間再說無法為神作工，而是先將時間獻給神。」"
+      }
+    },
+    "06-27": {
+      "action1": {
+        "weekday": "週六",
+        "topic": "為自身悔改禱告",
+        "content": "檢視這一個月在社群上的發言，感謝神保守我們的舌頭與指尖，宣告我們已退出了那場鍵盤降火的遊戲。"
+      },
+      "action2": {
+        "weekday": "週六",
+        "topic": "健康體魄",
+        "content": "挑戰飯後10分鐘內就起身散步20分鐘，已有研究證實飯後輕度有氧能穩定血糖、避免脂肪堆積。"
+      },
+      "action3": {
+        "weekday": "週六",
+        "topic": "真實生活",
+        "content": "分享這個月你在實體生活中，最讓你感到幸福、留有餘韻的 3 個無網日常瞬間，影響身邊人回歸實體。"
+      },
+      "action4": {
+        "weekday": "週六",
+        "topic": "為主留下時間與空間",
+        "content": "制定一個具體且可行的「微服事」計畫，例如每週花一小時參與線上關懷或製作福音圖卡。"
+      }
+    },
+    "06-28": {
+      "action1": {
+        "weekday": "週日",
+        "topic": "為主日安息",
+        "content": "讀以賽亞書五十二7，為全台灣正透過網路尋求心靈平安的隱形慕道友代禱，宣告佳美的福音腳蹤要在數位禾場展開。"
+      },
+      "action2": {
+        "weekday": "週日",
+        "topic": "實體聖經",
+        "content": "拿起實體聖經，讀完一篇詩篇。感謝神在過去一個月，藉著實體聖經重置了你浮躁的心靈。"
+      },
+      "action3": {
+        "weekday": "週日",
+        "topic": "小卡轉發",
+        "content": "讀以賽亞書五十二7，利用AI 做成圖卡轉發到你的群組中，分享你這個月在數位世界作光、為神所用的喜樂。"
+      },
+      "action4": {
+        "weekday": "週日",
+        "topic": "為主留下時間與空間",
+        "content": "帶著悔改與更新的心，重新將主權交還給神，宣告你的時間與生命都為主所用。"
+      }
+    },
+    "06-29": {
+      "action1": {
+        "weekday": "週一",
+        "topic": "為事工守望",
+        "content": "為懷恩堂數位事工的永續經營與新一輪同工招募求神開路。"
+      },
+      "action2": {
+        "weekday": "週一",
+        "topic": "路徑上的脂油",
+        "content": "統計 6 月份的每日平均螢幕使用時間，看著減少的數字，感謝神奪回了時間主權。"
+      },
+      "action3": {
+        "weekday": "週一",
+        "topic": "指尖防守最後檢視",
+        "content": "看著自己過去一個月在網路上充滿平安、造就人的發言，感謝神保守了你的舌頭與指尖。"
+      },
+      "action4": {
+        "weekday": "週一",
+        "topic": "行動還會延續",
+        "content": "回顧這三十天，神在「數位宣教士」的呼召上給了你什麼清楚的異象與感動？寫下來。"
+      }
+    },
+    "06-30": {
+      "action1": {
+        "weekday": "週二",
+        "topic": "為神國降臨",
+        "content": "為神在數位虛擬世界上坐著為王感恩，為自己這三十天、神如何調整你的屬靈眼光感恩。"
+      },
+      "action2": {
+        "weekday": "週二",
+        "topic": "將注意力回歸於神",
+        "content": "在 30 天的最後，走向一棵大樹，深呼吸，對神宣告：「演算法不再決定我的心情，因為我的靈魂在基督裡享有真正的安息！」"
+      },
+      "action3": {
+        "weekday": "週二",
+        "topic": "垃圾清理習慣續航",
+        "content": "寫下這 30 天數位之光行動的收穫，並在禱告中謝恩：「我已靠著主在指尖世界裡做光做鹽，踩下最美的腳蹤！」"
+      },
+      "action4": {
+        "weekday": "週二",
+        "topic": "行動還會延續",
+        "content": "為接下來懷恩堂即將開展的數位事工禱告，宣告自己已經預備好，隨時回應神的差遣！"
+      }
     }
   },
-  "06-02": {
-    "action1": {
-      "weekday": "週二",
-      "topic": "為萬國禱告",
-      "content": "進入差傳年會頁面，點選「為台灣禱告」，觀看其文宣影片，為當地需要代禱。"
-    },
-    "action2": {
-      "weekday": "週二",
-      "topic": "收操放電",
-      "content": "今天每一次使用3C告一段落後，強制將視線移開，注視綠色植物、陽台盆栽或看著窗外天空 1 分鐘。"
-    },
-    "action3": {
-      "weekday": "週二",
-      "topic": "垃圾清理",
-      "content": "封鎖或取消追蹤 3 個經常發布負能量、酸民言論的粉專或帳號。"
-    },
-    "action4": {
-      "weekday": "週二",
-      "topic": "釐清你的數位呼召",
-      "content": "思考「網紅、做影片、做圖卡、定期發文」等網路內容面，這是否是神給你的感動？"
-    }
-  },
-  "06-03": {
-    "action1": {
-      "weekday": "週三",
-      "topic": "為世代心靈",
-      "content": "為自己在3C上花費大量時間、情緒被挑逗失控、注意力被掠奪而無法享受安息禱告，求神賞賜免除定罪的真平安。"
-    },
-    "action2": {
-      "weekday": "週三",
-      "topic": "實體單工",
-      "content": "在今天工作或讀書的其中一個時段（如 30 分鐘），將手機翻面朝下、或不額外掛著影音陪襯。"
-    },
-    "action3": {
-      "weekday": "週三",
-      "topic": "正面點讚",
-      "content": "主動為你河道上 3 則帶有溫暖、歡樂、或正能量的好友貼文點讚，給他最直接的支持。"
-    },
-    "action4": {
-      "weekday": "週三",
-      "topic": "釐清你的數位呼召",
-      "content": "思考「建立小組，關懷經營並牧養網路慕道友」的社群面，你是否對失喪靈魂有牧養的負擔？"
-    }
-  },
-  "06-04": {
-    "action1": {
-      "weekday": "週四",
-      "topic": "為環境媒體",
-      "content": "為你今天所滑過的三大平台（FB, LINE, Threads）的網路環境禱告，求神保守你的心不隨怒火起舞。"
-    },
-    "action2": {
-      "weekday": "週四",
-      "topic": "餐桌安息",
-      "content": "今天的午餐時間，將手機設定為靜音或關閉電腦螢幕，專注享受食物的滋味。"
-    },
-    "action3": {
-      "weekday": "週四",
-      "topic": "溫暖留言",
-      "content": "在 1 位好朋友分享日常生活的貼文下，留下真誠、簡單的問候（如：「看到你的分享，今天心情也變好了！」）。"
-    },
-    "action4": {
-      "weekday": "週四",
-      "topic": "釐清你的數位呼召",
-      "content": "思考「撰寫設計更符合數位世代的主日學教材」的教育面，你是否有將真理轉譯的熱忱？"
-    }
-  },
-  "06-05": {
-    "action1": {
-      "weekday": "週五",
-      "topic": "為數位宣教士",
-      "content": "為在台灣網路媒體上耕耘的基督徒禱告，求神祝福他們手上的工，能更多造就需要的人。"
-    },
-    "action2": {
-      "weekday": "週五",
-      "topic": "夜間斷電",
-      "content": "睡前一小時前，關閉房間的燈，關閉或遮罩額外光源，讓你的睡眠能更安穩。"
-    },
-    "action3": {
-      "weekday": "週五",
-      "topic": "感恩發送",
-      "content": "在社群上（或 LINE 動態）分享 1 件你今天遇到、感到很感恩的小確幸，傳遞正面微光。"
-    },
-    "action4": {
-      "weekday": "週五",
-      "topic": "釐清你的數位呼召",
-      "content": "思考「製作教會 APP、提昇行政效能」的技術面，你是否願意將專業技術奉獻給神國？"
-    }
-  },
-  "06-06": {
-    "action1": {
-      "weekday": "週六",
-      "topic": "為自身悔改禱告",
-      "content": "閉眼 1 分鐘，回顧這週的手機使用，求神洗淨我們因被動點閱沒營養八卦所累積的煩躁。"
-    },
-    "action2": {
-      "weekday": "週六",
-      "topic": "健康體魄",
-      "content": "進行 20 分鐘慢跑或快走，在過程中為這一週所經歷的喜樂禱告、讚美神。"
-    },
-    "action3": {
-      "weekday": "週六",
-      "topic": "真實生活",
-      "content": "分享一張你散步時拍下的美麗自然景物照片，不加濾鏡，寫下一句感謝上帝創造的心聲。"
-    },
-    "action4": {
-      "weekday": "週六",
-      "topic": "釐清你的數位呼召",
-      "content": "打開「數位事工禱告雲」，你是否從關鍵字中看見異象？求神啟發你如何用新穎的方式傳遞信仰。"
-    }
-  },
-  "06-07": {
-    "action1": {
-      "weekday": "週日",
-      "topic": "為主日安息",
-      "content": "崇拜開始前 10 分鐘，將手機關機或靜音放入包包，安靜為身旁正要一起崇拜的會眾能得著安息禱告。"
-    },
-    "action2": {
-      "weekday": "週日",
-      "topic": "實體聖經",
-      "content": "主日拿起實體聖經讀經，不要使用手機 App 看經文，體驗手指翻閱紙張的專注溫度。"
-    },
-    "action3": {
-      "weekday": "週日",
-      "topic": "小卡轉發",
-      "content": "轉貼一則你認為非常值得被更多人閱讀的文章，用心寫下你轉錄推薦的理由。"
-    },
-    "action4": {
-      "weekday": "週日",
-      "topic": "釐清你的數位呼召",
-      "content": "在主日安息中，將這幾天所思考的種種可能性交託給主，求神親自為你指明道路。"
-    }
-  },
-  "06-08": {
-    "action1": {
-      "weekday": "週一",
-      "topic": "為事工守望",
-      "content": "特別為懷恩堂年會上大家期待的「數位事工禱告雲」事工的籌備、技術與同工預備禱告。"
-    },
-    "action2": {
-      "weekday": "週一",
-      "topic": "環境清掃",
-      "content": "打開你的youtube或社群平台，清理那些很久不看的追蹤帳號。"
-    },
-    "action3": {
-      "weekday": "週一",
-      "topic": "指尖防守",
-      "content": "遇到別人在 Threads 或臉書留言區大肆爭吵、公審時，堅持不留下任何冷嘲熱諷的隻字片語。"
-    },
-    "action4": {
-      "weekday": "週一",
-      "topic": "整理你的數位履歷",
-      "content": "寫下三項你最擅長的數位技能或軟體工具（例如：影片剪輯、文案撰寫、程式開發等）。"
-    }
-  },
-  "06-09": {
-    "action1": {
-      "weekday": "週二",
-      "topic": "為萬國禱告",
-      "content": "進入差傳年會頁面，點選「為萬國禱告」，觀看文宣，並花 3 分鐘為當地的差傳需要與宣教士家庭的平安守望。"
-    },
-    "action2": {
-      "weekday": "週二",
-      "topic": "收操放電",
-      "content": "每次連續滑手機超過 15 分鐘，放下手機後，立刻走向陽台或庭院，做 5 分鐘的動植物接觸或觀察天空。"
-    },
-    "action3": {
-      "weekday": "週二",
-      "topic": "垃圾清理",
-      "content": "主動退出一個經常傳播政治八卦、陰謀論或情緒罵戰的 LINE 垃圾群組。"
-    },
-    "action4": {
-      "weekday": "週二",
-      "topic": "整理你的數位履歷",
-      "content": "寫下你擁有但尚未成熟，卻非常有興趣學習的一項數位技能，為這份學習的熱忱禱告。"
-    }
-  },
-  "06-10": {
-    "action1": {
-      "weekday": "週三",
-      "topic": "為世代心靈",
-      "content": "特別為 30 歲以下、深受 IG 與短影音完美濾鏡綁架的青少年心靈禱告，求神賜下無條件被愛與接納的安全感。"
-    },
-    "action2": {
-      "weekday": "週三",
-      "topic": "實體單工",
-      "content": "在最容易使用3C的空間放上隨時可見的提示字條：「專心不分心」、「看完3C記得放電」。"
-    },
-    "action3": {
-      "weekday": "週三",
-      "topic": "正面點讚",
-      "content": "主動為你河道上 3 則帶有正能量、有價值或具備專業知識的良善內容按讚投票。"
-    },
-    "action4": {
-      "weekday": "週三",
-      "topic": "整理你的數位履歷",
-      "content": "檢視過去你在工作或服事中的經驗，有哪些「世俗」的專業能力其實是可以為主所用的？"
-    }
-  },
-  "06-11": {
-    "action1": {
-      "weekday": "週四",
-      "topic": "為環境媒體",
-      "content": "為在數位平台尋找信仰答案的「隱形慕道友」禱告，求神的真光藉著網路內容引導他們。"
-    },
-    "action2": {
-      "weekday": "週四",
-      "topic": "餐桌安息",
-      "content": "今天的晚餐時間，與家人或室友用餐時，大家一起將手機收在餐桌旁的籃子裡，專注面對面聊天。"
-    },
-    "action3": {
-      "weekday": "週四",
-      "topic": "溫暖留言",
-      "content": "在一位朋友的發文下，留下具體且造就人的鼓勵（如：「謝謝你的分享，這段話今天對我非常有啟發！」）。"
-    },
-    "action4": {
-      "weekday": "週四",
-      "topic": "整理你的數位履歷",
-      "content": "為自己感到不足的地方禱告，承認我們無法做全部的事，學習謙卑仰望神的供應。"
-    }
-  },
-  "06-12": {
-    "action1": {
-      "weekday": "週五",
-      "topic": "為數位宣教士",
-      "content": "為懷恩堂能夠興起更多數位專業投入服事，使他們的恩賜為神所用、拓張神國的地界。"
-    },
-    "action2": {
-      "weekday": "週五",
-      "topic": "夜間斷電",
-      "content": "睡前最後 30 分鐘關閉發光螢幕。用閱讀實體書、手寫日記或拉伸代替滑手機。"
-    },
-    "action3": {
-      "weekday": "週五",
-      "topic": "感恩發送",
-      "content": "分享一段你最近從實體書、或是靈修中讀到的有智慧的金句，配上你的一句話心得。"
-    },
-    "action4": {
-      "weekday": "週五",
-      "topic": "整理你的數位履歷",
-      "content": "為懷恩堂的弟兄姊妹禱告，求神親自將擁有不同恩賜的肢體連結起來，形成堅強的團隊。"
-    }
-  },
-  "06-13": {
-    "action1": {
-      "weekday": "週六",
-      "topic": "為自身悔改禱告",
-      "content": "為自己這週在 LINE 群組中，是否有順手轉發未經證實的假訊息或八卦進行反思與求神赦免。"
-    },
-    "action2": {
-      "weekday": "週六",
-      "topic": "健康體魄",
-      "content": "進行 30 分鐘慢跑或快走，在過程中為這一週所經歷的喜樂禱告、讚美神。"
-    },
-    "action3": {
-      "weekday": "週六",
-      "topic": "真實生活",
-      "content": "分享你在教會見過最有愛的夫妻與家庭關係，不讓男女對立與家庭衝突掌控社群話語權。"
-    },
-    "action4": {
-      "weekday": "週六",
-      "topic": "整理你的數位履歷",
-      "content": "思考你可以如何主動認識其他對數位宣教有負擔的肢體，為未來的團隊合作預備心。"
-    }
-  },
-  "06-14": {
-    "action1": {
-      "weekday": "週日",
-      "topic": "為主日安息",
-      "content": "在主日崇拜中，為講員的口舌與所有會眾的聽道心田禱告，求神的話語成為大家面對週一挑戰的盾牌。"
-    },
-    "action2": {
-      "weekday": "週日",
-      "topic": "實體聖經",
-      "content": "主日崇拜不使用手機，預備紙張或筆記本，抄寫本週的經文，寫下今日領受的信息。"
-    },
-    "action3": {
-      "weekday": "週日",
-      "topic": "小卡轉發",
-      "content": "挑選一張傳遞心靈安息的圖文，分享到你的家長群組或工作群組，配上一句：「送給這週辛苦奮鬥的大家。」"
-    },
-    "action4": {
-      "weekday": "週日",
-      "topic": "整理你的數位履歷",
-      "content": "將你整理好的「數位履歷」在禱告中呈獻給神，宣告這一切能力都將指向神的心意。"
-    }
-  },
-  "06-15": {
-    "action1": {
-      "weekday": "週一",
-      "topic": "為事工守望",
-      "content": "為「數位事工禱告雲」點讚數最高的項目禱告，求神興起能夠推動此事工的同工。"
-    },
-    "action2": {
-      "weekday": "週一",
-      "topic": "環境清掃",
-      "content": "檢查手機系統的「螢幕使用時間」，並在系統中為最常滑的社群 App 設定嚴格的「每日限時 45 分鐘」。"
-    },
-    "action3": {
-      "weekday": "週一",
-      "topic": "指尖防守",
-      "content": "收到群組傳來未經證實的八卦或假消息時，拒絕順手轉發，用你的冷靜阻斷謠言的傳播。"
-    },
-    "action4": {
-      "weekday": "週一",
-      "topic": "嘗試接觸新的 AI 工具",
-      "content": "決定一款你這週要探索的 AI 工具（如 ChatGPT、Midjourney、Notion AI 等），並註冊帳號。"
-    }
-  },
-  "06-16": {
-    "action1": {
-      "weekday": "週二",
-      "topic": "為萬國禱告",
-      "content": "點選「為台灣禱告」，為今天抽選到的行政地區，從google地圖找到該地教會，為教會對周遭環境做光做鹽代求。"
-    },
-    "action2": {
-      "weekday": "週二",
-      "topic": "收操放電",
-      "content": "今天滑完手機後，與家中的寵物互動、去公園看松鼠與飛鳥、或赤腳踩踩草地 5 分鐘，重建大腦與真實世界的感官連結。"
-    },
-    "action3": {
-      "weekday": "週二",
-      "topic": "垃圾清理",
-      "content": "看到純粹挑起對立的廣告或假帳號，不留言爭論，直接按下「檢舉並封鎖」，主動做數位環境清潔。"
-    },
-    "action4": {
-      "weekday": "週二",
-      "topic": "嘗試接觸新的 AI 工具",
-      "content": "花 15 分鐘觀看該 AI 工具的入門教學影片，了解它的基本功能與應用場景。"
-    }
-  },
-  "06-17": {
-    "action1": {
-      "weekday": "週三",
-      "topic": "為世代心靈",
-      "content": "特別為 40 歲以上、每天被海量 LINE 群組訊息與對立輿論轟炸得精神疲憊的成人求神賞賜平靜。"
-    },
-    "action2": {
-      "weekday": "週三",
-      "topic": "實體單工",
-      "content": "在今天看一本書、或是寫一份報告的 45 分鐘內，挑戰「單一任務」，絕不一邊滑手機一邊做別的事。"
-    },
-    "action3": {
-      "weekday": "週三",
-      "topic": "正面點讚",
-      "content": "主動為 3 位很少受到關注、但一直在努力分享日常或服事的好友按讚，成為他們的默默支持者。"
-    },
-    "action4": {
-      "weekday": "週三",
-      "topic": "嘗試接觸新的 AI 工具",
-      "content": "實際動手操作！嘗試用該工具生成一段簡短的見證文案、一張配圖，或整理一篇靈修筆記。"
-    }
-  },
-  "06-18": {
-    "action1": {
-      "weekday": "週四",
-      "topic": "為環境媒體",
-      "content": "為在網路上發揮影響力的基督教媒體 KOL 與影音創作者禱告，求神保護他們的靈命與家庭。"
-    },
-    "action2": {
-      "weekday": "週四",
-      "topic": "餐桌安息",
-      "content": "今天的前五口飯菜，嘗試用心咀嚼30下再吞嚥。飯後回想這一週是否有吃到15種不同的蔬菜？"
-    },
-    "action3": {
-      "weekday": "週四",
-      "topic": "溫暖留言",
-      "content": "主動在社群上傳私訊給一位最近面臨工作、功課或服事重壓的同工，向他表達你誠摯的讚賞與關懷。"
-    },
-    "action4": {
-      "weekday": "週四",
-      "topic": "嘗試接觸新的 AI 工具",
-      "content": "思考這項工具可以如何應用在教會服事或個人傳福音的過程中？寫下一個具體的點子。"
-    }
-  },
-  "06-19": {
-    "action1": {
-      "weekday": "週五",
-      "topic": "為數位宣教士",
-      "content": "為自己的數位能力拓展禱告，曾經期盼能夠學習更多的火熱，求神點燃、為主所用。"
-    },
-    "action2": {
-      "weekday": "週五",
-      "topic": "夜間斷電",
-      "content": "嘗試「睡前 45 分鐘斷電」。將手機充電器徹底移出臥室，改用實體鬧鐘，享受高質量的安穩睡眠。"
-    },
-    "action3": {
-      "weekday": "週五",
-      "topic": "感恩發送",
-      "content": "分享一首能為你心靈帶來平靜、安息的優質音樂或詩歌連結，並手寫寫下它如何陪伴了你度過低谷。"
-    },
-    "action4": {
-      "weekday": "週五",
-      "topic": "嘗試接觸新的 AI 工具",
-      "content": "與一位朋友分享你這幾天嘗試新工具的心得，激發彼此對數位宣教的想像。"
-    }
-  },
-  "06-20": {
-    "action1": {
-      "weekday": "週六",
-      "topic": "為自身悔改禱告",
-      "content": "面對這週可能因網路輿論、群組爭論產生的血氣與論斷，在禱告中求耶穌的溫柔重置（Reset）我們。"
-    },
-    "action2": {
-      "weekday": "週六",
-      "topic": "健康體魄",
-      "content": "安排一個下午，到附近的公園漫遊，在公園草地上，找到至少10種不一樣的野花，把它們拍下來。"
-    },
-    "action3": {
-      "weekday": "週六",
-      "topic": "真實生活",
-      "content": "分享你如何正值良善與愛心回應職場困境，不讓撒但建造的虛假對立營壘形塑社會價值觀。"
-    },
-    "action4": {
-      "weekday": "週六",
-      "topic": "嘗試接觸新的 AI 工具",
-      "content": "評估這項工具是否適合持續深入學習？若是，為自己規劃接下來的學習步驟。"
-    }
-  },
-  "06-21": {
-    "action1": {
-      "weekday": "週日",
-      "topic": "為主日安息",
-      "content": "禱告求神保守我們在主日能徹底放下工作的 LINE 訊息，享受與神、與弟兄姊妹面對面相處的聖日安息。"
-    },
-    "action2": {
-      "weekday": "週日",
-      "topic": "實體聖經",
-      "content": "今天主日，從崇拜到小組查經，全程使用實體聖經，完全不打開手機的經文 App，專注於上帝話語的直接同在。"
-    },
-    "action3": {
-      "weekday": "週日",
-      "topic": "小卡轉發",
-      "content": "轉發推薦一個讓你感覺有盼望的影音頻道或藝術家，用心寫下你推薦的理由。"
-    },
-    "action4": {
-      "weekday": "週日",
-      "topic": "嘗試接觸新的 AI 工具",
-      "content": "感謝神賜下科技的智慧，求神保守我們善用工具，成為傳遞愛與真理的器皿，而不被工具轄制。"
-    }
-  },
-  "06-22": {
-    "action1": {
-      "weekday": "週一",
-      "topic": "為事工守望",
-      "content": "為你在這一個月對「數位事工」的感動、腦中浮現的畫面感謝神，相信做新事的神必為懷恩堂開路。"
-    },
-    "action2": {
-      "weekday": "週一",
-      "topic": "環境清掃",
-      "content": "打開你的youtube或社群平台，將首頁跳出的前20則訊息，挑出3-5個項目選擇「不感興趣」。"
-    },
-    "action3": {
-      "weekday": "週一",
-      "topic": "指尖防守",
-      "content": "享受關閉非人際推送的第四週。面對敏感的社會爭議議題時，若要發言，堅持只寫下促進和睦與理解的字眼。"
-    },
-    "action4": {
-      "weekday": "週一",
-      "topic": "為主留下時間與空間",
-      "content": "誠實面對自己：我是否經常覺得「太忙了，沒時間服事」？為這份被世界塞滿的忙碌向神悔改。"
-    }
-  },
-  "06-23": {
-    "action1": {
-      "weekday": "週二",
-      "topic": "為萬國禱告",
-      "content": "點選「為萬國禱告」，為今天抽選到的國家，從google地圖找到其首都，宣告神的王權要在該地彰顯。"
-    },
-    "action2": {
-      "weekday": "週二",
-      "topic": "收操放電",
-      "content": "使用完3C後進行 5 分鐘自然接觸已成為肌肉記憶。感受自己在大腦 Reset 後，專注力與心靈平靜度的顯著提升。"
-    },
-    "action3": {
-      "weekday": "週二",
-      "topic": "垃圾清理",
-      "content": "協助你的孩子、家人或身邊長輩，教導他們如何封鎖詐騙與隱藏垃圾廢文，當他們數位環境的管家。"
-    },
-    "action4": {
-      "weekday": "週二",
-      "topic": "為主留下時間與空間",
-      "content": "檢視你的每週行事曆，找出哪些時間是浪費在無意義的滑手機或追劇上？"
-    }
-  },
-  "06-24": {
-    "action1": {
-      "weekday": "週三",
-      "topic": "為世代心靈",
-      "content": "為台灣在 Threads 上集體傾倒焦慮與空虛的年輕世代禱告，求神興起更多能陪伴他們的年輕信徒。"
-    },
-    "action2": {
-      "weekday": "週三",
-      "topic": "實體單工",
-      "content": "和身邊一位朋友分享這一個月來專心於實體、不被手機/3C分新的經驗與感受。"
-    },
-    "action3": {
-      "weekday": "週三",
-      "topic": "正面點讚",
-      "content": "主動為你所看到的優質基督教媒體、福音創作者的貼文按讚與留言，用實際行動在數位禾場上托住他們。"
-    },
-    "action4": {
-      "weekday": "週三",
-      "topic": "為主留下時間與空間",
-      "content": "嘗試每天刻意空出 15 分鐘，甚麼都不做，單單等候神，將這段時間完全分別為聖。"
-    }
-  },
-  "06-25": {
-    "action1": {
-      "weekday": "週四",
-      "topic": "為環境媒體",
-      "content": "祝福所有在網路上傳遞真理、安慰的福音貼文與信仰小卡，宣告這些內容要像微光照亮深夜的黑暗。"
-    },
-    "action2": {
-      "weekday": "週四",
-      "topic": "餐桌安息",
-      "content": "享受每一餐沒有手機干擾的美味，回想你這一個月吃得最開心的一餐，為美好的用餐心情禱告。"
-    },
-    "action3": {
-      "weekday": "週四",
-      "topic": "溫暖留言",
-      "content": "主動關心一位在社群上發出沮喪、空虛文字的朋友，用私訊送出溫暖的代求與問候，不說教，只傾聽。"
-    },
-    "action4": {
-      "weekday": "週四",
-      "topic": "為主留下時間與空間",
-      "content": "求神賜給我們智慧，懂得拒絕不必要的應酬或瑣事，讓生命留下更多時間給神。"
-    }
-  },
-  "06-26": {
-    "action1": {
-      "weekday": "週五",
-      "topic": "為數位宣教士",
-      "content": "為所有心中對數位宣教有熱忱的肢體，求神挪去他們前方的攔阻，充足地供應他們，使他們願意承接懷恩堂數位事工的呼召。"
-    },
-    "action2": {
-      "weekday": "週五",
-      "topic": "夜間斷電",
-      "content": "享受長達一個月睡前斷電的恩典，感受睡眠品質的大幅改善與清晨起床時的清爽。"
-    },
-    "action3": {
-      "weekday": "週五",
-      "topic": "感恩發送",
-      "content": "分享你過去一個月實踐「數位安息」的感恩得著，見證神如何在你安靜下來時重新更新了你。"
-    },
-    "action4": {
-      "weekday": "週五",
-      "topic": "為主留下時間與空間",
-      "content": "禱告求神調整我們的價值觀：「不是塞滿了所有時間再說無法為神作工，而是先將時間獻給神。」"
-    }
-  },
-  "06-27": {
-    "action1": {
-      "weekday": "週六",
-      "topic": "為自身悔改禱告",
-      "content": "檢視這一個月在社群上的發言，感謝神保守我們的舌頭與指尖，宣告我們已退出了那場鍵盤降火的遊戲。"
-    },
-    "action2": {
-      "weekday": "週六",
-      "topic": "健康體魄",
-      "content": "挑戰飯後10分鐘內就起身散步20分鐘，已有研究證實飯後輕度有氧能穩定血糖、避免脂肪堆積。"
-    },
-    "action3": {
-      "weekday": "週六",
-      "topic": "真實生活",
-      "content": "分享這個月你在實體生活中，最讓你感到幸福、留有餘韻的 3 個無網日常瞬間，影響身邊人回歸實體。"
-    },
-    "action4": {
-      "weekday": "週六",
-      "topic": "為主留下時間與空間",
-      "content": "制定一個具體且可行的「微服事」計畫，例如每週花一小時參與線上關懷或製作福音圖卡。"
-    }
-  },
-  "06-28": {
-    "action1": {
-      "weekday": "週日",
-      "topic": "為主日安息",
-      "content": "讀以賽亞書五十二7，為全台灣正透過網路尋求心靈平安的隱形慕道友代禱，宣告佳美的福音腳蹤要在數位禾場展開。"
-    },
-    "action2": {
-      "weekday": "週日",
-      "topic": "實體聖經",
-      "content": "拿起實體聖經，讀完一篇詩篇。感謝神在過去一個月，藉著實體聖經重置了你浮躁的心靈。"
-    },
-    "action3": {
-      "weekday": "週日",
-      "topic": "小卡轉發",
-      "content": "讀以賽亞書五十二7，利用AI 做成圖卡轉發到你的群組中，分享你這個月在數位世界作光、為神所用的喜樂。"
-    },
-    "action4": {
-      "weekday": "週日",
-      "topic": "為主留下時間與空間",
-      "content": "帶著悔改與更新的心，重新將主權交還給神，宣告你的時間與生命都為主所用。"
-    }
-  },
-  "06-29": {
-    "action1": {
-      "weekday": "週一",
-      "topic": "為事工守望",
-      "content": "為懷恩堂數位事工的永續經營與新一輪同工招募求神開路。"
-    },
-    "action2": {
-      "weekday": "週一",
-      "topic": "路徑上的脂油",
-      "content": "統計 6 月份的每日平均螢幕使用時間，看著減少的數字，感謝神奪回了時間主權。"
-    },
-    "action3": {
-      "weekday": "週一",
-      "topic": "指尖防守最後檢視",
-      "content": "看著自己過去一個月在網路上充滿平安、造就人的發言，感謝神保守了你的舌頭與指尖。"
-    },
-    "action4": {
-      "weekday": "週一",
-      "topic": "行動還會延續",
-      "content": "回顧這三十天，神在「數位宣教士」的呼召上給了你什麼清楚的異象與感動？寫下來。"
-    }
-  },
-  "06-30": {
-    "action1": {
-      "weekday": "週二",
-      "topic": "為神國降臨",
-      "content": "為神在數位虛擬世界上坐著為王感恩，為自己這三十天、神如何調整你的屬靈眼光感恩。"
-    },
-    "action2": {
-      "weekday": "週二",
-      "topic": "將注意力回歸於神",
-      "content": "在 30 天的最後，走向一棵大樹，深呼吸，對神宣告：「演算法不再決定我的心情，因為我的靈魂在基督裡享有真正的安息！」"
-    },
-    "action3": {
-      "weekday": "週二",
-      "topic": "垃圾清理習慣續航",
-      "content": "寫下這 30 天數位之光行動的收穫，並在禱告中謝恩：「我已靠著主在指尖世界裡做光做鹽，踩下最美的腳蹤！」"
-    },
-    "action4": {
-      "weekday": "週二",
-      "topic": "行動還會延續",
-      "content": "為接下來懷恩堂即將開展的數位事工禱告，宣告自己已經預備好，隨時回應神的差遣！"
+  "en": {
+    "06-01": {
+      "action1": {
+        "weekday": "Mon",
+        "topic": "Ministry Watch",
+        "content": "Pray for God's protection over the sprouting vision of digital missions from the recently concluded conference, that the congregation's hearts won't grow cold."
+      },
+      "action2": {
+        "weekday": "Mon",
+        "topic": "Environment Cleanup",
+        "content": "Check your phone's app push notifications and pick three to turn off (e.g., shopping, games, or news likes/alerts) to reduce active interruptions."
+      },
+      "action3": {
+        "weekday": "Mon",
+        "topic": "Fingertip Defense",
+        "content": "When seeing sensational news or trash posts on Threads that incite division, absolutely do not click—scroll right past them."
+      },
+      "action4": {
+        "weekday": "Mon",
+        "topic": "Clarifying Your Digital Calling",
+        "content": "Quiet yourself before God. Ask Him to open your spiritual eyes to see the unmet gospel needs in this digital generation."
+      }
+    },
+    "06-02": {
+      "action1": {
+        "weekday": "Tue",
+        "topic": "Pray for Nations",
+        "content": "Enter the missions conference page, click \"Pray for Taiwan,\" watch the promo video, and pray for the local needs."
+      },
+      "action2": {
+        "weekday": "Tue",
+        "topic": "Cool Down & Discharge",
+        "content": "Today, every time you finish using a 3C device, force yourself to look away and gaze at green plants, balcony potted plants, or the sky outside your window for 1 minute."
+      },
+      "action3": {
+        "weekday": "Tue",
+        "topic": "Trash Cleanup",
+        "content": "Block or unfollow 3 fan pages or accounts that frequently post negative energy or bitter remarks."
+      },
+      "action4": {
+        "weekday": "Tue",
+        "topic": "Clarifying Your Digital Calling",
+        "content": "Consider the content creation side: \"influencers, making videos, designing graphics, regular posting.\" Is this what God is prompting you to do?"
+      }
+    },
+    "06-03": {
+      "action1": {
+        "weekday": "Wed",
+        "topic": "Hearts of this Gen",
+        "content": "Pray for your own heavy use of 3C devices, emotionally triggered outbursts, and hijacked attention that robs your rest. Ask God for true peace free from condemnation."
+      },
+      "action2": {
+        "weekday": "Wed",
+        "topic": "Physical Monotasking",
+        "content": "During one of your work or study sessions today (e.g., 30 minutes), put your phone face down or avoid having videos playing in the background."
+      },
+      "action3": {
+        "weekday": "Wed",
+        "topic": "Positive Likes",
+        "content": "Actively like 3 posts from friends on your feed that are warm, joyful, or full of positive energy, giving them your most direct support."
+      },
+      "action4": {
+        "weekday": "Wed",
+        "topic": "Clarifying Your Digital Calling",
+        "content": "Consider the community side: \"building groups, caring for and pastoring online seekers.\" Do you have a burden to pastor lost souls?"
+      }
+    },
+    "06-04": {
+      "action1": {
+        "weekday": "Thu",
+        "topic": "Media Environment",
+        "content": "Pray for the online environment of the top three platforms (FB, LINE, Threads) you scrolled through today. Ask God to keep your heart from dancing with anger."
+      },
+      "action2": {
+        "weekday": "Thu",
+        "topic": "Table Sabbath",
+        "content": "During your lunch break today, put your phone on silent or turn off your computer screen, and focus entirely on savoring the taste of your food."
+      },
+      "action3": {
+        "weekday": "Thu",
+        "topic": "Warm Comments",
+        "content": "Leave a sincere, simple greeting under a good friend's post sharing their daily life (e.g., \"Seeing your post brightened my day!\")."
+      },
+      "action4": {
+        "weekday": "Thu",
+        "topic": "Clarifying Your Digital Calling",
+        "content": "Consider the education side: \"writing and designing Sunday school materials tailored for the digital generation.\" Do you have a passion for translating truth?"
+      }
+    },
+    "06-05": {
+      "action1": {
+        "weekday": "Fri",
+        "topic": "Digital Missionaries",
+        "content": "Pray for Christians laboring in Taiwan's online media. Ask God to bless the work of their hands to edify more people in need."
+      },
+      "action2": {
+        "weekday": "Fri",
+        "topic": "Nighttime Power Off",
+        "content": "One hour before bed, turn off the lights in your room, and turn off or cover extra light sources to allow for a more peaceful sleep."
+      },
+      "action3": {
+        "weekday": "Fri",
+        "topic": "Sending Gratitude",
+        "content": "Share on social media (or LINE timeline) 1 small blessing you encountered today that you are thankful for, spreading a glimmer of positivity."
+      },
+      "action4": {
+        "weekday": "Fri",
+        "topic": "Clarifying Your Digital Calling",
+        "content": "Consider the technical side: \"building church apps, improving administrative efficiency.\" Are you willing to dedicate your professional skills to God's kingdom?"
+      }
+    },
+    "06-06": {
+      "action1": {
+        "weekday": "Sat",
+        "topic": "Repentance",
+        "content": "Close your eyes for 1 minute and review your phone usage this week. Ask God to wash away the irritation accumulated from passively reading unedifying gossip."
+      },
+      "action2": {
+        "weekday": "Sat",
+        "topic": "Healthy Body",
+        "content": "Go for a 20-minute jog or brisk walk, and as you do, pray and praise God for the joy you experienced this week."
+      },
+      "action3": {
+        "weekday": "Sat",
+        "topic": "Real Life",
+        "content": "Share an unfiltered photo of beautiful nature you took on a walk, and write a sentence thanking God for His creation."
+      },
+      "action4": {
+        "weekday": "Sat",
+        "topic": "Clarifying Your Digital Calling",
+        "content": "Open the \"Digital Ministry Prayer Cloud.\" Do you see a vision in the keywords? Ask God to inspire you with new ways to communicate the faith."
+      }
+    },
+    "06-07": {
+      "action1": {
+        "weekday": "Sun",
+        "topic": "Sabbath Rest",
+        "content": "10 minutes before the service begins, turn off your phone or put it on silent in your bag. Quietly pray for the congregation beside you to find rest as you worship together."
+      },
+      "action2": {
+        "weekday": "Sun",
+        "topic": "Physical Bible",
+        "content": "Pick up a physical Bible for Sunday reading. Avoid using a phone app for scripture, and experience the focused warmth of flipping through paper pages."
+      },
+      "action3": {
+        "weekday": "Sun",
+        "topic": "Card Forwarding",
+        "content": "Share an article you believe is highly worth reading by more people, and thoughtfully write down your reason for recommending it."
+      },
+      "action4": {
+        "weekday": "Sun",
+        "topic": "Clarifying Your Digital Calling",
+        "content": "During Sunday rest, entrust all the possibilities you thought about this week to the Lord, asking Him to personally point out the path for you."
+      }
+    },
+    "06-08": {
+      "action1": {
+        "weekday": "Mon",
+        "topic": "Ministry Watch",
+        "content": "Pray specifically for the preparation, technology, and coworkers of the highly anticipated \"Digital Ministry Prayer Cloud.\""
+      },
+      "action2": {
+        "weekday": "Mon",
+        "topic": "Environment Cleanup",
+        "content": "Open your YouTube or social media platforms and unfollow accounts you haven't watched in a long time."
+      },
+      "action3": {
+        "weekday": "Mon",
+        "topic": "Fingertip Defense",
+        "content": "When encountering others loudly arguing or publicly shaming someone in the comment sections of Threads or Facebook, insist on not leaving a single word of sarcasm."
+      },
+      "action4": {
+        "weekday": "Mon",
+        "topic": "Organizing Your Digital Resume",
+        "content": "Write down three digital skills or software tools you are best at (e.g., video editing, copywriting, programming)."
+      }
+    },
+    "06-09": {
+      "action1": {
+        "weekday": "Tue",
+        "topic": "Pray for Nations",
+        "content": "Enter the missions conference page, click \"Pray for Nations,\" watch the promo, and spend 3 minutes praying for the local mission needs and the peace of missionary families."
+      },
+      "action2": {
+        "weekday": "Tue",
+        "topic": "Cool Down & Discharge",
+        "content": "Whenever you scroll on your phone continuously for over 15 minutes, immediately walk to the balcony or yard after putting it down. Spend 5 minutes connecting with plants/animals or observing the sky."
+      },
+      "action3": {
+        "weekday": "Tue",
+        "topic": "Trash Cleanup",
+        "content": "Actively leave a LINE trash group that frequently spreads political gossip, conspiracy theories, or emotional flame wars."
+      },
+      "action4": {
+        "weekday": "Tue",
+        "topic": "Organizing Your Digital Resume",
+        "content": "Write down one digital skill you possess but haven't mastered yet, but are very interested in learning. Pray for this passion to learn."
+      }
+    },
+    "06-10": {
+      "action1": {
+        "weekday": "Wed",
+        "topic": "Hearts of this Gen",
+        "content": "Pray especially for youths under 30 who are kidnapped by the perfect filters of IG and short videos. Ask God to grant them the security of unconditional love and acceptance."
+      },
+      "action2": {
+        "weekday": "Wed",
+        "topic": "Physical Monotasking",
+        "content": "Place visible sticky notes in the spaces where you use 3C devices the most: \"Focus, don't be distracted,\" \"Remember to discharge after using 3C.\""
+      },
+      "action3": {
+        "weekday": "Wed",
+        "topic": "Positive Likes",
+        "content": "Actively vote with your likes for 3 posts on your feed that carry positive energy, value, or professional knowledge."
+      },
+      "action4": {
+        "weekday": "Wed",
+        "topic": "Organizing Your Digital Resume",
+        "content": "Review your past work or ministry experiences. What \"secular\" professional skills can actually be used for the Lord?"
+      }
+    },
+    "06-11": {
+      "action1": {
+        "weekday": "Thu",
+        "topic": "Media Environment",
+        "content": "Pray for the \"invisible seekers\" looking for answers about faith on digital platforms. May God's true light guide them through online content."
+      },
+      "action2": {
+        "weekday": "Thu",
+        "topic": "Table Sabbath",
+        "content": "During dinner today, when eating with family or roommates, have everyone put their phones in a basket by the table and focus on face-to-face conversation."
+      },
+      "action3": {
+        "weekday": "Thu",
+        "topic": "Warm Comments",
+        "content": "Leave a specific and edifying encouragement under a friend's post (e.g., \"Thank you for sharing, this really inspired me today!\")."
+      },
+      "action4": {
+        "weekday": "Thu",
+        "topic": "Organizing Your Digital Resume",
+        "content": "Pray about the areas where you feel inadequate. Acknowledge that we cannot do everything, and learn to humbly look to God's provision."
+      }
+    },
+    "06-12": {
+      "action1": {
+        "weekday": "Fri",
+        "topic": "Digital Missionaries",
+        "content": "Pray that GBC can raise up more digital professionals to serve, using their gifts for God to expand the borders of His kingdom."
+      },
+      "action2": {
+        "weekday": "Fri",
+        "topic": "Nighttime Power Off",
+        "content": "Turn off glowing screens for the last 30 minutes before bed. Replace scrolling with reading a physical book, writing a journal, or stretching."
+      },
+      "action3": {
+        "weekday": "Fri",
+        "topic": "Sending Gratitude",
+        "content": "Share a wise quote you recently read from a physical book or devotional, along with a one-sentence reflection of your own."
+      },
+      "action4": {
+        "weekday": "Fri",
+        "topic": "Organizing Your Digital Resume",
+        "content": "Pray for the brothers and sisters of GBC. Ask God to personally connect members with different gifts to form a strong team."
+      }
+    },
+    "06-13": {
+      "action1": {
+        "weekday": "Sat",
+        "topic": "Repentance",
+        "content": "Reflect on whether you casually forwarded unverified fake news or gossip in LINE groups this week, and ask God for forgiveness."
+      },
+      "action2": {
+        "weekday": "Sat",
+        "topic": "Healthy Body",
+        "content": "Go for a 30-minute jog or brisk walk, and as you do, pray and praise God for the joy you experienced this week."
+      },
+      "action3": {
+        "weekday": "Sat",
+        "topic": "Real Life",
+        "content": "Share about the most loving couple or family relationship you've seen at church, refusing to let gender conflicts and family drama dominate social media narratives."
+      },
+      "action4": {
+        "weekday": "Sat",
+        "topic": "Organizing Your Digital Resume",
+        "content": "Think about how you can actively get to know other members who have a burden for digital missions, preparing your heart for future teamwork."
+      }
+    },
+    "06-14": {
+      "action1": {
+        "weekday": "Sun",
+        "topic": "Sabbath Rest",
+        "content": "During Sunday service, pray for the speaker's words and the listening hearts of the congregation. May God's word be a shield for everyone facing Monday's challenges."
+      },
+      "action2": {
+        "weekday": "Sun",
+        "topic": "Physical Bible",
+        "content": "Do not use your phone during Sunday service. Prepare paper or a notebook to handwrite this week's verses and the message you received today."
+      },
+      "action3": {
+        "weekday": "Sun",
+        "topic": "Card Forwarding",
+        "content": "Pick an image or text that conveys spiritual rest and share it to your parents' or work group, adding: \"A gift for everyone who worked hard this week.\""
+      },
+      "action4": {
+        "weekday": "Sun",
+        "topic": "Organizing Your Digital Resume",
+        "content": "Present your organized \"Digital Resume\" to God in prayer, declaring that all these abilities will point to God's will."
+      }
+    },
+    "06-15": {
+      "action1": {
+        "weekday": "Mon",
+        "topic": "Ministry Watch",
+        "content": "Pray for the most \"liked\" items on the \"Digital Ministry Prayer Cloud.\" Ask God to raise up coworkers who can drive these ministries forward."
+      },
+      "action2": {
+        "weekday": "Mon",
+        "topic": "Environment Cleanup",
+        "content": "Check your phone's \"Screen Time\" and set a strict \"45-minute daily limit\" for your most used social media app."
+      },
+      "action3": {
+        "weekday": "Mon",
+        "topic": "Fingertip Defense",
+        "content": "When receiving unverified gossip or fake news in a group, refuse to casually forward it. Use your calmness to block the spread of rumors."
+      },
+      "action4": {
+        "weekday": "Mon",
+        "topic": "Trying New AI Tools",
+        "content": "Decide on one AI tool you want to explore this week (like ChatGPT, Midjourney, Notion AI, etc.) and register an account."
+      }
+    },
+    "06-16": {
+      "action1": {
+        "weekday": "Tue",
+        "topic": "Pray for Nations",
+        "content": "Click \"Pray for Taiwan.\" For the administrative district drawn today, find a local church on Google Maps and pray for that church to be salt and light in its community."
+      },
+      "action2": {
+        "weekday": "Tue",
+        "topic": "Cool Down & Discharge",
+        "content": "After scrolling on your phone today, interact with a pet, go to a park to watch squirrels and birds, or walk barefoot on the grass for 5 minutes to rebuild your brain's sensory connection with the real world."
+      },
+      "action3": {
+        "weekday": "Tue",
+        "topic": "Trash Cleanup",
+        "content": "When seeing ads or fake accounts purely inciting division, don't comment or argue. Simply click \"Report and Block\" to actively clean your digital environment."
+      },
+      "action4": {
+        "weekday": "Tue",
+        "topic": "Trying New AI Tools",
+        "content": "Spend 15 minutes watching a beginner tutorial video for that AI tool to understand its basic functions and use cases."
+      }
+    },
+    "06-17": {
+      "action1": {
+        "weekday": "Wed",
+        "topic": "Hearts of this Gen",
+        "content": "Pray especially for adults over 40 who are mentally exhausted by the daily bombardment of LINE group messages and polarized public opinions. Ask God to grant them calm."
+      },
+      "action2": {
+        "weekday": "Wed",
+        "topic": "Physical Monotasking",
+        "content": "For 45 minutes while reading a book or writing a report today, challenge yourself to \"monotask\" and absolutely do not scroll on your phone while doing other things."
+      },
+      "action3": {
+        "weekday": "Wed",
+        "topic": "Positive Likes",
+        "content": "Actively like posts from 3 friends who rarely get attention but consistently try to share their daily lives or ministries, becoming their silent supporter."
+      },
+      "action4": {
+        "weekday": "Wed",
+        "topic": "Trying New AI Tools",
+        "content": "Get hands-on! Try using the tool to generate a short testimony draft, an accompanying image, or organize a devotional note."
+      }
+    },
+    "06-18": {
+      "action1": {
+        "weekday": "Thu",
+        "topic": "Media Environment",
+        "content": "Pray for Christian media KOLs and video creators who are influential online. Ask God to protect their spiritual lives and families."
+      },
+      "action2": {
+        "weekday": "Thu",
+        "topic": "Table Sabbath",
+        "content": "For the first five bites of your meal today, try to mindfully chew 30 times before swallowing. After the meal, recall if you've eaten 15 different types of vegetables this week."
+      },
+      "action3": {
+        "weekday": "Thu",
+        "topic": "Warm Comments",
+        "content": "Actively send a private message on social media to a coworker who is currently under heavy pressure from work, studies, or ministry, expressing your sincere appreciation and care."
+      },
+      "action4": {
+        "weekday": "Thu",
+        "topic": "Trying New AI Tools",
+        "content": "Think about how this tool could be applied to church ministry or personal evangelism? Write down one specific idea."
+      }
+    },
+    "06-19": {
+      "action1": {
+        "weekday": "Fri",
+        "topic": "Digital Missionaries",
+        "content": "Pray for the expansion of your own digital skills. If you've ever had a burning desire to learn more, ask God to ignite it so you can be used by Him."
+      },
+      "action2": {
+        "weekday": "Fri",
+        "topic": "Nighttime Power Off",
+        "content": "Try a \"45-minute pre-sleep power off.\" Completely move your phone charger out of the bedroom, switch to a physical alarm clock, and enjoy high-quality, peaceful sleep."
+      },
+      "action3": {
+        "weekday": "Fri",
+        "topic": "Sending Gratitude",
+        "content": "Share a link to high-quality music or a worship song that brings peace and rest to your soul, and write about how it accompanied you through a low point."
+      },
+      "action4": {
+        "weekday": "Fri",
+        "topic": "Trying New AI Tools",
+        "content": "Share your experience of trying the new tool these past few days with a friend, sparking each other's imagination for digital missions."
+      }
+    },
+    "06-20": {
+      "action1": {
+        "weekday": "Sat",
+        "topic": "Repentance",
+        "content": "Facing the fleshly reactions and judgments that may have arisen from online public opinions or group debates this week, ask for Jesus' gentle reset in your prayers."
+      },
+      "action2": {
+        "weekday": "Sat",
+        "topic": "Healthy Body",
+        "content": "Schedule an afternoon to wander in a nearby park. Find at least 10 different wild flowers on the park grass and take pictures of them."
+      },
+      "action3": {
+        "weekday": "Sat",
+        "topic": "Real Life",
+        "content": "Share how you responded to workplace difficulties with goodness and love, refusing to let the false strongholds of division built by Satan shape societal values."
+      },
+      "action4": {
+        "weekday": "Sat",
+        "topic": "Trying New AI Tools",
+        "content": "Evaluate whether this tool is suitable for continued, in-depth learning. If so, plan out your next learning steps."
+      }
+    },
+    "06-21": {
+      "action1": {
+        "weekday": "Sun",
+        "topic": "Sabbath Rest",
+        "content": "Pray that God will help us completely put down work-related LINE messages on Sunday, enjoying the holy day of rest face-to-face with God and brothers and sisters."
+      },
+      "action2": {
+        "weekday": "Sun",
+        "topic": "Physical Bible",
+        "content": "Today on Sunday, from the worship service to small group Bible study, use a physical Bible the entire time. Do not open your phone's Bible app at all, focusing on the direct presence of God's word."
+      },
+      "action3": {
+        "weekday": "Sun",
+        "topic": "Card Forwarding",
+        "content": "Forward and recommend a video channel or artist that makes you feel hopeful, and thoughtfully write down your reason for recommending them."
+      },
+      "action4": {
+        "weekday": "Sun",
+        "topic": "Trying New AI Tools",
+        "content": "Thank God for providing the wisdom of technology. Ask God to help us use tools well, becoming vessels to transmit love and truth, rather than being controlled by the tools."
+      }
+    },
+    "06-22": {
+      "action1": {
+        "weekday": "Mon",
+        "topic": "Ministry Watch",
+        "content": "Thank God for the inspirations and images that have surfaced in your mind regarding \"digital missions\" this month. Believe that the God who does new things will make a way for GBC."
+      },
+      "action2": {
+        "weekday": "Mon",
+        "topic": "Environment Cleanup",
+        "content": "Open your YouTube or social media platforms. Pick 3-5 items from the top 20 recommended posts on your homepage and select \"Not interested.\""
+      },
+      "action3": {
+        "weekday": "Mon",
+        "topic": "Fingertip Defense",
+        "content": "Enjoy your fourth week of turning off non-interpersonal push notifications. When facing sensitive social controversies, if you must speak, insist on only using words that promote peace and understanding."
+      },
+      "action4": {
+        "weekday": "Mon",
+        "topic": "Leaving Time and Space for the Lord",
+        "content": "Be honest with yourself: Do I often feel \"too busy to serve\"? Repent to God for this busyness stuffed by the world."
+      }
+    },
+    "06-23": {
+      "action1": {
+        "weekday": "Tue",
+        "topic": "Pray for Nations",
+        "content": "Click \"Pray for Nations.\" For the country drawn today, find its capital on Google Maps and declare that God's kingship will be manifested there."
+      },
+      "action2": {
+        "weekday": "Tue",
+        "topic": "Cool Down & Discharge",
+        "content": "5 minutes of nature contact after using 3C devices has become muscle memory. Feel the significant improvement in your focus and mental calmness after resetting your brain."
+      },
+      "action3": {
+        "weekday": "Tue",
+        "topic": "Trash Cleanup",
+        "content": "Assist your children, family, or elders around you, teaching them how to block scams and hide trash posts, becoming stewards of their digital environment."
+      },
+      "action4": {
+        "weekday": "Tue",
+        "topic": "Leaving Time and Space for the Lord",
+        "content": "Review your weekly calendar. Find out what time is wasted on meaningless phone scrolling or binge-watching."
+      }
+    },
+    "06-24": {
+      "action1": {
+        "weekday": "Wed",
+        "topic": "Hearts of this Gen",
+        "content": "Pray for the young generation in Taiwan collectively pouring out their anxiety and emptiness on Threads. Ask God to raise up more young believers who can accompany them."
+      },
+      "action2": {
+        "weekday": "Wed",
+        "topic": "Physical Monotasking",
+        "content": "Share your experiences and feelings with a friend about focusing on real life and not being distracted by phones/3C devices this past month."
+      },
+      "action3": {
+        "weekday": "Wed",
+        "topic": "Positive Likes",
+        "content": "Actively like and comment on posts from high-quality Christian media and gospel creators you see, supporting them in the digital harvest field with practical actions."
+      },
+      "action4": {
+        "weekday": "Wed",
+        "topic": "Leaving Time and Space for the Lord",
+        "content": "Try to intentionally set aside 15 minutes every day doing nothing but waiting on God, completely sanctifying this time."
+      }
+    },
+    "06-25": {
+      "action1": {
+        "weekday": "Thu",
+        "topic": "Media Environment",
+        "content": "Bless all gospel posts and faith cards that convey truth and comfort online. Declare that these contents will shine like a glimmer of light in the dark night."
+      },
+      "action2": {
+        "weekday": "Thu",
+        "topic": "Table Sabbath",
+        "content": "Enjoy the deliciousness of every meal without phone interference. Recall your happiest meal this month and pray with gratitude for a wonderful dining mood."
+      },
+      "action3": {
+        "weekday": "Thu",
+        "topic": "Warm Comments",
+        "content": "Actively check on a friend who posted words of depression or emptiness on social media. Send a warm private message of intercession and greeting—no preaching, just listening."
+      },
+      "action4": {
+        "weekday": "Thu",
+        "topic": "Leaving Time and Space for the Lord",
+        "content": "Ask God to give us the wisdom to refuse unnecessary social events or trivial matters, leaving more time in our lives for God."
+      }
+    },
+    "06-26": {
+      "action1": {
+        "weekday": "Fri",
+        "topic": "Digital Missionaries",
+        "content": "Pray for all members whose hearts are passionate about digital missions. Ask God to remove the obstacles before them and supply them abundantly, making them willing to accept GBC's digital ministry calling."
+      },
+      "action2": {
+        "weekday": "Fri",
+        "topic": "Nighttime Power Off",
+        "content": "Enjoy the grace of a full month of pre-sleep power offs. Feel the dramatic improvement in your sleep quality and how refreshed you feel when waking up in the morning."
+      },
+      "action3": {
+        "weekday": "Fri",
+        "topic": "Sending Gratitude",
+        "content": "Share your grateful takeaways from practicing \"Digital Sabbath\" over the past month, testifying how God renewed you when you quieted down."
+      },
+      "action4": {
+        "weekday": "Fri",
+        "topic": "Leaving Time and Space for the Lord",
+        "content": "Pray for God to adjust our values: \"It's not about stuffing our time full and then saying we can't work for God; it's about offering our time to God first.\""
+      }
+    },
+    "06-27": {
+      "action1": {
+        "weekday": "Sat",
+        "topic": "Repentance",
+        "content": "Review your social media comments over the past month. Thank God for guarding our tongues and fingertips, and declare that we have exited the game of keyboard wars."
+      },
+      "action2": {
+        "weekday": "Sat",
+        "topic": "Healthy Body",
+        "content": "Challenge yourself to get up and walk for 20 minutes within 10 minutes after a meal. Research confirms that light cardio after meals stabilizes blood sugar and prevents fat accumulation."
+      },
+      "action3": {
+        "weekday": "Sat",
+        "topic": "Real Life",
+        "content": "Share the 3 most joyful, lingering offline moments you experienced in your physical life this month, influencing those around you to return to real life."
+      },
+      "action4": {
+        "weekday": "Sat",
+        "topic": "Leaving Time and Space for the Lord",
+        "content": "Formulate a specific and feasible \"micro-service\" plan, such as spending one hour a week on online caring or making gospel image cards."
+      }
+    },
+    "06-28": {
+      "action1": {
+        "weekday": "Sun",
+        "topic": "Sabbath Rest",
+        "content": "Read Isaiah 52:7. Pray for the invisible seekers all over Taiwan who are looking for spiritual peace online. Declare that the beautiful footsteps of the gospel will unfold in the digital harvest field."
+      },
+      "action2": {
+        "weekday": "Sun",
+        "topic": "Physical Bible",
+        "content": "Pick up your physical Bible and read a Psalm. Thank God for resetting your restless soul through the physical Bible over the past month."
+      },
+      "action3": {
+        "weekday": "Sun",
+        "topic": "Card Forwarding",
+        "content": "Read Isaiah 52:7. Use AI to create an image card and forward it to your groups, sharing the joy of being salt and light and being used by God in the digital world this month."
+      },
+      "action4": {
+        "weekday": "Sun",
+        "topic": "Leaving Time and Space for the Lord",
+        "content": "With a heart of repentance and renewal, hand the sovereignty back to God, declaring that your time and life are ready to be used by the Lord."
+      }
+    },
+    "06-29": {
+      "action1": {
+        "weekday": "Mon",
+        "topic": "Ministry Watch",
+        "content": "Pray for God to open a way for the sustainable operation of GBC's digital ministries and the recruitment of a new batch of coworkers."
+      },
+      "action2": {
+        "weekday": "Mon",
+        "topic": "Fat on the Path",
+        "content": "Check your daily average screen time for June. Looking at the decreased numbers, thank God for reclaiming the sovereignty of your time."
+      },
+      "action3": {
+        "weekday": "Mon",
+        "topic": "Final Fingertip Review",
+        "content": "Looking at your peaceful, edifying comments on the internet over the past month, thank God for guarding your tongue and fingertips."
+      },
+      "action4": {
+        "weekday": "Mon",
+        "topic": "The Action Continues",
+        "content": "Look back over these thirty days. What clear vision and inspiration has God given you regarding the \"Digital Missionary\" calling? Write it down."
+      }
+    },
+    "06-30": {
+      "action1": {
+        "weekday": "Tue",
+        "topic": "Kingdom Come",
+        "content": "Thank God for sitting as King over the digital virtual world. Give thanks for how God has adjusted your spiritual vision over these thirty days."
+      },
+      "action2": {
+        "weekday": "Tue",
+        "topic": "Return Attention to God",
+        "content": "At the end of the 30 days, walk up to a large tree, take a deep breath, and declare to God: \"Algorithms no longer dictate my mood, because my soul enjoys true Sabbath rest in Christ!\""
+      },
+      "action3": {
+        "weekday": "Tue",
+        "topic": "Trash Cleanup Cont.",
+        "content": "Write down your takeaways from these 30 days of the Digital Light Action, and give thanks in prayer: \"By relying on the Lord, I have been salt and light in the fingertip world, leaving the most beautiful footsteps!\""
+      },
+      "action4": {
+        "weekday": "Tue",
+        "topic": "The Action Continues",
+        "content": "Pray for the digital ministries that Grace Baptist Church is about to launch. Declare that you are prepared and ready to respond to God's sending at any time!"
+      }
     }
   }
 };
