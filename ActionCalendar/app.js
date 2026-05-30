@@ -7,7 +7,7 @@ const I18N = {
   zh: {
     'hero-title': '30日數位宣教行動',
     'hero-subtitle': '數位禾場：在指尖世界看見呼召',
-    'hero-text': '你是否聽見在五光十色的數位世界背後<br>網友們對真實連結、心靈平靜的渴求？<br>人們的痛苦，就是福音的著陸點。<br>打破宣教時空藩籬，現在就為福音做出行動',
+    'hero-text': '你是否聽見在五光十色的數位世界背後<br>網友們對真實連結、心靈平靜的渴求？<br>人們的痛苦，就是福音的著力點。<br>打破宣教時空藩籬，現在就為福音做出行動',
     'print-title': '📄 30日行動指南 A4列印版',
     'print-prayer': '🙏 禱告大軍',
     'print-sabbath': '🌿 數位安息',
@@ -40,9 +40,9 @@ const I18N = {
     }
   },
   en: {
-    'hero-title': '30-Day Digital Missions Action',
-    'hero-subtitle': 'Digital Harvest: Seeing the Call in a Fingertip World',
-    'hero-text': 'Behind the dazzling digital world, do you hear<br>netizens thirsting for genuine connection and peace of mind?<br>People\'s pain is the landing zone of the gospel.<br>Break the boundaries of time and space, and take action for the gospel today!',
+    'hero-title': '30-Day<br>Digital Missions Action',
+    'hero-subtitle': 'Digital Missions: Calling at your fingertips',
+    'hero-text': 'Behind the dazzling digital world, do you hear netizens thirsting for genuine connection and peace of mind? People\'s pain is the landing zone of the gospel. Break the boundaries of time and space, and take action for the gospel today!',
     'print-title': '📄 30-Day Action Guide (A4 Print)',
     'print-prayer': '🙏 Prayer Warriors',
     'print-sabbath': '🌿 Digital Sabbath',
@@ -81,12 +81,12 @@ function init() {
   const today = new Date();
   if (today.getMonth() === 5 && today.getDate() >= 1 && today.getDate() <= 30) {
     currentDay = today.getDate();
-    isHomeView = false; 
+    isHomeView = false;
   } else {
     currentDay = 1;
-    isHomeView = true;  
+    isHomeView = true;
   }
-  
+
   setupListeners();
   applyLanguage();
   renderView();
@@ -94,11 +94,11 @@ function init() {
 
 function applyLanguage() {
   document.documentElement.lang = currentLang === 'zh' ? 'zh-TW' : 'en';
-  
+
   // 更新語言按鈕樣式
   const langBtn = document.getElementById('langToggleBtn');
   langBtn.textContent = currentLang === 'zh' ? 'EN' : '中';
-  
+
   // 更新靜態文字
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
@@ -118,7 +118,7 @@ function applyLanguage() {
 function renderView() {
   const homeView = document.getElementById('home-view');
   const calendarView = document.getElementById('calendar-view');
-  
+
   if (isHomeView) {
     homeView.classList.add('active');
     calendarView.classList.remove('active');
@@ -146,7 +146,7 @@ function setupListeners() {
     isHomeView = true;
     renderView();
   });
-  
+
   // 從首頁進入月曆
   document.getElementById('enterCalendarBtn').addEventListener('click', () => {
     isHomeView = false;
@@ -167,7 +167,7 @@ function setupListeners() {
       updateCalendarUI();
     }
   });
-  
+
   // 返回今天
   document.getElementById('todayBtn').addEventListener('click', () => {
     const today = new Date();
@@ -193,10 +193,10 @@ function setupListeners() {
 // 更新月曆介面
 function updateCalendarUI() {
   document.getElementById('cardDay').textContent = currentDay;
-  
+
   document.getElementById('prevBtn').disabled = (currentDay === 1);
   document.getElementById('nextBtn').disabled = (currentDay === 30);
-  
+
   const today = new Date();
   const todayBtn = document.getElementById('todayBtn');
   if (today.getMonth() === 5 && today.getDate() >= 1 && today.getDate() <= 30) {
@@ -215,18 +215,18 @@ function updateCalendarUI() {
   document.getElementById('scriptureSource').textContent = scripData.source;
 
   const dayStr = String(currentDay).padStart(2, '0');
-  
+
   // 使用 currentLang 選擇資料夾結構 calendarData[lang]['06-01']
   let dayData;
   if (typeof calendarData[currentLang] !== 'undefined') {
     dayData = calendarData[currentLang][`06-${dayStr}`];
   }
-  
+
   const contentEl = document.getElementById('actionContent');
   const weekdayEl = document.getElementById('cardWeekday');
   const topicEl = document.getElementById('cardTopic');
   const extraContentEl = document.getElementById('extraContent');
-  
+
   if (!dayData) {
     weekdayEl.textContent = '';
     topicEl.textContent = I18N[currentLang]['no-content'];
@@ -234,9 +234,9 @@ function updateCalendarUI() {
     extraContentEl.innerHTML = '';
     return;
   }
-  
+
   contentEl.style.animation = 'none';
-  contentEl.offsetHeight; 
+  contentEl.offsetHeight;
   contentEl.style.animation = null;
 
   let currentActionData;
@@ -245,13 +245,13 @@ function updateCalendarUI() {
   else if (currentTab === 3) currentActionData = dayData.action3;
   else if (currentTab === 4) currentActionData = dayData.action4;
 
-  extraContentEl.innerHTML = ''; 
+  extraContentEl.innerHTML = '';
 
   if (currentActionData) {
     weekdayEl.textContent = currentActionData.weekday || I18N[currentLang]['weekday-fallback'];
     topicEl.textContent = currentActionData.topic || I18N[currentLang]['no-title'];
     contentEl.innerHTML = currentActionData.content || '';
-    
+
     if (currentTab === 1) {
       if (currentActionData.weekday === '週一' || currentActionData.weekday === 'Mon') {
         extraContentEl.innerHTML = `<a href="../WordCloud/index.html" target="_blank" class="btn-outline" style="display:inline-block; margin-top:15px; width:100%; text-align:center;">${I18N[currentLang]['btn-cloud']}</a>`;
