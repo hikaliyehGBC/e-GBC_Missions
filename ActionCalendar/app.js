@@ -5,7 +5,8 @@ let isHomeView = true;
 const SCRIPTURES = {
   1: { text: "「靠著聖靈，隨時多方禱告祈求；並要在此警醒不倦，為眾聖徒祈求。」", source: "以弗所書 6:18" },
   2: { text: "「豈不知你們的身子就是聖靈的殿嗎？這聖靈是從神而來，住在你們裡頭的。」", source: "哥林多前書 6:19" },
-  3: { text: "「你們是世上的鹽...你們的光也當這樣照在人前，叫他們看見你們的好行為，便將榮耀歸給你們在天上的父。」", source: "馬太福音 5:13-16" }
+  3: { text: "「你們是世上的鹽...你們的光也當這樣照在人前，叫他們看見你們的好行為，便將榮耀歸給你們在天上的父。」", source: "馬太福音 5:13-16" },
+  4: { text: "「我又聽見主的聲音說：『我可以差遣誰呢？誰肯為我們去呢？』我說：『我在這裡，請差遣我！』」", source: "以賽亞書 6:8" }
 };
 
 // 初始化
@@ -146,6 +147,7 @@ function updateCalendarUI() {
   if (currentTab === 1) currentActionData = dayData.action1;
   else if (currentTab === 2) currentActionData = dayData.action2;
   else if (currentTab === 3) currentActionData = dayData.action3;
+  else if (currentTab === 4) currentActionData = dayData.action4;
 
   extraContentEl.innerHTML = ''; // 清空預設外加內容
 
